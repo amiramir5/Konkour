@@ -7449,3 +7449,311 @@ async function submitManualSession(form) {
     device_id: S.settings.deviceId,
     subject, seconds: minutes * 60,
     correct, wrong, blank,
+    note, day, type
+  };
+
+  await idbPut('sessions', session);
+  await queueOp('upsert', 'sessions', session.id, session);
+  await refreshCache();
+
+  if (S.settings.vibrationEnabled && navigator.vibrate) {
+    try { navigator.vibrate(30); } catch (e) {}
+  }
+
+  toast('ثبت شد', 'ok');
+  navigate('home');
+}
+
+async function submitExam(form) {
+  const subject = String(form.subject.value || '');
+  const day = String(form.day.value || todayKey());
+  const correct = clamp(toInt(form.correct.value, 0), 0, 1000);
+  const wrong = clamp(toInt(form.wrong.value, 0), 0, 1000);
+  const blank = clamp(toInt(form.blank.value, 0), 0, 1000);
+  const duration = clamp(toInt(form.duration.value, 0), 0, 600);
+  const note = String(form.note.value || '').trim();
+
+  if (!SUBJ_MAP[subject]) { toast('درس نامعتبر', 'error'); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) { toast('تاریخ نامعتبر', 'error'); return; }
+  if (correct + wrong + blank === 0) { toast('حداقل یک سؤال ثبت کن', 'error'); return; }
+
+  const percent = calcPercent(correct, wrong, blank);
+
+  const exam = {
+    id: uid(), created_at: Date.now(), updated_at: Date.now(), deleted_at: null,
+    device_id: S.settings.deviceId,
+    subject, day, correct, wrong, blank, duration, percent, note
+  };
+
+  await idbPut('exams', exam);
+  await queueOp('upsert', 'exams', exam.id, exam);
+  await refreshCache();
+
+  if (S.settings.vibrationEnabled && navigator.vibrate) {
+    try { navigator.vibrate(30); } catch (e) {}
+  }
+
+  toast('ثبت شد — ' + fmtPct(percent), 'ok');
+  navigate('exams');
+}
+
+async function submitMistake(form) {
+  const subject = String(form.subject.value || '');
+  const cause = String(form.cause.value || '');
+  const question = String(form.question.value || '').trim();
+  const source = String(form.source.value || '').trim();
+
+  if (!SUBJ_MAP[subject]) { toast('درس نامعتبر', 'error'); return; }
+  if (!question) { toast('سؤال الزامی است', 'error'); return; }
+
+  const m = {
+    id: uid(), created_at: Date.now(), updated_at: Date.now(), deleted_at: null,
+    device_id: S.settings.deviceId,
+    subject, cause, question, source,
+    image_data: pendingMistakeImage || null,
+    box: 1, next_review: addDays(todayKey(), LEITNER_DAYS[0]),
+    history: []
+  };
+
+  await idbPut('mistakes', m);
+  await queueOp('upsert', 'mistakes', m.id, m);
+  pendingMistakeImage = null;
+  await refreshCache();
+
+  if (S.settings.vibrationEnabled && navigator.vibrate) {
+    try { navigator.vibrate(30); } catch (e) {}
+  }
+
+  toast('اضافه شد — ' + faDate(m.next_review, 'short'), 'ok');
+  navigate('mistakes');
+}
+
+async function submitNote(form) {
+  const text = String(form.text.value || '').trim();
+  if (!text) { toast('خالی است', 'error'); return; }
+
+  const note = {
+    id: uid(), created_at: Date.now(), updated_at: Date.now(), deleted_at: null,
+    device_id: S.settings.deviceId,
+    day: todayKey(), text, ts: Date.now()
+  };
+
+  await idbPut('notes', note);
+  await queueOp('upsert', 'notes', note.id, note);
+  await refreshCache();
+
+  toast('ثبت شد', 'ok');
+  renderPlan();
+}
+
+async function submitTask(form) {
+  const text = String(form.text.value || '').trim();
+  if (!text) return;
+
+  const tKey = todayKey();
+  let plan = CACHE.plans.find(p => p.day === tKey && !p.deleted_at);
+  if (!plan) {
+    plan = {
+      id: uid(), day: tKey, wake_time: '', items: [],
+      created_at: Date.now(), updated_at: Date.now(),
+      device_id: S.settings.deviceId, deleted_at: null
+    };
+  }
+  plan.items.push({ text, done: false });
+  plan.updated_at = Date.now();
+
+  await idbPut('plans', plan);
+  await queueOp('upsert', 'plans', plan.id, plan);
+  await refreshCache();
+  renderPlan();
+}
+
+/* =========================================================================
+   SECTION 33 — COMMAND PALETTE
+   ========================================================================= */
+
+const CMD_ITEMS = [
+  { id: 'go-home', label: 'خانه', icon: 'home', nav: 'home' },
+  { id: 'go-timer', label: 'اتاق تمرکز', icon: 'timer', nav: 'timer' },
+  { id: 'go-exams', label: 'آزمون‌ها', icon: 'exams', nav: 'exams' },
+  { id: 'go-mistakes', label: 'دفترچه', icon: 'mistakes', nav: 'mistakes' },
+  { id: 'go-sim', label: 'آزمون شبیه‌ساز', icon: 'sim', nav: 'sim' },
+  { id: 'go-plan', label: 'برنامه روزانه', icon: 'plan', nav: 'plan' },
+  { id: 'go-stats', label: 'آمار هفته', icon: 'stats', nav: 'stats' },
+  { id: 'go-monthly', label: 'گزارش ماهانه', icon: 'stats', nav: 'monthly' },
+  { id: 'go-ai', label: 'دستیار AI', icon: 'spark', nav: 'ai' },
+  { id: 'go-settings', label: 'تنظیمات', icon: 'settings', nav: 'settings' },
+  { id: 'go-diag', label: 'عیب‌یابی', icon: 'diag', nav: 'diag' },
+  { id: 'act-theme', label: 'تغییر پوسته', icon: 'moon', action: 'toggle-theme' },
+  { id: 'act-account', label: 'حساب کاربری', icon: 'key', action: 'open-account' },
+  { id: 'act-export', label: 'خروجی JSON', icon: 'download', action: 'export' },
+  { id: 'act-sync', label: 'همگام‌سازی', icon: 'refresh', action: 'sync-now' }
+];
+
+function openCmd() {
+  const root = $('#cmdRoot');
+  if (!root) return;
+  root.style.display = 'flex';
+  const input = $('#cmdInput');
+  if (input) { input.value = ''; input.focus(); }
+  renderCmdList('');
+}
+
+function closeCmd() {
+  const root = $('#cmdRoot');
+  if (!root) return;
+  root.style.display = 'none';
+}
+
+function renderCmdList(query) {
+  const list = $('#cmdList');
+  if (!list) return;
+  const q = String(query || '').toLowerCase().trim();
+  const items = CMD_ITEMS.filter(it =>
+    !q || it.label.toLowerCase().includes(q) || it.id.includes(q)
+  );
+
+  if (!items.length) {
+    list.innerHTML = '<p class="t-sm muted center" style="padding:20px">چیزی یافت نشد.</p>';
+    return;
+  }
+
+  list.innerHTML = items.map((it, i) =>
+    '<button type="button" class="cmd-item' + (i === 0 ? ' active' : '') + '" ' +
+      'data-cmd-id="' + it.id + '" ' +
+      'style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;color:var(--ink);border:0;background:none;width:100%;text-align:start;font-family:inherit' +
+      (i === 0 ? ';background:var(--brand-soft);color:var(--brand)' : '') + '">' +
+      (ICONS[it.icon] || '') +
+      '<span>' + esc(it.label) + '</span>' +
+    '</button>'
+  ).join('');
+}
+
+function runCmdItem(id) {
+  const it = CMD_ITEMS.find(x => x.id === id);
+  if (!it) return;
+  closeCmd();
+  if (it.nav) navigate(it.nav);
+  else if (it.action === 'toggle-theme') {
+    S.settings.theme = S.settings.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(); saveSettings();
+  } else if (it.action === 'open-account') openAccount();
+  else if (it.action === 'export') exportData();
+  else if (it.action === 'sync-now') syncNow(true);
+}
+
+/* =========================================================================
+   SECTION 34 — AFTER SIGN IN
+   ========================================================================= */
+
+async function afterSignIn() {
+  if (!initSupabaseSDK()) return;
+
+  const { data } = await sb.auth.getUser();
+  if (!data || !data.user) return;
+
+  currentUser = { id: data.user.id, email: data.user.email };
+  lastPullTs = toInt(await getMeta('lastPullTs'), 0);
+  await fetchMyProfile();
+  await refreshSharedStatsForToday().catch(() => {});
+  await syncNow(true);
+  await startPresence();
+  startSyncLoop();
+  updateAccountBtn();
+  if (S.activeView === 'home') renderHome();
+}
+
+/* =========================================================================
+   SECTION 35 — BOOTSTRAP
+   ========================================================================= */
+
+async function bootstrap() {
+  try {
+    await openDB();
+    await loadSettings();
+    await Timer.load();
+    await refreshCache();
+    applyTheme();
+    buildNav();
+    bindEvents();
+
+    if (Timer.state && Timer.state.status === 'running') {
+      Timer.state.started_at = Timer.state.started_at || Date.now();
+      Timer.loop();
+    }
+
+    try {
+      if (navigator.storage && navigator.storage.persist) {
+        if (!(await navigator.storage.persisted())) {
+          navigator.storage.persist().catch(() => {});
+        }
+      }
+    } catch (e) {}
+
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('./sw.js').catch((e) => {
+        logError('SW: ' + e.message);
+      });
+    }
+
+    if (initSupabaseSDK()) {
+      try {
+        const { data } = await sb.auth.getSession();
+        if (data && data.session && data.session.user) {
+          currentUser = { id: data.session.user.id, email: data.session.user.email };
+          lastPullTs = toInt(await getMeta('lastPullTs'), 0);
+          await fetchMyProfile();
+          await syncNow(true);
+          await startPresence();
+          startSyncLoop();
+          updateAccountBtn();
+        }
+      } catch (err) {
+        logError('bootstrap phase2: ' + (err.message || err));
+      }
+    }
+
+    navigate(S.activeView || 'home');
+    setInterval(updateSyncPill, 15000);
+    setInterval(() => {
+      if (currentUser && navigator.onLine && !syncState.running) syncNow();
+    }, 60000);
+
+    const lastBackupReminder = toInt(await getMeta('lastBackupReminder'), 0);
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    if (Date.now() - lastBackupReminder > WEEK_MS) {
+      setTimeout(() => {
+        toast('یادآوری: پشتیبان JSON بگیر.', 'warn', 5000);
+        saveMeta('lastBackupReminder', Date.now());
+      }, 3000);
+    }
+  } catch (err) {
+    console.error(err);
+    document.body.innerHTML =
+      '<div style="padding:24px;text-align:center;font-family:sans-serif;color:#dc2626">' +
+        '<h2>خطا در راه‌اندازی</h2>' +
+        '<p>' + esc(err.message) + '</p>' +
+        '<button onclick="location.reload()" style="margin-top:12px;padding:10px 20px">تلاش مجدد</button>' +
+      '</div>';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  bootstrap();
+}
+
+window.addEventListener('error', (e) => {
+  try { logError(e.message, { stack: e.error && e.error.stack }); } catch (_) {}
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  try {
+    const reason = e.reason;
+    logError('Unhandled: ' + (reason && reason.message ? reason.message : reason));
+  } catch (_) {}
+});
+</script>
+</body>
+</html>
