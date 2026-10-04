@@ -5140,9 +5140,9 @@ function navigate(view) {
   const dateEl = $('#topDate');
   if (dateEl) dateEl.textContent = faDate(todayKey(), 'weekday');
 
-  if (RENDER[view]) {
+   if (window.RENDER && window.RENDER[view]) {
     try {
-      RENDER[view]();
+      window.RENDER[view]();
     } catch (e) {
       logError('render ' + view + ': ' + e.message);
     }
@@ -8790,7 +8790,7 @@ async function afterSignIn() {
  * SECTION 36 — RENDER MAP
  * ========================================================================= */
 
-const RENDER = {
+window.RENDER = {
   home: renderHome,
   timer: renderTimer,
   exams: renderExams,
