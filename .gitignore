@@ -1,0 +1,11 @@
+# Supabase secrets — هرگز commit نشوند
+.env
+.env.*
+supabase/.temp/
+supabase/.branches/
+
+# سیستمی
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
