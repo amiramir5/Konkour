@@ -279,9 +279,15 @@ a:active{color:var(--brand-2);}
 
 svg{
   display:block;
+  width:24px;
+  height:24px;
   max-width:100%;
   flex-shrink:0;
 }
+
+/* اندازه‌های خاص که override می‌کنند */
+.empty svg{width:48px!important;height:48px!important;}
+.stat .icon-wrap svg{width:18px!important;height:18px!important;}
 
 img{
   max-width:100%;
