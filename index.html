@@ -17,64 +17,32 @@
 <link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <title>کنکوریار — دستیار مطالعه</title>
 
 <style>
 /* ============================================================================
- * KONKOOR YAR — DESIGN SYSTEM v1.0.4
- * ---------------------------------------------------------------------------
- * Design language: Minimal, soft, friendly, RTL-first
- * Color palette: Royal blue brand, calm neutrals
- * Motion: Subtle, functional, respects prefers-reduced-motion
- * ============================================================================
- */
-
-
-/* ============================================================================
- * SECTION 1 — DESIGN TOKENS
- * ---------------------------------------------------------------------------
- * تمام متغیرهای طراحی در اینجا تعریف می‌شوند. برای تغییر رنگ یا اندازه،
- * فقط کافی است این متغیرها را تغییر دهید.
+ * KONKOOR YAR — DESIGN SYSTEM v1.0.5
  * ========================================================================= */
+
 :root{
-  /* ---------- Typography ---------- */
   --font-sans:'Vazirmatn','Segoe UI',Tahoma,system-ui,-apple-system,sans-serif;
   --font-mono:'JetBrains Mono','Vazirmatn',ui-monospace,SFMono-Regular,Menlo,monospace;
 
-  --fs-2xs:10px;
-  --fs-xs:11px;
-  --fs-sm:12.5px;
-  --fs-base:15px;
-  --fs-md:16px;
-  --fs-lg:18px;
-  --fs-xl:20px;
-  --fs-2xl:24px;
-  --fs-3xl:32px;
-  --fs-4xl:42px;
-  --fs-hero:52px;
-  --fs-hero-desktop:64px;
+  --fs-2xs:10px; --fs-xs:11px; --fs-sm:12.5px; --fs-base:15px;
+  --fs-md:16px; --fs-lg:18px; --fs-xl:20px; --fs-2xl:24px;
+  --fs-3xl:32px; --fs-4xl:42px; --fs-hero:52px; --fs-hero-desktop:64px;
 
-  --lh-tight:1.3;
-  --lh-normal:1.6;
-  --lh-relaxed:1.85;
-  --lh-loose:2.2;
+  --lh-tight:1.3; --lh-normal:1.6; --lh-relaxed:1.85; --lh-loose:2.2;
+  --fw-light:300; --fw-regular:400; --fw-medium:500;
+  --fw-semibold:600; --fw-bold:700; --fw-extrabold:800; --fw-black:900;
 
-  --fw-light:300;
-  --fw-regular:400;
-  --fw-medium:500;
-  --fw-semibold:600;
-  --fw-bold:700;
-  --fw-extrabold:800;
-  --fw-black:900;
-
-  /* ---------- Light theme — background ---------- */
   --bg:#f0f4fa;
   --bg-gradient-1:#eef4ff;
   --bg-gradient-2:#f7f4ff;
   --bg-gradient-3:#f0fdfa;
 
-  /* ---------- Light theme — surfaces ---------- */
   --surface:#ffffff;
   --surface-2:#f6f9fe;
   --surface-3:#eaeff8;
@@ -84,14 +52,12 @@
   --surface-glass:rgba(255,255,255,.72);
   --surface-overlay:rgba(255,255,255,.94);
 
-  /* ---------- Light theme — borders ---------- */
   --border:#e3e9f2;
   --border-2:#d5dfed;
   --border-strong:#c5d1e3;
   --border-heavy:#9faccc;
   --border-subtle:#f0f4fa;
 
-  /* ---------- Light theme — ink ---------- */
   --ink:#0a1020;
   --ink-2:#4a5568;
   --ink-3:#94a3b8;
@@ -99,7 +65,6 @@
   --ink-5:#e2e8f0;
   --ink-inverse:#ffffff;
 
-  /* ---------- Brand — Royal blue ---------- */
   --brand:#2563eb;
   --brand-2:#1d4ed8;
   --brand-3:#3b82f6;
@@ -113,7 +78,6 @@
   --brand-fg:#ffffff;
   --brand-ink:#1e40af;
 
-  /* ---------- Success / Green ---------- */
   --ok:#059669;
   --ok-2:#10b981;
   --ok-3:#34d399;
@@ -121,7 +85,6 @@
   --ok-softer:#f0fdf9;
   --ok-glow:rgba(5,150,105,.35);
 
-  /* ---------- Warning / Amber ---------- */
   --warn:#d97706;
   --warn-2:#f59e0b;
   --warn-3:#fbbf24;
@@ -129,7 +92,6 @@
   --warn-softer:#fffbeb;
   --warn-glow:rgba(217,119,6,.35);
 
-  /* ---------- Danger / Red ---------- */
   --bad:#dc2626;
   --bad-2:#ef4444;
   --bad-3:#f87171;
@@ -137,37 +99,24 @@
   --bad-softer:#fef2f2;
   --bad-glow:rgba(220,38,38,.35);
 
-  /* ---------- Info / Cyan ---------- */
   --info:#0891b2;
   --info-2:#06b6d4;
   --info-soft:#e0f7fc;
   --info-glow:rgba(8,145,178,.35);
 
-  /* ---------- Purple ---------- */
   --purple:#7c3aed;
   --purple-2:#8b5cf6;
   --purple-soft:#f3e8ff;
   --purple-glow:rgba(124,58,237,.35);
 
-  /* ---------- Pink ---------- */
   --pink:#db2777;
   --pink-2:#ec4899;
   --pink-soft:#fce7f3;
   --pink-glow:rgba(219,39,119,.35);
 
-  /* ---------- Radii ---------- */
-  --r-2xs:4px;
-  --r-xs:6px;
-  --r-sm:12px;
-  --r:16px;
-  --r-md:20px;
-  --r-lg:24px;
-  --r-xl:28px;
-  --r-2xl:32px;
-  --r-3xl:40px;
-  --r-pill:999px;
+  --r-2xs:4px; --r-xs:6px; --r-sm:12px; --r:16px; --r-md:20px;
+  --r-lg:24px; --r-xl:28px; --r-2xl:32px; --r-3xl:40px; --r-pill:999px;
 
-  /* ---------- Shadows ---------- */
   --sh-0:0 0 0 1px rgba(15,23,42,.05);
   --sh-1:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
   --sh-2:0 2px 4px rgba(15,23,42,.04),0 10px 24px -12px rgba(15,23,42,.16);
@@ -177,50 +126,29 @@
   --sh-brand:0 12px 32px -12px var(--brand-glow);
   --sh-inset:inset 0 1px 0 rgba(255,255,255,.6);
   --sh-inset-dark:inset 0 1px 0 rgba(0,0,0,.08);
-  --sh-ring:0 0 0 4px var(--brand-soft);
 
-  /* ---------- Layout ---------- */
   --nav-h:64px;
   --sidebar-w:268px;
   --max-w:1140px;
   --container-pad:14px;
   --container-pad-desktop:32px;
 
-  /* ---------- Motion ---------- */
   --ease:cubic-bezier(.2,.7,.3,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
   --ease-in:cubic-bezier(.4,0,1,1);
   --ease-spring:cubic-bezier(.34,1.56,.64,1);
-  --dur-instant:.1s;
-  --dur-fast:.16s;
-  --dur:.24s;
-  --dur-slow:.4s;
-  --dur-slower:.6s;
+  --dur-instant:.1s; --dur-fast:.16s; --dur:.24s; --dur-slow:.4s; --dur-slower:.6s;
 
-  /* ---------- Z-Index layers ---------- */
-  --z-base:1;
-  --z-dropdown:50;
-  --z-sticky:100;
-  --z-overlay:150;
-  --z-modal:200;
-  --z-toast:250;
-  --z-cmd:300;
-  --z-max:9999;
+  --z-base:1; --z-dropdown:50; --z-sticky:100; --z-overlay:150;
+  --z-modal:200; --z-toast:250; --z-cmd:300; --z-max:9999;
 }
 
-/* ============================================================================
- * SECTION 2 — DARK THEME OVERRIDES
- * ---------------------------------------------------------------------------
- * تمام رنگ‌ها برای حالت شب. این بخش خودکار با تغییر data-theme فعال می‌شود.
- * ========================================================================= */
 [data-theme="dark"]{
-  /* Background */
   --bg:#080d18;
   --bg-gradient-1:#0a1220;
   --bg-gradient-2:#100a1e;
   --bg-gradient-3:#0a1f1e;
 
-  /* Surfaces */
   --surface:#131b2b;
   --surface-2:#18212f;
   --surface-3:#1e2838;
@@ -230,22 +158,18 @@
   --surface-glass:rgba(19,27,43,.72);
   --surface-overlay:rgba(19,27,43,.94);
 
-  /* Borders */
   --border:#22304a;
   --border-2:#2b3b56;
   --border-strong:#3a4c69;
   --border-heavy:#4a5e7f;
   --border-subtle:#18222f;
 
-  /* Ink */
   --ink:#f1f5f9;
   --ink-2:#94a3b8;
   --ink-3:#64748b;
   --ink-4:#475569;
   --ink-5:#334155;
-  --ink-inverse:#0a1020;
 
-  /* Brand */
   --brand:#5b8def;
   --brand-2:#7ba4f2;
   --brand-3:#4a7de0;
@@ -255,80 +179,30 @@
   --brand-soft:#16263f;
   --brand-softer:#101c30;
   --brand-glow:rgba(91,141,239,.5);
-  --brand-glow-soft:rgba(91,141,239,.15);
   --brand-ink:#93b4f5;
 
-  /* Success */
   --ok:#34d399;
-  --ok-2:#6ee7b7;
-  --ok-3:#a7f3d0;
   --ok-soft:#0f2a22;
-  --ok-softer:#0a1e18;
-  --ok-glow:rgba(52,211,153,.4);
-
-  /* Warning */
   --warn:#fbbf24;
-  --warn-2:#fde047;
-  --warn-3:#fef3c7;
   --warn-soft:#2a2010;
-  --warn-softer:#1e1710;
-  --warn-glow:rgba(251,191,36,.4);
-
-  /* Danger */
   --bad:#f87171;
-  --bad-2:#fca5a5;
-  --bad-3:#fecaca;
   --bad-soft:#2a1414;
-  --bad-softer:#1e0e0e;
-  --bad-glow:rgba(248,113,113,.4);
-
-  /* Info */
   --info:#22d3ee;
-  --info-2:#67e8f9;
   --info-soft:#0f2531;
-  --info-glow:rgba(34,211,238,.4);
-
-  /* Purple */
   --purple:#a78bfa;
-  --purple-2:#c4b5fd;
   --purple-soft:#201a35;
-  --purple-glow:rgba(167,139,250,.4);
-
-  /* Pink */
   --pink:#f472b6;
-  --pink-2:#f9a8d4;
   --pink-soft:#2a1520;
-  --pink-glow:rgba(244,114,182,.4);
 
-  /* Shadows */
-  --sh-0:0 0 0 1px rgba(255,255,255,.04);
   --sh-1:0 1px 2px rgba(0,0,0,.5);
   --sh-2:0 2px 6px rgba(0,0,0,.4),0 14px 30px -16px rgba(0,0,0,.8);
   --sh-3:0 6px 14px rgba(0,0,0,.5),0 26px 50px -22px rgba(0,0,0,.9);
   --sh-4:0 12px 24px rgba(0,0,0,.6),0 40px 70px -28px rgba(0,0,0,.95);
   --sh-5:0 20px 48px rgba(0,0,0,.7),0 60px 120px -32px rgba(0,0,0,1);
   --sh-inset:inset 0 1px 0 rgba(255,255,255,.08);
-  --sh-inset-dark:inset 0 1px 0 rgba(0,0,0,.4);
 }
 
-/* ============================================================================
- * SECTION 3 — RESET & BASE
- * ---------------------------------------------------------------------------
- * ریست کردن رفتار پیش‌فرض مرورگر و تنظیمات پایه.
- * ========================================================================= */
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  border:0;
-  outline:0;
-  font:inherit;
-  color:inherit;
-  background:transparent;
-  vertical-align:baseline;
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0;outline:0;font:inherit;color:inherit;background:transparent;vertical-align:baseline;}
 
 html{
   -webkit-text-size-adjust:100%;
@@ -356,43 +230,14 @@ body{
   min-height:100dvh;
   overflow-x:hidden;
   overscroll-behavior-y:none;
-  transition:
-    background-color var(--dur) var(--ease),
-    color var(--dur) var(--ease),
-    background-image var(--dur) var(--ease);
+  transition:background-color var(--dur) var(--ease),color var(--dur) var(--ease),background-image var(--dur) var(--ease);
   text-rendering:optimizeLegibility;
 }
 
 body.modal-open,
-body.zen-mode{
-  overflow:hidden;
-}
+body.zen-mode{overflow:hidden;}
 
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:var(--z-base);
-  background:
-    radial-gradient(circle at 15% 20%,var(--brand-glow-soft),transparent 30%),
-    radial-gradient(circle at 85% 80%,rgba(124,58,237,.06),transparent 30%);
-  opacity:0;
-  transition:opacity var(--dur-slower) var(--ease);
-}
-
-[data-theme="dark"] body::before{
-  opacity:1;
-}
-
-/* ---------- Typography ---------- */
-h1,h2,h3,h4,h5,h6{
-  font-weight:var(--fw-bold);
-  line-height:var(--lh-tight);
-  letter-spacing:-.015em;
-  color:var(--ink);
-}
-
+h1,h2,h3,h4,h5,h6{font-weight:var(--fw-bold);line-height:var(--lh-tight);letter-spacing:-.015em;color:var(--ink);}
 h1{font-size:var(--fs-3xl);font-weight:var(--fw-extrabold);}
 h2{font-size:var(--fs-2xl);font-weight:var(--fw-extrabold);}
 h3{font-size:var(--fs-xl);font-weight:var(--fw-bold);}
@@ -400,117 +245,39 @@ h4{font-size:var(--fs-lg);font-weight:var(--fw-bold);}
 h5{font-size:var(--fs-md);font-weight:var(--fw-semibold);}
 h6{font-size:var(--fs-base);font-weight:var(--fw-semibold);}
 
-p{
-  line-height:var(--lh-relaxed);
-  color:var(--ink-2);
-}
+p{line-height:var(--lh-relaxed);color:var(--ink-2);}
 p+p{margin-top:10px;}
 
 strong,b{font-weight:var(--fw-bold);color:var(--ink);}
 em,i{font-style:italic;}
 small{font-size:var(--fs-sm);color:var(--ink-3);}
 
-/* ---------- Links ---------- */
-a{
-  color:var(--brand);
-  text-decoration:none;
-  transition:color var(--dur-fast) var(--ease);
-  position:relative;
-}
+a{color:var(--brand);text-decoration:none;transition:color var(--dur-fast) var(--ease);position:relative;}
 a:hover{color:var(--brand-2);}
 a:active{color:var(--brand-2);}
-a:focus-visible{
-  outline:2px solid var(--brand);
-  outline-offset:2px;
-  border-radius:var(--r-2xs);
-}
+a:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--r-2xs);}
 
-/* ---------- Buttons base ---------- */
-button{
-  cursor:pointer;
-  background:none;
-  border:0;
-  font-family:inherit;
-  color:inherit;
-  transition:all var(--dur-fast) var(--ease);
-  -webkit-tap-highlight-color:transparent;
-}
+button{cursor:pointer;background:none;border:0;font-family:inherit;color:inherit;transition:all var(--dur-fast) var(--ease);-webkit-tap-highlight-color:transparent;}
 button:disabled{cursor:not-allowed;}
 
-/* ---------- Inputs base ---------- */
-input,select,textarea{
-  font-family:inherit;
-  font-size:inherit;
-  color:inherit;
-}
+input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;}
 
-/* ---------- SVG ---------- */
-svg{
-  display:block;
-  width:24px;
-  height:24px;
-  max-width:100%;
-  flex-shrink:0;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  overflow:visible;
-}
+svg{display:block;width:24px;height:24px;max-width:100%;flex-shrink:0;stroke-linecap:round;stroke-linejoin:round;overflow:visible;}
 
-/* ---------- Images ---------- */
-img{
-  max-width:100%;
-  height:auto;
-  display:block;
-}
+img{max-width:100%;height:auto;display:block;}
 
-/* ---------- Selection ---------- */
-::selection{
-  background:var(--brand-soft);
-  color:var(--ink);
-}
-[data-theme="dark"] ::selection{
-  background:var(--brand);
-  color:var(--brand-fg);
-}
+::selection{background:var(--brand-soft);color:var(--ink);}
+[data-theme="dark"] ::selection{background:var(--brand);color:var(--brand-fg);}
 
-/* ---------- Focus ---------- */
-:focus-visible{
-  outline:2px solid var(--brand);
-  outline-offset:2px;
-  border-radius:var(--r-xs);
-}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--r-xs);}
 :focus:not(:focus-visible){outline:none;}
 
-/* ---------- Scrollbars ---------- */
-*::-webkit-scrollbar{
-  width:9px;
-  height:9px;
-}
-*::-webkit-scrollbar-track{
-  background:transparent;
-}
-*::-webkit-scrollbar-thumb{
-  background:var(--border-strong);
-  border-radius:var(--r-pill);
-  border:2px solid transparent;
-  background-clip:padding-box;
-}
-*::-webkit-scrollbar-thumb:hover{
-  background:var(--ink-3);
-  background-clip:padding-box;
-}
-*{
-  scrollbar-width:thin;
-  scrollbar-color:var(--border-strong) transparent;
-}
+*::-webkit-scrollbar{width:9px;height:9px;}
+*::-webkit-scrollbar-track{background:transparent;}
+*::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:var(--r-pill);border:2px solid transparent;background-clip:padding-box;}
+*::-webkit-scrollbar-thumb:hover{background:var(--ink-3);background-clip:padding-box;}
+*{scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;}
 
-/* ============================================================================
- * SECTION 4 — UTILITY CLASSES
- * ---------------------------------------------------------------------------
- * کلاس‌های کاربردی که در همه جای اپ استفاده می‌شوند.
- * ========================================================================= */
-
-/* ---------- Display ---------- */
 .hidden{display:none!important;}
 .invisible{visibility:hidden!important;}
 .block{display:block;}
@@ -520,14 +287,10 @@ img{
 .inline-flex{display:inline-flex;}
 .grid{display:grid;}
 .contents{display:contents;}
-
-/* ---------- Position ---------- */
 .relative{position:relative;}
 .absolute{position:absolute;}
 .fixed{position:fixed;}
 .sticky{position:sticky;}
-
-/* ---------- Flex helpers ---------- */
 .flex-1{flex:1 1 0%;min-width:0;}
 .flex-auto{flex:1 1 auto;min-width:0;}
 .flex-none{flex:none;}
@@ -547,8 +310,6 @@ img{
 .justify-between{justify-content:space-between;}
 .justify-around{justify-content:space-around;}
 .justify-evenly{justify-content:space-evenly;}
-
-/* ---------- Gaps ---------- */
 .gap-0{gap:0;}
 .gap-1{gap:4px;}
 .gap-2{gap:8px;}
@@ -557,8 +318,6 @@ img{
 .gap-5{gap:20px;}
 .gap-6{gap:24px;}
 .gap-8{gap:32px;}
-
-/* ---------- Margins ---------- */
 .mt-0{margin-top:0;}
 .mt-1{margin-top:4px;}
 .mt-2{margin-top:8px;}
@@ -575,8 +334,6 @@ img{
 .mb-6{margin-bottom:24px;}
 .mx-auto{margin-inline:auto;}
 .my-auto{margin-block:auto;}
-
-/* ---------- Padding ---------- */
 .p-0{padding:0;}
 .p-1{padding:4px;}
 .p-2{padding:8px;}
@@ -584,70 +341,32 @@ img{
 .p-4{padding:16px;}
 .p-5{padding:20px;}
 .p-6{padding:24px;}
-
-/* ---------- Overflow ---------- */
 .overflow-hidden{overflow:hidden;}
 .overflow-auto{overflow:auto;}
 .overflow-y-auto{overflow-y:auto;overflow-x:hidden;}
 .overflow-x-auto{overflow-x:auto;overflow-y:hidden;}
 .overflow-visible{overflow:visible;}
-
-/* ---------- Text alignment ---------- */
 .center{text-align:center;}
 .text-right{text-align:right;}
 .text-left{text-align:left;}
 .text-start{text-align:start;}
 .text-end{text-align:end;}
-
-/* ---------- Text helpers ---------- */
-.ellipsis{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.break-word{
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
-.break-all{word-break:break-all;}
+.ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.break-word{overflow-wrap:anywhere;word-break:break-word;}
 .nowrap{white-space:nowrap;}
 .pre-wrap{white-space:pre-wrap;}
-.pre-line{white-space:pre-line;}
-
-/* ---------- Cursor ---------- */
 .pointer{cursor:pointer;}
 .not-allowed{cursor:not-allowed;}
-.grab{cursor:grab;}
-
-/* ---------- Opacity ---------- */
 .opacity-0{opacity:0;}
 .opacity-25{opacity:.25;}
 .opacity-50{opacity:.5;}
 .opacity-75{opacity:.75;}
 .opacity-100{opacity:1;}
-
-/* ---------- RTL / LTR isolation ---------- */
-.ltr{
-  direction:ltr;
-  unicode-bidi:isolate;
-  display:inline-block;
-}
-.rtl{
-  direction:rtl;
-  unicode-bidi:isolate;
-}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block;}
+.rtl{direction:rtl;unicode-bidi:isolate;}
 bdi{unicode-bidi:isolate;}
-
-/* ---------- Font families ---------- */
-.mono{
-  font-family:var(--font-mono);
-  font-variant-numeric:tabular-nums;
-  font-feature-settings:'tnum','ss01';
-  letter-spacing:0;
-}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-feature-settings:'tnum','ss01';letter-spacing:0;}
 .sans{font-family:var(--font-sans);}
-
-/* ---------- Font sizes ---------- */
 .t-2xs{font-size:var(--fs-2xs);}
 .t-xs{font-size:var(--fs-xs);}
 .t-sm{font-size:var(--fs-sm);}
@@ -657,16 +376,12 @@ bdi{unicode-bidi:isolate;}
 .t-xl{font-size:var(--fs-xl);}
 .t-2xl{font-size:var(--fs-2xl);}
 .t-3xl{font-size:var(--fs-3xl);}
-
-/* ---------- Font weights ---------- */
 .fw-light{font-weight:var(--fw-light);}
 .fw-regular{font-weight:var(--fw-regular);}
 .fw-medium{font-weight:var(--fw-medium);}
 .fw-semibold{font-weight:var(--fw-semibold);}
 .fw-bold{font-weight:var(--fw-bold);}
 .fw-extrabold{font-weight:var(--fw-extrabold);}
-
-/* ---------- Colors ---------- */
 .muted{color:var(--ink-2);}
 .muted-2{color:var(--ink-3);}
 .muted-3{color:var(--ink-4);}
@@ -676,217 +391,47 @@ bdi{unicode-bidi:isolate;}
 .c-bad{color:var(--bad);}
 .c-info{color:var(--info);}
 .c-purple{color:var(--purple);}
-
-/* ---------- Backgrounds ---------- */
 .bg-surface{background:var(--surface);}
 .bg-surface-2{background:var(--surface-2);}
-.bg-surface-3{background:var(--surface-3);}
 .bg-brand{background:var(--brand);}
-.bg-ok{background:var(--ok);}
-.bg-warn{background:var(--warn);}
-.bg-bad{background:var(--bad);}
-
-/* ---------- Borders ---------- */
 .border{border:1px solid var(--border);}
-.border-2{border:1px solid var(--border-2);}
-.border-strong{border:1px solid var(--border-strong);}
 .border-t{border-top:1px solid var(--border);}
 .border-b{border-bottom:1px solid var(--border);}
 .rounded-sm{border-radius:var(--r-sm);}
 .rounded{border-radius:var(--r);}
 .rounded-lg{border-radius:var(--r-lg);}
 .rounded-pill{border-radius:var(--r-pill);}
-
-/* ---------- Shadow ---------- */
 .shadow-1{box-shadow:var(--sh-1);}
 .shadow-2{box-shadow:var(--sh-2);}
 .shadow-3{box-shadow:var(--sh-3);}
 .shadow-none{box-shadow:none;}
-
-/* ---------- Screen reader only ---------- */
-.sr-only{
-  position:absolute;
-  width:1px;
-  height:1px;
-  padding:0;
-  margin:-1px;
-  overflow:hidden;
-  clip:rect(0,0,0,0);
-  clip-path:inset(50%);
-  white-space:nowrap;
-  border:0;
-}
-.sr-only:focus{
-  position:static;
-  width:auto;
-  height:auto;
-  padding:8px 12px;
-  margin:0;
-  overflow:visible;
-  clip:auto;
-  white-space:normal;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r-sm);
-  z-index:var(--z-max);
-}
-
-/* ---------- Selection disable ---------- */
-.no-select{
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-touch-callout:none;
-}
-
-/* ---------- Aspect ratio ---------- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0;}
+.no-select{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;}
 .aspect-square{aspect-ratio:1;}
-.aspect-video{aspect-ratio:16/9;}
 
-/* ============================================================================
- * SECTION 5 — ANIMATIONS & KEYFRAMES
- * ---------------------------------------------------------------------------
- * تمام انیمیشن‌های مورد استفاده در اپ. همه با prefers-reduced-motion
- * غیرفعال می‌شوند.
- * ========================================================================= */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeOut{from{opacity:1;}to{opacity:0;}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+@keyframes popIn{0%{opacity:0;transform:scale(.85);}60%{transform:scale(1.03);}100%{opacity:1;transform:scale(1);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+@keyframes bounceIn{0%{transform:scale(.9);opacity:0;}50%{transform:scale(1.03);opacity:1;}100%{transform:scale(1);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes navPulse{0%,100%{opacity:1;}50%{opacity:.65;}}
+@keyframes viewIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.4;}to{transform:none;opacity:1;}}
+@keyframes modalIn{from{transform:scale(.94);opacity:0;}to{transform:none;opacity:1;}}
+@keyframes toastBar{from{transform:scaleX(1);}to{transform:scaleX(0);}}
+@keyframes donutIn{from{transform:rotate(-15deg) scale(.9);opacity:0;}to{transform:none;opacity:1;}}
+@keyframes accountPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+@keyframes heroSpin{to{transform:rotate(360deg);}}
+@keyframes fabEnter{from{opacity:0;transform:scale(.5);}to{opacity:1;transform:scale(1);}}
 
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+.app{display:flex;min-height:100vh;min-height:100dvh;align-items:stretch;position:relative;z-index:var(--z-base);}
 
-@keyframes fadeOut{
-  from{opacity:1;}
-  to{opacity:0;}
-}
-
-@keyframes slideUp{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes slideDown{
-  from{opacity:0;transform:translateY(-20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes slideInRight{
-  from{opacity:0;transform:translateX(20px);}
-  to{opacity:1;transform:translateX(0);}
-}
-
-@keyframes slideInLeft{
-  from{opacity:0;transform:translateX(-20px);}
-  to{opacity:1;transform:translateX(0);}
-}
-
-@keyframes scaleIn{
-  from{opacity:0;transform:scale(.92);}
-  to{opacity:1;transform:scale(1);}
-}
-
-@keyframes scaleUp{
-  from{transform:scale(1);}
-  to{transform:scale(1.06);}
-}
-
-@keyframes popIn{
-  0%{opacity:0;transform:scale(.85);}
-  60%{transform:scale(1.03);}
-  100%{opacity:1;transform:scale(1);}
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg);}
-}
-
-@keyframes pulse{
-  0%,100%{opacity:1;}
-  50%{opacity:.6;}
-}
-
-@keyframes shimmer{
-  0%{background-position:200% 0;}
-  100%{background-position:-200% 0;}
-}
-
-@keyframes bounceIn{
-  0%{transform:scale(.9);opacity:0;}
-  50%{transform:scale(1.03);opacity:1;}
-  100%{transform:scale(1);}
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-4px);}
-}
-
-@keyframes ripple{
-  to{transform:scale(4);opacity:0;}
-}
-
-@keyframes rotateGradient{
-  to{transform:rotate(360deg);}
-}
-
-@keyframes navPulse{
-  0%,100%{opacity:1;}
-  50%{opacity:.65;}
-}
-
-@keyframes viewIn{
-  from{opacity:0;transform:translateY(12px);}
-  to{opacity:1;transform:none;}
-}
-
-@keyframes sheetUp{
-  from{transform:translateY(40px);opacity:.4;}
-  to{transform:none;opacity:1;}
-}
-
-@keyframes modalIn{
-  from{transform:scale(.94);opacity:0;}
-  to{transform:none;opacity:1;}
-}
-
-@keyframes toastBar{
-  from{transform:scaleX(1);}
-  to{transform:scaleX(0);}
-}
-
-@keyframes donutIn{
-  from{transform:rotate(-15deg) scale(.9);opacity:0;}
-  to{transform:none;opacity:1;}
-}
-
-@keyframes accountPulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.15);}
-}
-
-@keyframes heroSpin{
-  to{transform:rotate(360deg);}
-}
-
-@keyframes fabEnter{
-  from{opacity:0;transform:scale(.5);}
-  to{opacity:1;transform:scale(1);}
-}
-
-/* ============================================================================
- * SECTION 6 — APP SHELL LAYOUT
- * ---------------------------------------------------------------------------
- * ساختار اصلی اپ: sidebar + content + bottomnav
- * ========================================================================= */
-.app{
-  display:flex;
-  min-height:100vh;
-  min-height:100dvh;
-  align-items:stretch;
-  position:relative;
-  z-index:var(--z-base);
-}
-
-/* ---------- Sidebar (Desktop only) ---------- */
 .sidebar{
   display:none;
   flex-direction:column;
@@ -903,191 +448,64 @@ bdi{unicode-bidi:isolate;}
   overflow-y:auto;
   overflow-x:hidden;
   box-shadow:1px 0 0 rgba(255,255,255,.6) inset;
-  transition:width var(--dur-slow) var(--ease);
 }
 
-.sidebar-head{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:4px 8px 18px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:14px;
-  flex:none;
-}
-.sidebar-head .title{
-  min-width:0;
-  flex:1;
-}
-.sidebar-head b{
-  display:block;
-  font-size:14.5px;
-  font-weight:var(--fw-extrabold);
-  letter-spacing:-.02em;
-  line-height:1.2;
-}
-.sidebar-head span{
-  display:block;
-  font-size:11.5px;
-  color:var(--ink-3);
-  margin-top:2px;
-}
+.sidebar-head{display:flex;align-items:center;gap:11px;padding:4px 8px 18px;border-bottom:1px solid var(--border);margin-bottom:14px;flex:none;}
+.sidebar-head .title{min-width:0;flex:1;}
+.sidebar-head b{display:block;font-size:14.5px;font-weight:var(--fw-extrabold);letter-spacing:-.02em;line-height:1.2;}
+.sidebar-head span{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;}
 
-.sidebar-nav{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  flex:1;
-  overflow-y:auto;
-}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
 .sidebar-nav button{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:10px 12px;
-  border-radius:12px;
-  color:var(--ink-2);
-  font-size:13.5px;
-  font-weight:var(--fw-semibold);
-  text-align:start;
-  transition:all var(--dur-fast) var(--ease);
-  width:100%;
-  position:relative;
-  overflow:hidden;
-  min-height:44px;
+  display:flex;align-items:center;gap:11px;
+  padding:10px 12px;border-radius:12px;
+  color:var(--ink-2);font-size:13.5px;font-weight:var(--fw-semibold);
+  text-align:start;transition:all var(--dur-fast) var(--ease);
+  width:100%;position:relative;overflow:hidden;min-height:44px;
 }
-.sidebar-nav button:hover{
-  background:var(--surface-2);
-  color:var(--ink);
-  transform:translateX(-2px);
-}
-.sidebar-nav button.active{
-  background:var(--brand-soft);
-  color:var(--brand);
-  font-weight:var(--fw-bold);
-}
+.sidebar-nav button:hover{background:var(--surface-2);color:var(--ink);transform:translateX(-2px);}
+.sidebar-nav button.active{background:var(--brand-soft);color:var(--brand);font-weight:var(--fw-bold);}
 .sidebar-nav button.active::before{
-  content:'';
-  position:absolute;
-  inset-inline-start:-12px;
-  top:50%;
-  transform:translateY(-50%);
-  width:4px;
-  height:24px;
-  border-radius:0 var(--r-pill) var(--r-pill) 0;
+  content:'';position:absolute;inset-inline-start:-12px;top:50%;transform:translateY(-50%);
+  width:4px;height:24px;border-radius:0 var(--r-pill) var(--r-pill) 0;
   background:linear-gradient(180deg,var(--brand-4),var(--brand-2));
   box-shadow:0 0 12px var(--brand-glow);
 }
-.sidebar-nav button svg{
-  width:18px;
-  height:18px;
-  flex:none;
-  transition:transform var(--dur) var(--ease-spring);
-}
-.sidebar-nav button:hover svg{
-  transform:scale(1.08);
-}
-.sidebar-nav button.active svg{
-  filter:drop-shadow(0 2px 4px var(--brand-glow));
-}
-.sidebar-nav .nav-sep{
-  height:1px;
-  background:var(--border);
-  margin:12px 8px;
-}
-.sidebar-foot{
-  padding-top:14px;
-  border-top:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  flex:none;
-}
+.sidebar-nav button svg{width:18px;height:18px;flex:none;transition:transform var(--dur) var(--ease-spring);}
+.sidebar-nav button:hover svg{transform:scale(1.08);}
+.sidebar-nav button.active svg{filter:drop-shadow(0 2px 4px var(--brand-glow));}
+.sidebar-nav .nav-sep{height:1px;background:var(--border);margin:12px 8px;}
+.sidebar-foot{padding-top:14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex:none;}
 
-/* ---------- Content area ---------- */
-.content{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-}
+.content{flex:1;display:flex;flex-direction:column;min-width:0;}
 
-/* ---------- Topbar (Mobile only) ---------- */
 .topbar{
-  position:sticky;
-  top:0;
-  z-index:var(--z-sticky);
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  padding-top:calc(10px + env(safe-area-inset-top));
+  position:sticky;top:0;z-index:var(--z-sticky);
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));
   background:var(--surface);
   background:color-mix(in srgb,var(--surface) 92%,transparent);
   backdrop-filter:saturate(180%) blur(18px);
   -webkit-backdrop-filter:saturate(180%) blur(18px);
   border-bottom:1px solid var(--border);
   box-shadow:0 4px 24px -16px rgba(15,23,42,.15),var(--sh-inset);
-  transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease);
 }
-.topbar .brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
-  flex:1;
-}
-.topbar .brand-txt{
-  min-width:0;
-  flex:1;
-}
-.topbar b{
-  display:block;
-  font-size:14.5px;
-  font-weight:var(--fw-extrabold);
-  line-height:1.3;
-  letter-spacing:-.02em;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.topbar .sub{
-  display:block;
-  font-size:11.5px;
-  color:var(--ink-3);
-  margin-top:2px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.top-actions{
-  margin-inline-start:auto;
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex:none;
-}
+.topbar .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+.topbar .brand-txt{min-width:0;flex:1;}
+.topbar b{display:block;font-size:14.5px;font-weight:var(--fw-extrabold);line-height:1.3;letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar .sub{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.top-actions{margin-inline-start:auto;display:flex;gap:8px;align-items:center;flex:none;}
 
-/* ---------- Main content area ---------- */
 .main{
-  flex:1;
-  padding:var(--container-pad);
+  flex:1;padding:var(--container-pad);
   padding-bottom:calc(var(--nav-h) + 80px + env(safe-area-inset-bottom));
-  max-width:var(--max-w);
-  width:100%;
-  margin:0 auto;
+  max-width:var(--max-w);width:100%;margin:0 auto;
   animation:viewIn .4s var(--ease-out);
 }
 
-/* ---------- Bottom nav (Mobile only) ---------- */
 .bottomnav{
-  position:fixed;
-  inset-inline:0;
-  bottom:0;
-  z-index:var(--z-sticky);
-  display:flex;
-  justify-content:space-around;
-  align-items:stretch;
+  position:fixed;inset-inline:0;bottom:0;z-index:var(--z-sticky);
+  display:flex;justify-content:space-around;align-items:stretch;
   background:var(--surface);
   background:color-mix(in srgb,var(--surface) 94%,transparent);
   backdrop-filter:saturate(180%) blur(20px);
@@ -1097,293 +515,90 @@ bdi{unicode-bidi:isolate;}
   box-shadow:0 -8px 24px -16px rgba(15,23,42,.2),var(--sh-inset);
 }
 .bottomnav button{
-  flex:1;
-  max-width:100px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  padding:8px 2px 6px;
-  color:var(--ink-3);
-  font-size:10px;
-  font-weight:var(--fw-semibold);
-  position:relative;
-  min-height:56px;
+  flex:1;max-width:100px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:8px 2px 6px;
+  color:var(--ink-3);font-size:10px;font-weight:var(--fw-semibold);
+  position:relative;min-height:56px;
   transition:color var(--dur-fast) var(--ease);
   -webkit-tap-highlight-color:transparent;
 }
-.bottomnav button svg{
-  width:22px;
-  height:22px;
-  transition:transform var(--dur) var(--ease-spring);
-}
+.bottomnav button svg{width:22px;height:22px;transition:transform var(--dur) var(--ease-spring);}
 .bottomnav button:hover{color:var(--ink-2);}
-.bottomnav button.active{
-  color:var(--brand);
-  font-weight:var(--fw-bold);
-}
-.bottomnav button.active svg{
-  transform:scale(1.08) translateY(-1px);
-  filter:drop-shadow(0 3px 8px var(--brand-glow));
-}
+.bottomnav button.active{color:var(--brand);font-weight:var(--fw-bold);}
+.bottomnav button.active svg{transform:scale(1.08) translateY(-1px);filter:drop-shadow(0 3px 8px var(--brand-glow));}
 .bottomnav button.active::before{
-  content:'';
-  position:absolute;
-  top:0;
-  width:32px;
-  height:3.5px;
-  border-radius:0 0 6px 6px;
+  content:'';position:absolute;top:0;width:32px;height:3.5px;border-radius:0 0 6px 6px;
   background:linear-gradient(90deg,var(--brand-4),var(--brand-2));
   box-shadow:0 3px 12px var(--brand-glow);
   animation:navPulse 2s ease-in-out infinite;
 }
 
-/* ============================================================================
- * SECTION 7 — LOGO
- * ========================================================================= */
 .logo{
-  width:40px;
-  height:40px;
-  flex:none;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  color:#fff;
-  font-weight:var(--fw-extrabold);
-  font-size:14px;
-  letter-spacing:-.5px;
-  position:relative;
-  overflow:hidden;
+  width:40px;height:40px;flex:none;border-radius:13px;
+  display:grid;place-items:center;color:#fff;
+  font-weight:var(--fw-extrabold);font-size:14px;letter-spacing:-.5px;
+  position:relative;overflow:hidden;
   background:linear-gradient(145deg,#7cb3ff 0%,#2563eb 55%,#1e40af 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.6),
-    inset 0 -2px 6px rgba(0,0,0,.15),
-    0 10px 22px -10px rgba(37,99,235,.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -2px 6px rgba(0,0,0,.15),0 10px 22px -10px rgba(37,99,235,.8);
   user-select:none;
 }
-.logo::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background:linear-gradient(160deg,rgba(255,255,255,.45),transparent 55%);
-  pointer-events:none;
-}
-.logo.lg{
-  width:56px;
-  height:56px;
-  border-radius:18px;
-  font-size:20px;
-}
+.logo::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.45),transparent 55%);pointer-events:none;}
+.logo.lg{width:56px;height:56px;border-radius:18px;font-size:20px;}
 
-/* ============================================================================
- * SECTION 8 — BUTTONS
- * ========================================================================= */
-
-/* ---------- Base button ---------- */
 .btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  padding:10px 16px;
-  min-height:44px;
-  border-radius:var(--r-sm);
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--ink);
-  font-weight:var(--fw-semibold);
-  font-size:14px;
-  white-space:nowrap;
-  cursor:pointer;
-  transition:all var(--dur-fast) var(--ease);
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 16px;min-height:44px;border-radius:var(--r-sm);
+  border:1px solid var(--border);background:var(--surface);color:var(--ink);
+  font-weight:var(--fw-semibold);font-size:14px;white-space:nowrap;
+  cursor:pointer;transition:all var(--dur-fast) var(--ease);
   box-shadow:var(--sh-1),var(--sh-inset);
-  -webkit-tap-highlight-color:transparent;
-  position:relative;
-  overflow:hidden;
-  user-select:none;
+  -webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;user-select:none;
   text-decoration:none;
 }
-.btn::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 50%);
-  pointer-events:none;
-  opacity:.7;
-}
-.btn:hover{
-  background:var(--surface-2);
-  border-color:var(--border-2);
-  transform:translateY(-1px);
-  box-shadow:var(--sh-2);
-}
-.btn:active{
-  transform:translateY(0) scale(.98);
-  box-shadow:var(--sh-1);
-}
-.btn:disabled,
-.btn[disabled]{
-  opacity:.5;
-  cursor:not-allowed;
-  transform:none;
-  box-shadow:none;
-  filter:saturate(.7);
-  pointer-events:none;
-}
-.btn svg{
-  width:17px;
-  height:17px;
-  flex:none;
-}
+.btn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 50%);pointer-events:none;opacity:.7;}
+.btn:hover{background:var(--surface-2);border-color:var(--border-2);transform:translateY(-1px);box-shadow:var(--sh-2);}
+.btn:active{transform:translateY(0) scale(.98);box-shadow:var(--sh-1);}
+.btn:disabled,.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;filter:saturate(.7);pointer-events:none;}
+.btn svg{width:17px;height:17px;flex:none;}
 
-/* ---------- Button variants ---------- */
-.btn-primary{
-  background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);
-  border-color:transparent;
-  color:#fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    inset 0 -2px 8px rgba(0,0,0,.1),
-    0 10px 22px -10px rgba(37,99,235,.8);
-}
-.btn-primary::before{
-  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);
-}
-.btn-primary:hover{
-  filter:brightness(1.06);
-  color:#fff;
-  border-color:transparent;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    0 14px 28px -10px rgba(37,99,235,.9);
-}
-
-.btn-success{
-  background:linear-gradient(145deg,#6ee7b7,#059669 55%,#047857);
-  border-color:transparent;
-  color:#fff;
-  box-shadow:0 10px 22px -10px rgba(5,150,105,.7);
-}
+.btn-primary{background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);border-color:transparent;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 8px rgba(0,0,0,.1),0 10px 22px -10px rgba(37,99,235,.8);}
+.btn-primary::before{background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);}
+.btn-primary:hover{filter:brightness(1.06);color:#fff;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 28px -10px rgba(37,99,235,.9);}
+.btn-success{background:linear-gradient(145deg,#6ee7b7,#059669 55%,#047857);border-color:transparent;color:#fff;box-shadow:0 10px 22px -10px rgba(5,150,105,.7);}
 .btn-success:hover{filter:brightness(1.06);color:#fff;}
-
-.btn-danger{
-  background:var(--surface);
-  color:var(--bad);
-  border-color:var(--border);
-}
-.btn-danger:hover{
-  background:var(--bad-soft);
-  border-color:var(--bad);
-  color:var(--bad);
-}
-
-.btn-ghost{
-  background:transparent;
-  border-color:transparent;
-  box-shadow:none;
-  color:var(--ink-2);
-}
+.btn-danger{background:var(--surface);color:var(--bad);border-color:var(--border);}
+.btn-danger:hover{background:var(--bad-soft);border-color:var(--bad);color:var(--bad);}
+.btn-ghost{background:transparent;border-color:transparent;box-shadow:none;color:var(--ink-2);}
 .btn-ghost::before{display:none;}
-.btn-ghost:hover{
-  background:var(--surface-2);
-  color:var(--ink);
-  box-shadow:none;
-  transform:none;
-  border-color:transparent;
-}
-
-.btn-outline{
-  background:transparent;
-  border-color:var(--border-2);
-  box-shadow:none;
-}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink);box-shadow:none;transform:none;border-color:transparent;}
+.btn-outline{background:transparent;border-color:var(--border-2);box-shadow:none;}
 .btn-outline::before{display:none;}
-.btn-outline:hover{
-  background:var(--surface-2);
-  border-color:var(--brand);
-  color:var(--brand);
-}
-
-/* ---------- Button sizes ---------- */
-.btn-xs{
-  min-height:32px;
-  padding:5px 10px;
-  font-size:11.5px;
-  border-radius:9px;
-  gap:4px;
-}
+.btn-outline:hover{background:var(--surface-2);border-color:var(--brand);color:var(--brand);}
+.btn-xs{min-height:32px;padding:5px 10px;font-size:11.5px;border-radius:9px;gap:4px;}
 .btn-xs svg{width:13px;height:13px;}
-
-.btn-sm{
-  min-height:36px;
-  padding:6px 12px;
-  font-size:12.5px;
-  border-radius:10px;
-  gap:5px;
-}
+.btn-sm{min-height:36px;padding:6px 12px;font-size:12.5px;border-radius:10px;gap:5px;}
 .btn-sm svg{width:15px;height:15px;}
-
-.btn-lg{
-  min-height:52px;
-  padding:13px 22px;
-  font-size:15px;
-  border-radius:var(--r);
-  gap:9px;
-}
+.btn-lg{min-height:52px;padding:13px 22px;font-size:15px;border-radius:var(--r);gap:9px;}
 .btn-lg svg{width:19px;height:19px;}
-
 .btn-block{width:100%;}
 
-/* ---------- Icon button ---------- */
 .icon-btn{
-  width:42px;
-  height:42px;
-  flex:none;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--ink-2);
+  width:42px;height:42px;flex:none;
+  display:grid;place-items:center;
+  border-radius:12px;border:1px solid var(--border);
+  background:var(--surface);color:var(--ink-2);
   box-shadow:var(--sh-1),var(--sh-inset);
   transition:all var(--dur-fast) var(--ease);
-  -webkit-tap-highlight-color:transparent;
-  position:relative;
-  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;
 }
-.icon-btn:hover{
-  background:var(--surface-2);
-  color:var(--ink);
-  transform:translateY(-1px);
-  box-shadow:var(--sh-2);
-  border-color:var(--border-2);
-}
-.icon-btn:active{
-  transform:translateY(0) scale(.96);
-  box-shadow:var(--sh-1);
-}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink);transform:translateY(-1px);box-shadow:var(--sh-2);border-color:var(--border-2);}
+.icon-btn:active{transform:translateY(0) scale(.96);box-shadow:var(--sh-1);}
 .icon-btn svg{width:19px;height:19px;}
-
-.icon-btn.primary{
-  background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);
-  border-color:transparent;
-  color:#fff;
-  box-shadow:0 10px 22px -10px rgba(37,99,235,.8);
-}
-.icon-btn.primary:hover{
-  filter:brightness(1.06);
-  color:#fff;
-}
-
+.icon-btn.primary{background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);border-color:transparent;color:#fff;box-shadow:0 10px 22px -10px rgba(37,99,235,.8);}
+.icon-btn.primary:hover{filter:brightness(1.06);color:#fff;}
 .icon-btn.danger{color:var(--bad);}
-.icon-btn.danger:hover{
-  background:var(--bad-soft);
-  border-color:transparent;
-  color:var(--bad);
-}
-
+.icon-btn.danger:hover{background:var(--bad-soft);border-color:transparent;color:var(--bad);}
 .icon-btn.sm{width:36px;height:36px;border-radius:10px;}
 .icon-btn.sm svg{width:16px;height:16px;}
 .icon-btn.xs{width:30px;height:30px;border-radius:9px;}
@@ -1391,135 +606,52 @@ bdi{unicode-bidi:isolate;}
 .icon-btn.lg{width:52px;height:52px;border-radius:16px;}
 .icon-btn.lg svg{width:24px;height:24px;}
 
-/* ---------- Account button ---------- */
 .account-btn{position:relative;}
 .account-btn .account-dot{
-  position:absolute;
-  top:6px;
-  inset-inline-end:6px;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--ink-3);
-  border:2px solid var(--surface);
+  position:absolute;top:6px;inset-inline-end:6px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--ink-3);border:2px solid var(--surface);
   transition:background var(--dur);
 }
-.account-btn.on .account-dot{
-  background:var(--ok);
-  box-shadow:0 0 8px var(--ok-glow);
-  animation:accountPulse 2.4s ease-in-out infinite;
-}
+.account-btn.on .account-dot{background:var(--ok);box-shadow:0 0 8px var(--ok-glow);animation:accountPulse 2.4s ease-in-out infinite;}
 
-/* ---------- FAB ---------- */
 .fab{
-  position:fixed;
-  inset-inline-end:18px;
+  position:fixed;inset-inline-end:18px;
   bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  z-index:var(--z-sticky);
-  display:grid;
-  place-items:center;
-  color:#fff;
+  width:58px;height:58px;border-radius:50%;
+  z-index:var(--z-sticky);display:grid;place-items:center;color:#fff;
   background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.4),
-    0 18px 36px -12px rgba(37,99,235,.9);
-  cursor:pointer;
-  transition:all var(--dur) var(--ease-spring);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 18px 36px -12px rgba(37,99,235,.9);
+  cursor:pointer;transition:all var(--dur) var(--ease-spring);
   -webkit-tap-highlight-color:transparent;
   animation:fabEnter .4s var(--ease-spring);
 }
-.fab:hover{
-  transform:translateY(-3px) scale(1.06);
-  filter:brightness(1.08);
-}
+.fab:hover{transform:translateY(-3px) scale(1.06);filter:brightness(1.08);}
 .fab:active{transform:scale(.94);}
-.fab svg{
-  width:26px;
-  height:26px;
-  filter:drop-shadow(0 1.5px 2px rgba(0,0,0,.3));
-}
+.fab svg{width:26px;height:26px;filter:drop-shadow(0 1.5px 2px rgba(0,0,0,.3));}
 .fab.hidden{display:none;}
 
-/* ============================================================================
- * SECTION 9 — FORMS
- * ========================================================================= */
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  min-width:0;
-}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.label{font-size:12.5px;font-weight:var(--fw-semibold);color:var(--ink-2);display:block;line-height:1.6;}
+.label .req{color:var(--bad);margin-inline-start:3px;}
+.label .hint{font-size:11px;color:var(--ink-3);margin-inline-start:6px;font-weight:var(--fw-medium);}
 
-.label{
-  font-size:12.5px;
-  font-weight:var(--fw-semibold);
-  color:var(--ink-2);
-  display:block;
-  line-height:1.6;
-}
-.label .req{
-  color:var(--bad);
-  margin-inline-start:3px;
-}
-.label .hint{
-  font-size:11px;
-  color:var(--ink-3);
-  margin-inline-start:6px;
-  font-weight:var(--fw-medium);
-}
-
-.input,
-.select,
-.textarea{
-  width:100%;
-  min-height:44px;
-  padding:10px 13px;
-  border-radius:var(--r-sm);
-  border:1px solid var(--border);
-  background:var(--surface-2);
-  color:var(--ink);
-  font:inherit;
-  font-size:14px;
-  outline:none;
+.input,.select,.textarea{
+  width:100%;min-height:44px;padding:10px 13px;
+  border-radius:var(--r-sm);border:1px solid var(--border);
+  background:var(--surface-2);color:var(--ink);
+  font:inherit;font-size:14px;outline:none;
   transition:all var(--dur-fast) var(--ease);
-  appearance:none;
-  -webkit-appearance:none;
+  appearance:none;-webkit-appearance:none;
   box-shadow:inset 0 1px 2px rgba(15,23,42,.03);
 }
-.input:hover,
-.select:hover,
-.textarea:hover{
-  border-color:var(--border-2);
-}
-.input:focus,
-.select:focus,
-.textarea:focus{
-  border-color:var(--brand);
-  background:var(--surface);
-  box-shadow:0 0 0 4px var(--brand-soft),inset 0 1px 2px rgba(15,23,42,.03);
-}
-.input::placeholder,
-.textarea::placeholder{
-  color:var(--ink-3);
-  opacity:1;
-}
+.input:hover,.select:hover,.textarea:hover{border-color:var(--border-2);}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--brand);background:var(--surface);box-shadow:0 0 0 4px var(--brand-soft),inset 0 1px 2px rgba(15,23,42,.03);}
+.input::placeholder,.textarea::placeholder{color:var(--ink-3);opacity:1;}
 .input[type="number"]{-moz-appearance:textfield;}
-.input[type="number"]::-webkit-inner-spin-button,
-.input[type="number"]::-webkit-outer-spin-button{
-  -webkit-appearance:none;
-  margin:0;
-}
+.input[type="number"]::-webkit-inner-spin-button,.input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
 .input[type="file"]{padding:8px 12px;cursor:pointer;}
-
-.textarea{
-  min-height:88px;
-  resize:vertical;
-  line-height:1.8;
-  padding-top:12px;
-}
+.textarea{min-height:88px;resize:vertical;line-height:1.8;padding-top:12px;}
 
 .select{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -1531,1108 +663,316 @@ bdi{unicode-bidi:isolate;}
   cursor:pointer;
 }
 
-.input.error,
-.select.error,
-.textarea.error{
-  border-color:var(--bad);
-  background:var(--bad-soft);
-}
-.input.error:focus,
-.select.error:focus,
-.textarea.error:focus{
-  box-shadow:0 0 0 4px rgba(220,38,38,.15);
-}
-
-/* ---------- Toggle switch ---------- */
 .toggle{
-  width:48px;
-  height:28px;
-  flex:none;
-  border-radius:var(--r-pill);
-  background:var(--surface-3);
-  border:0;
-  cursor:pointer;
-  position:relative;
+  width:48px;height:28px;flex:none;border-radius:var(--r-pill);
+  background:var(--surface-3);border:0;cursor:pointer;position:relative;
   transition:background var(--dur) var(--ease);
   -webkit-tap-highlight-color:transparent;
 }
 .toggle::after{
-  content:'';
-  position:absolute;
-  top:3px;
-  inset-inline-end:3px;
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  background:var(--surface);
-  box-shadow:0 2px 6px rgba(0,0,0,.24);
+  content:'';position:absolute;top:3px;inset-inline-end:3px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--surface);box-shadow:0 2px 6px rgba(0,0,0,.24);
   transition:all var(--dur) var(--ease-spring);
 }
 .toggle:hover{background:var(--surface-4);}
-.toggle.on{
-  background:linear-gradient(145deg,#7cb3ff,#1d4ed8);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,.2);
-}
-.toggle.on::after{
-  inset-inline-end:calc(100% - 25px);
-  box-shadow:0 2px 6px rgba(37,99,235,.4);
-}
+.toggle.on{background:linear-gradient(145deg,#7cb3ff,#1d4ed8);box-shadow:inset 0 1px 2px rgba(0,0,0,.2);}
+.toggle.on::after{inset-inline-end:calc(100% - 25px);box-shadow:0 2px 6px rgba(37,99,235,.4);}
 
-/* ---------- Key input ---------- */
 .key-input-wrap{position:relative;}
 .key-input-wrap .input{padding-inline-end:44px;}
 .key-toggle{
-  position:absolute;
-  inset-inline-end:8px;
-  top:50%;
-  transform:translateY(-50%);
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  border:0;
-  background:transparent;
-  color:var(--ink-3);
-  cursor:pointer;
-  display:grid;
-  place-items:center;
+  position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;border-radius:8px;border:0;background:transparent;
+  color:var(--ink-3);cursor:pointer;display:grid;place-items:center;
   transition:all var(--dur-fast);
 }
-.key-toggle:hover{
-  background:var(--surface-3);
-  color:var(--ink);
-}
+.key-toggle:hover{background:var(--surface-3);color:var(--ink);}
 .key-toggle svg{width:16px;height:16px;}
 
-/* ============================================================================
- * SECTION 10 — CARDS
- * ========================================================================= */
 .card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  padding:16px;
-  box-shadow:var(--sh-2);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:16px;box-shadow:var(--sh-2);
   position:relative;
-  transition:
-    box-shadow var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
+  transition:box-shadow var(--dur) var(--ease),border-color var(--dur) var(--ease),transform var(--dur) var(--ease);
 }
 .card::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
+  content:'';position:absolute;inset:0;border-radius:inherit;
   background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 40%);
-  pointer-events:none;
-  opacity:.5;
+  pointer-events:none;opacity:.5;
 }
-[data-theme="dark"] .card::before{
-  background:linear-gradient(160deg,rgba(255,255,255,.04),transparent 40%);
-}
-.card:hover{
-  box-shadow:var(--sh-3);
-  border-color:var(--border-2);
-}
-
-.card.no-hover:hover{
-  box-shadow:var(--sh-2);
-  border-color:var(--border);
-}
-
+[data-theme="dark"] .card::before{background:linear-gradient(160deg,rgba(255,255,255,.04),transparent 40%);}
+.card:hover{box-shadow:var(--sh-3);border-color:var(--border-2);}
+.card.no-hover:hover{box-shadow:var(--sh-2);border-color:var(--border);}
 .card-flat{box-shadow:var(--sh-1);}
 .card-flat:hover{box-shadow:var(--sh-2);}
-
-.card-inset{
-  background:var(--surface-2);
-  box-shadow:none;
-  border-color:var(--border-subtle);
-}
+.card-inset{background:var(--surface-2);box-shadow:none;border-color:var(--border-subtle);}
 .card-inset::before{opacity:.3;}
-
-.card-brand{
-  background:linear-gradient(135deg,var(--brand-softer),var(--surface));
-  border-color:var(--brand-soft);
-}
-
+.card-brand{background:linear-gradient(135deg,var(--brand-softer),var(--surface));border-color:var(--brand-soft);}
 .card-tight{padding:12px;}
 .card-loose{padding:22px;}
 
-.card-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:12px;
-  flex-wrap:wrap;
-}
-.card-head h3{
-  font-size:14.5px;
-  font-weight:var(--fw-extrabold);
-  flex:1;
-  min-width:0;
-  letter-spacing:-.015em;
-}
-.card-head .hint{
-  font-size:11.5px;
-  color:var(--ink-3);
-  font-weight:var(--fw-medium);
-}
-.card-head svg{
-  width:22px;
-  height:22px;
-  color:var(--brand);
-  flex:none;
-}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.card-head h3{font-size:14.5px;font-weight:var(--fw-extrabold);flex:1;min-width:0;letter-spacing:-.015em;}
+.card-head .hint{font-size:11.5px;color:var(--ink-3);font-weight:var(--fw-medium);}
+.card-head svg{width:22px;height:22px;color:var(--brand);flex:none;}
 
-.card-body{
-  font-size:13.5px;
-  line-height:var(--lh-relaxed);
-}
+.card-body{font-size:13.5px;line-height:var(--lh-relaxed);}
 .card-body p+p{margin-top:10px;}
 
-.card-foot{
-  margin-top:14px;
-  padding-top:14px;
-  border-top:1px solid var(--border);
-  display:flex;
-  gap:8px;
-  align-items:center;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-}
+.card-foot{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
 
-/* ============================================================================
- * SECTION 11 — GRID LAYOUTS
- * ========================================================================= */
-.grid{
-  display:grid;
-  gap:12px;
-  align-items:stretch;
-}
+.grid{display:grid;gap:12px;align-items:stretch;}
 .grid.g1{grid-template-columns:1fr;}
 .grid.g2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
 .grid.g3{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
 .grid.g4{grid-template-columns:repeat(2,1fr);}
 .grid.g5{grid-template-columns:repeat(2,1fr);}
 .grid.g6{grid-template-columns:repeat(2,1fr);}
-
-@media(min-width:480px){
-  .grid.g5{grid-template-columns:repeat(3,1fr);}
-}
+@media(min-width:480px){.grid.g5{grid-template-columns:repeat(3,1fr);}}
 @media(min-width:640px){
   .grid.g4{grid-template-columns:repeat(4,1fr);}
   .grid.g5{grid-template-columns:repeat(5,1fr);}
   .grid.g6{grid-template-columns:repeat(3,1fr);}
 }
-@media(min-width:900px){
-  .grid.g6{grid-template-columns:repeat(6,1fr);}
-}
+@media(min-width:900px){.grid.g6{grid-template-columns:repeat(6,1fr);}}
 
 .stack{display:flex;flex-direction:column;gap:12px;}
 .stack.tight{gap:8px;}
 .stack.loose{gap:16px;}
 
-/* ============================================================================
- * SECTION 12 — DIVIDERS
- * ========================================================================= */
-.divider{
-  height:1px;
-  background:var(--border);
-  margin:14px 0;
-  border:0;
-}
-.divider.dashed{
-  background:none;
-  border-top:1px dashed var(--border-2);
-}
-.divider.vertical{
-  width:1px;
-  height:auto;
-  margin:0 14px;
-}
+.divider{height:1px;background:var(--border);margin:14px 0;border:0;}
+.divider.dashed{background:none;border-top:1px dashed var(--border-2);}
+.divider.vertical{width:1px;height:auto;margin:0 14px;}
 
-/* ============================================================================
- * SECTION 13 — BADGES
- * ========================================================================= */
 .badge{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:3px 10px;
-  border-radius:var(--r-pill);
-  font-size:11.5px;
-  font-weight:var(--fw-semibold);
-  line-height:1.7;
-  background:var(--surface-2);
-  color:var(--ink-2);
-  border:1px solid var(--border);
-  white-space:nowrap;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:var(--r-pill);
+  font-size:11.5px;font-weight:var(--fw-semibold);
+  line-height:1.7;background:var(--surface-2);color:var(--ink-2);
+  border:1px solid var(--border);white-space:nowrap;
 }
-.badge .dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:currentColor;
-  flex:none;
-}
-.badge.ok{
-  background:var(--ok-soft);
-  color:var(--ok);
-  border-color:transparent;
-}
-.badge.warn{
-  background:var(--warn-soft);
-  color:var(--warn);
-  border-color:transparent;
-}
-.badge.bad{
-  background:var(--bad-soft);
-  color:var(--bad);
-  border-color:transparent;
-}
-.badge.brand{
-  background:var(--brand-soft);
-  color:var(--brand);
-  border-color:transparent;
-}
-.badge.info{
-  background:var(--info-soft);
-  color:var(--info);
-  border-color:transparent;
-}
-.badge.purple{
-  background:var(--purple-soft);
-  color:var(--purple);
-  border-color:transparent;
-}
-.badge.pink{
-  background:var(--pink-soft);
-  color:var(--pink);
-  border-color:transparent;
-}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;}
+.badge.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent;}
+.badge.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent;}
+.badge.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent;}
+.badge.brand{background:var(--brand-soft);color:var(--brand);border-color:transparent;}
+.badge.info{background:var(--info-soft);color:var(--info);border-color:transparent;}
+.badge.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent;}
+.badge.pink{background:var(--pink-soft);color:var(--pink);border-color:transparent;}
 .badge-lg{padding:5px 12px;font-size:12.5px;}
 .badge-sm{padding:2px 8px;font-size:10.5px;}
 
-/* ============================================================================
- * SECTION 14 — CHIPS
- * ========================================================================= */
 .chip{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 14px;
-  border-radius:var(--r-pill);
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--ink-2);
-  font-size:12.5px;
-  font-weight:var(--fw-semibold);
-  cursor:pointer;
-  flex:none;
-  transition:all var(--dur-fast) var(--ease);
-  white-space:nowrap;
-  -webkit-tap-highlight-color:transparent;
-  min-height:38px;
-  box-shadow:var(--sh-1);
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:var(--r-pill);
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--ink-2);font-size:12.5px;font-weight:var(--fw-semibold);
+  cursor:pointer;flex:none;transition:all var(--dur-fast) var(--ease);
+  white-space:nowrap;-webkit-tap-highlight-color:transparent;
+  min-height:38px;box-shadow:var(--sh-1);
 }
-.chip:hover{
-  background:var(--surface-2);
-  transform:translateY(-1px);
-  box-shadow:var(--sh-2);
-}
+.chip:hover{background:var(--surface-2);transform:translateY(-1px);box-shadow:var(--sh-2);}
 .chip:active{transform:translateY(0);}
-.chip .cdot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  flex:none;
-  box-shadow:inset 0 1px 1px rgba(0,0,0,.2);
-}
+.chip .cdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:inset 0 1px 1px rgba(0,0,0,.2);}
 .chip.active{
-  color:#fff;
-  border-color:transparent;
+  color:#fff;border-color:transparent;
   background:linear-gradient(145deg,var(--c1,#7cb3ff),var(--c2,#1d4ed8));
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.4),
-    0 10px 20px -8px var(--c1,rgba(37,99,235,.7));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 20px -8px var(--c1,rgba(37,99,235,.7));
 }
 .chip.active .cdot{background:rgba(255,255,255,.9);}
 .chip.sm{padding:6px 11px;font-size:11.5px;min-height:32px;}
 .chip.xs{padding:4px 9px;font-size:10.5px;min-height:28px;}
 
-.chips-row{
-  display:flex;
-  gap:6px;
-  overflow-x:auto;
-  padding:4px 2px 10px;
-  scrollbar-width:none;
-  -ms-overflow-style:none;
-}
+.chips-row{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none;-ms-overflow-style:none;}
 .chips-row::-webkit-scrollbar{display:none;}
 
-/* ============================================================================
- * SECTION 15 — SEGMENTED CONTROL
- * ========================================================================= */
 .seg{
-  display:inline-flex;
-  background:var(--surface-2);
-  border-radius:12px;
-  padding:4px;
-  gap:3px;
+  display:inline-flex;background:var(--surface-2);
+  border-radius:12px;padding:4px;gap:3px;
   border:1px solid var(--border);
   box-shadow:inset 0 1px 3px rgba(15,23,42,.05);
 }
 .seg button{
-  border:0;
-  background:none;
-  padding:7px 13px;
-  border-radius:9px;
-  font-size:12.5px;
-  color:var(--ink-2);
-  cursor:pointer;
-  transition:all var(--dur-fast) var(--ease);
-  font-weight:var(--fw-semibold);
-  white-space:nowrap;
-  min-height:34px;
+  border:0;background:none;padding:7px 13px;border-radius:9px;
+  font-size:12.5px;color:var(--ink-2);cursor:pointer;
+  transition:all var(--dur-fast) var(--ease);font-weight:var(--fw-semibold);
+  white-space:nowrap;min-height:34px;
 }
 .seg button:hover{color:var(--ink);}
-.seg button.active{
-  background:var(--surface);
-  color:var(--ink);
-  box-shadow:0 2px 8px rgba(15,23,42,.12),var(--sh-inset);
-}
+.seg button.active{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px rgba(15,23,42,.12),var(--sh-inset);}
 .seg-full{display:flex;width:100%;}
 .seg-full button{flex:1;min-width:0;}
 
-/* ============================================================================
- * SECTION 16 — PROGRESS BARS
- * ========================================================================= */
-.progress{
-  height:8px;
-  border-radius:var(--r-pill);
-  background:var(--surface-3);
-  overflow:hidden;
-  box-shadow:inset 0 1px 3px rgba(15,23,42,.1);
-}
-.progress i{
-  display:block;
-  height:100%;
-  border-radius:inherit;
-  background:linear-gradient(90deg,#7cb3ff,#2563eb);
-  transition:width .6s var(--ease-out);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
-}
+.progress{height:8px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;box-shadow:inset 0 1px 3px rgba(15,23,42,.1);}
+.progress i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7cb3ff,#2563eb);transition:width .6s var(--ease-out);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
 .progress.ok i{background:linear-gradient(90deg,#6ee7b7,#059669);}
 .progress.warn i{background:linear-gradient(90deg,#fde047,#d97706);}
 .progress.bad i{background:linear-gradient(90deg,#fca5a5,#dc2626);}
 .progress.lg{height:12px;}
 .progress.sm{height:6px;}
 
-/* ============================================================================
- * SECTION 17 — VIEWS
- * ========================================================================= */
-.view{
-  display:none;
-}
-.view.active{
-  display:block;
-  animation:viewIn .38s var(--ease-out);
-}
+.view{display:none;}
+.view.active{display:block;animation:viewIn .38s var(--ease-out);}
 
-.view-title{
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  margin-bottom:14px;
-  flex-wrap:wrap;
-}
-.view-title h2{
-  font-size:19px;
-  font-weight:var(--fw-extrabold);
-  letter-spacing:-.02em;
-}
-.view-title span{
-  font-size:12px;
-  color:var(--ink-3);
-}
+.view-title{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.view-title h2{font-size:19px;font-weight:var(--fw-extrabold);letter-spacing:-.02em;}
+.view-title span{font-size:12px;color:var(--ink-3);}
 
 .section{margin-top:14px;}
 .section:first-child{margin-top:0;}
 
-/* ============================================================================
- * SECTION 18 — EMPTY STATES
- * ========================================================================= */
 .empty{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:12px;
-  text-align:center;
-  padding:30px 20px;
-  border:1.5px dashed var(--border-strong);
-  border-radius:var(--r);
-  background:var(--surface-2);
-  color:var(--ink-2);
+  display:flex;flex-direction:column;align-items:center;
+  gap:12px;text-align:center;padding:30px 20px;
+  border:1.5px dashed var(--border-strong);border-radius:var(--r);
+  background:var(--surface-2);color:var(--ink-2);
 }
-.empty svg{
-  width:48px!important;
-  height:48px!important;
-  opacity:.5;
-  color:var(--ink-3);
-}
-.empty b{
-  font-size:14.5px;
-  color:var(--ink);
-  font-weight:var(--fw-bold);
-}
-.empty p{
-  font-size:12.5px;
-  max-width:44ch;
-  line-height:var(--lh-relaxed);
-}
-.empty.no-border{
-  border:0;
-  background:transparent;
-  padding:12px;
-}
+.empty svg{width:48px!important;height:48px!important;opacity:.5;color:var(--ink-3);}
+.empty b{font-size:14.5px;color:var(--ink);font-weight:var(--fw-bold);}
+.empty p{font-size:12.5px;max-width:44ch;line-height:var(--lh-relaxed);}
+.empty.no-border{border:0;background:transparent;padding:12px;}
 
-/* ============================================================================
- * SECTION 19 — HERO
- * ========================================================================= */
 .hero{
-  position:relative;
-  overflow:hidden;
-  border-radius:var(--r-xl);
-  padding:20px;
+  position:relative;overflow:hidden;border-radius:var(--r-xl);padding:20px;
   background:linear-gradient(135deg,#4a7de0 0%,#2563eb 40%,#1e40af 100%);
-  color:#fff;
-  box-shadow:
-    0 20px 44px -18px rgba(37,99,235,.8),
-    inset 0 1px 0 rgba(255,255,255,.35);
+  color:#fff;box-shadow:0 20px 44px -18px rgba(37,99,235,.8),inset 0 1px 0 rgba(255,255,255,.35);
 }
-.hero::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(255,255,255,.32),transparent 55%),
-    radial-gradient(circle at 0% 100%,rgba(0,0,0,.22),transparent 60%);
-  pointer-events:none;
-}
-.hero::after{
-  content:'';
-  position:absolute;
-  inset:-50%;
-  background:conic-gradient(from 180deg,transparent 0%,rgba(255,255,255,.1) 25%,transparent 50%);
-  animation:heroSpin 24s linear infinite;
-  pointer-events:none;
-}
-.hero-body{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:16px;
-  flex-wrap:wrap;
-  z-index:1;
-}
-.hero-num{
-  font-family:var(--font-mono);
-  font-size:var(--fs-hero);
-  line-height:1;
-  font-weight:var(--fw-extrabold);
-  letter-spacing:-2px;
-  text-shadow:0 4px 12px rgba(0,0,0,.25);
-  font-variant-numeric:tabular-nums;
-}
-.hero-meta{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  min-width:0;
-  flex:1;
-}
-.hero-meta b{
-  font-size:14.5px;
-  font-weight:var(--fw-bold);
-}
-.hero-meta span{
-  font-size:12px;
-  opacity:.9;
-}
-.hero .btn{
-  background:rgba(255,255,255,.18);
-  color:#fff;
-  border-color:rgba(255,255,255,.32);
-  box-shadow:0 8px 20px -8px rgba(0,0,0,.3);
-  backdrop-filter:blur(10px);
-}
-.hero .btn:hover{
-  background:rgba(255,255,255,.28);
-}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(255,255,255,.32),transparent 55%),radial-gradient(circle at 0% 100%,rgba(0,0,0,.22),transparent 60%);pointer-events:none;}
+.hero::after{content:'';position:absolute;inset:-50%;background:conic-gradient(from 180deg,transparent 0%,rgba(255,255,255,.1) 25%,transparent 50%);animation:heroSpin 24s linear infinite;pointer-events:none;}
+.hero-body{position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap;z-index:1;}
+.hero-num{font-family:var(--font-mono);font-size:var(--fs-hero);line-height:1;font-weight:var(--fw-extrabold);letter-spacing:-2px;text-shadow:0 4px 12px rgba(0,0,0,.25);font-variant-numeric:tabular-nums;}
+.hero-meta{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
+.hero-meta b{font-size:14.5px;font-weight:var(--fw-bold);}
+.hero-meta span{font-size:12px;opacity:.9;}
+.hero .btn{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.32);box-shadow:0 8px 20px -8px rgba(0,0,0,.3);backdrop-filter:blur(10px);}
+.hero .btn:hover{background:rgba(255,255,255,.28);}
 
-/* ============================================================================
- * SECTION 20 — STAT CARD
- * ========================================================================= */
 .stat{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:14px;
-  box-shadow:var(--sh-2);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  position:relative;
-  overflow:hidden;
-  min-height:98px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px;box-shadow:var(--sh-2);display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;min-height:98px;
   transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);
 }
-.stat:hover{
-  transform:translateY(-3px);
-  box-shadow:var(--sh-3);
-}
-.stat::after{
-  content:'';
-  position:absolute;
-  inset-inline-end:-20px;
-  top:-20px;
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  background:var(--tint,transparent);
-  opacity:.5;
-  pointer-events:none;
-}
-.stat::before{
-  content:'';
-  position:absolute;
-  inset-inline-start:0;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:linear-gradient(180deg,var(--accent,var(--brand)),transparent);
-  opacity:.7;
-}
-.stat .stat-top{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  position:relative;
-  z-index:1;
-}
-.stat .icon-wrap{
-  width:32px;
-  height:32px;
-  border-radius:10px;
-  display:grid;
-  place-items:center;
-  background:var(--surface-3);
-  color:var(--brand);
-  flex:none;
-}
-.stat .icon-wrap svg{
-  width:18px!important;
-  height:18px!important;
-}
-.stat .lbl{
-  font-size:11.5px;
-  font-weight:var(--fw-semibold);
-  color:var(--ink-2);
-  line-height:1.5;
-}
-.stat .val{
-  font-family:var(--font-mono);
-  font-size:24px;
-  font-weight:var(--fw-extrabold);
-  line-height:1.1;
-  letter-spacing:-.5px;
-  position:relative;
-  z-index:1;
-  font-variant-numeric:tabular-nums;
-}
-.stat .sub{
-  font-size:11px;
-  color:var(--ink-3);
-  position:relative;
-  z-index:1;
-  line-height:1.5;
-}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--sh-3);}
+.stat::after{content:'';position:absolute;inset-inline-end:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:var(--tint,transparent);opacity:.5;pointer-events:none;}
+.stat::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent,var(--brand)),transparent);opacity:.7;}
+.stat .stat-top{display:flex;align-items:center;gap:8px;position:relative;z-index:1;}
+.stat .icon-wrap{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--surface-3);color:var(--brand);flex:none;}
+.stat .icon-wrap svg{width:18px!important;height:18px!important;}
+.stat .lbl{font-size:11.5px;font-weight:var(--fw-semibold);color:var(--ink-2);line-height:1.5;}
+.stat .val{font-family:var(--font-mono);font-size:24px;font-weight:var(--fw-extrabold);line-height:1.1;letter-spacing:-.5px;position:relative;z-index:1;font-variant-numeric:tabular-nums;}
+.stat .sub{font-size:11px;color:var(--ink-3);position:relative;z-index:1;line-height:1.5;}
 
-/* ============================================================================
- * SECTION 21 — LISTS / ITEMS
- * ========================================================================= */
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.item{
-  display:flex;
-  gap:10px;
-  padding:12px 14px;
-  border:1px solid var(--border);
-  border-radius:var(--r-sm);
-  background:var(--surface-2);
-  align-items:flex-start;
-  transition:all var(--dur-fast) var(--ease);
-}
-.item:hover{
-  background:var(--surface);
-  box-shadow:var(--sh-1);
-  border-color:var(--border-2);
-}
-.item-main{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.item-main b{
-  font-size:13.5px;
-  font-weight:var(--fw-bold);
-  overflow-wrap:anywhere;
-  word-break:break-word;
-  line-height:1.6;
-}
-.item-main span{
-  font-size:11.5px;
-  color:var(--ink-3);
-  line-height:1.6;
-}
-.item-main p{
-  font-size:12.5px;
-  line-height:var(--lh-relaxed);
-  margin-top:4px;
-  overflow-wrap:anywhere;
-  color:var(--ink-2);
-}
+.list{display:flex;flex-direction:column;gap:8px;}
+.item{display:flex;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);align-items:flex-start;transition:all var(--dur-fast) var(--ease);}
+.item:hover{background:var(--surface);box-shadow:var(--sh-1);border-color:var(--border-2);}
+.item-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+.item-main b{font-size:13.5px;font-weight:var(--fw-bold);overflow-wrap:anywhere;word-break:break-word;line-height:1.6;}
+.item-main span{font-size:11.5px;color:var(--ink-3);line-height:1.6;}
+.item-main p{font-size:12.5px;line-height:var(--lh-relaxed);margin-top:4px;overflow-wrap:anywhere;color:var(--ink-2);}
 
-/* ============================================================================
- * SECTION 22 — TIMER
- * ========================================================================= */
-.timer-stage{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:20px;
-  padding:8px 0;
-}
-.ring-wrap{
-  position:relative;
-  width:min(280px,72vw);
-  aspect-ratio:1;
-  filter:drop-shadow(0 20px 40px rgba(37,99,235,.18));
-}
-.ring-wrap svg{
-  width:100%!important;
-  height:100%!important;
-  transform:rotate(-90deg);
-}
-.ring-bg{
-  fill:none;
-  stroke:var(--surface-3);
-  stroke-width:11;
-}
-.ring-fg{
-  fill:none;
-  stroke:url(#ringGrad);
-  stroke-width:11;
-  stroke-linecap:round;
-  transition:stroke-dashoffset .6s linear;
-  filter:drop-shadow(0 4px 16px var(--brand-glow));
-}
-.ring-inner{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  text-align:center;
-}
-.ring-time{
-  font-family:var(--font-mono);
-  font-size:clamp(34px,10vw,52px);
-  font-weight:var(--fw-extrabold);
-  line-height:1.15;
-  letter-spacing:-1px;
-  color:var(--ink);
-  white-space:nowrap;
-  font-variant-numeric:tabular-nums;
-}
-.ring-sub{
-  font-size:12px;
-  color:var(--ink-3);
-  font-weight:var(--fw-semibold);
-  margin-top:6px;
-  padding:0 20px;
-}
-.timer-ctrl{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.timer-stage{display:flex;flex-direction:column;align-items:center;gap:20px;padding:8px 0;}
+.ring-wrap{position:relative;width:min(280px,72vw);aspect-ratio:1;filter:drop-shadow(0 20px 40px rgba(37,99,235,.18));}
+.ring-wrap svg{width:100%!important;height:100%!important;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(--surface-3);stroke-width:11;}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset .6s linear;filter:drop-shadow(0 4px 16px var(--brand-glow));}
+.ring-inner{position:absolute;inset:0;display:grid;place-items:center;text-align:center;}
+.ring-time{font-family:var(--font-mono);font-size:clamp(34px,10vw,52px);font-weight:var(--fw-extrabold);line-height:1.15;letter-spacing:-1px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.ring-sub{font-size:12px;color:var(--ink-3);font-weight:var(--fw-semibold);margin-top:6px;padding:0 20px;}
+.timer-ctrl{display:flex;align-items:center;gap:14px;}
 .ctrl-fab{
-  width:66px;
-  height:66px;
-  border-radius:50%;
-  border:0;
-  display:grid;
-  place-items:center;
-  color:#fff;
+  width:66px;height:66px;border-radius:50%;border:0;
+  display:grid;place-items:center;color:#fff;
   background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.4),
-    inset 0 -3px 10px rgba(0,0,0,.15),
-    0 14px 28px -10px rgba(37,99,235,.85);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.4),inset 0 -3px 10px rgba(0,0,0,.15),0 14px 28px -10px rgba(37,99,235,.85);
   transition:all var(--dur-fast) var(--ease);
   -webkit-tap-highlight-color:transparent;
 }
-.ctrl-fab:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.08);
-}
+.ctrl-fab:hover{transform:translateY(-2px);filter:brightness(1.08);}
 .ctrl-fab:active{transform:scale(.94);}
-.ctrl-fab svg{
-  width:28px!important;
-  height:28px!important;
-  filter:drop-shadow(0 1.5px 2px rgba(0,0,0,.3));
-}
-.ctrl-fab.ghost{
-  width:52px;
-  height:52px;
-  background:var(--surface);
-  color:var(--ink-2);
-  border:1px solid var(--border);
-  box-shadow:var(--sh-2),var(--sh-inset);
-}
-.ctrl-fab.ghost svg{
-  width:22px!important;
-  height:22px!important;
-  filter:none;
-}
-.ctrl-fab.ghost:hover{
-  background:var(--surface-2);
-  color:var(--ink);
-}
+.ctrl-fab svg{width:28px!important;height:28px!important;filter:drop-shadow(0 1.5px 2px rgba(0,0,0,.3));}
+.ctrl-fab.ghost{width:52px;height:52px;background:var(--surface);color:var(--ink-2);border:1px solid var(--border);box-shadow:var(--sh-2),var(--sh-inset);}
+.ctrl-fab.ghost svg{width:22px!important;height:22px!important;filter:none;}
+.ctrl-fab.ghost:hover{background:var(--surface-2);color:var(--ink);}
 .ctrl-fab.ghost.danger{color:var(--bad);}
 .ctrl-fab.ghost.danger:hover{background:var(--bad-soft);}
 
-/* Zen mode */
-body.zen-mode{
-  background:#0a1020;
-}
-body.zen-mode .sidebar,
-body.zen-mode .bottomnav,
-body.zen-mode .topbar,
-body.zen-mode .fab{
-  display:none!important;
-}
+body.zen-mode{background:#0a1020;}
+body.zen-mode .sidebar,body.zen-mode .bottomnav,body.zen-mode .topbar,body.zen-mode .fab{display:none!important;}
 body.zen-mode .main{padding:0;}
-body.zen-mode .timer-stage{
-  min-height:100vh;
-  min-height:100dvh;
-  justify-content:center;
-  gap:34px;
-}
-body.zen-mode .view-title,
-body.zen-mode .chips-row{display:none;}
+body.zen-mode .timer-stage{min-height:100vh;min-height:100dvh;justify-content:center;gap:34px;}
+body.zen-mode .view-title,body.zen-mode .chips-row{display:none;}
 body.zen-mode .ring-wrap{width:min(460px,90vw);}
-body.zen-mode .ring-time{
-  font-size:clamp(56px,17vw,120px);
-  letter-spacing:-2px;
-  color:#fff;
-}
+body.zen-mode .ring-time{font-size:clamp(56px,17vw,120px);letter-spacing:-2px;color:#fff;}
 body.zen-mode .ring-sub{color:rgba(255,255,255,.7);font-size:14px;}
 body.zen-mode .ring-bg{stroke:rgba(255,255,255,.1);}
-body.zen-mode .card{
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-}
+body.zen-mode .card{background:transparent!important;border:0!important;box-shadow:none!important;}
 
-/* ============================================================================
- * SECTION 23 — CHARTS
- * ========================================================================= */
-.bars{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:6px;
-  height:140px;
-  padding:6px 0;
-}
-.bar-col{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  height:100%;
-}
-.bar-track{
-  width:100%;
-  flex:1;
-  display:flex;
-  align-items:flex-end;
-  border-radius:10px;
-  background:var(--surface-2);
-  overflow:hidden;
-  box-shadow:inset 0 1px 3px rgba(15,23,42,.06);
-}
-.bar-fill{
-  width:100%;
-  border-radius:10px;
-  background:linear-gradient(180deg,#7cb3ff,#2563eb);
-  min-height:3px;
-  transition:height .8s var(--ease-out);
-}
-.bar-fill.today{
-  background:linear-gradient(180deg,#c4b5fd,#7c3aed);
-  box-shadow:0 -2px 10px rgba(124,58,237,.4);
-}
-.bar-lbl{
-  font-size:10.5px;
-  color:var(--ink-3);
-  font-weight:var(--fw-semibold);
-}
-.bar-val{
-  font-family:var(--font-mono);
-  font-size:10px;
-  color:var(--ink-3);
-}
+.bars{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;height:140px;padding:6px 0;}
+.bar-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;}
+.bar-track{width:100%;flex:1;display:flex;align-items:flex-end;border-radius:10px;background:var(--surface-2);overflow:hidden;box-shadow:inset 0 1px 3px rgba(15,23,42,.06);}
+.bar-fill{width:100%;border-radius:10px;background:linear-gradient(180deg,#7cb3ff,#2563eb);min-height:3px;transition:height .8s var(--ease-out);}
+.bar-fill.today{background:linear-gradient(180deg,#c4b5fd,#7c3aed);box-shadow:0 -2px 10px rgba(124,58,237,.4);}
+.bar-lbl{font-size:10.5px;color:var(--ink-3);font-weight:var(--fw-semibold);}
+.bar-val{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);}
 
-.donut-wrap{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.donut{
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  position:relative;
-  flex:none;
-  box-shadow:var(--sh-3),inset 0 3px 8px rgba(0,0,0,.08);
-  animation:donutIn .8s var(--ease-out);
-}
-.donut::after{
-  content:'';
-  position:absolute;
-  inset:26px;
-  border-radius:50%;
-  background:var(--surface);
-  box-shadow:inset 0 3px 10px rgba(15,23,42,.12);
-}
-.donut-center{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  z-index:2;
-  text-align:center;
-  font-family:var(--font-mono);
-}
-.donut-center b{
-  font-size:20px;
-  display:block;
-  letter-spacing:-.5px;
-}
-.donut-center span{
-  font-size:11px;
-  color:var(--ink-3);
-}
-.legend{
-  flex:1;
-  min-width:170px;
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-.legend-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:12.5px;
-  padding:3px 0;
-}
-.legend-dot{
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  flex:none;
-  box-shadow:inset 0 1.5px 2px rgba(0,0,0,.22);
-}
-.legend-name{
-  flex:1;
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.legend-val{
-  font-family:var(--font-mono);
-  font-size:11.5px;
-  color:var(--ink-2);
-}
+.donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;}
+.donut{width:150px;height:150px;border-radius:50%;position:relative;flex:none;box-shadow:var(--sh-3),inset 0 3px 8px rgba(0,0,0,.08);animation:donutIn .8s var(--ease-out);}
+.donut::after{content:'';position:absolute;inset:26px;border-radius:50%;background:var(--surface);box-shadow:inset 0 3px 10px rgba(15,23,42,.12);}
+.donut-center{position:absolute;inset:0;display:grid;place-items:center;z-index:2;text-align:center;font-family:var(--font-mono);}
+.donut-center b{font-size:20px;display:block;letter-spacing:-.5px;}
+.donut-center span{font-size:11px;color:var(--ink-3);}
+.legend{flex:1;min-width:170px;display:flex;flex-direction:column;gap:7px;}
+.legend-row{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;}
+.legend-dot{width:11px;height:11px;border-radius:50%;flex:none;box-shadow:inset 0 1.5px 2px rgba(0,0,0,.22);}
+.legend-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.legend-val{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-2);}
 
-/* ============================================================================
- * SECTION 24 — SETTINGS GROUPS
- * ========================================================================= */
-.settings-group{
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  background:var(--surface);
-  margin-bottom:12px;
-  box-shadow:var(--sh-1);
-}
-.settings-group-head{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:14px;
-}
-.settings-group-head svg{
-  width:22px;
-  height:22px;
-  color:var(--brand);
-  flex:none;
-}
-.settings-group-head h3{
-  font-size:14.5px;
-  font-weight:var(--fw-extrabold);
-  flex:1;
-}
-.settings-group-head p{
-  font-size:11.5px;
-  color:var(--ink-3);
-  margin-top:2px;
-}
-
-.setting-row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border-subtle);
-}
+.settings-group{padding:16px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);margin-bottom:12px;box-shadow:var(--sh-1);}
+.settings-group-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.settings-group-head svg{width:22px;height:22px;color:var(--brand);flex:none;}
+.settings-group-head h3{font-size:14.5px;font-weight:var(--fw-extrabold);flex:1;}
+.settings-group-head p{font-size:11.5px;color:var(--ink-3);margin-top:2px;}
+.setting-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-subtle);}
 .setting-row:last-child{border-bottom:0;padding-bottom:0;}
 .setting-row:first-of-type{padding-top:0;}
-.setting-row-main{
-  flex:1;
-  min-width:0;
-}
-.setting-row-main b{
-  display:block;
-  font-size:13.5px;
-  font-weight:var(--fw-semibold);
-}
-.setting-row-main span{
-  display:block;
-  font-size:11.5px;
-  color:var(--ink-3);
-  margin-top:2px;
-}
+.setting-row-main{flex:1;min-width:0;}
+.setting-row-main b{display:block;font-size:13.5px;font-weight:var(--fw-semibold);}
+.setting-row-main span{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px;}
 
-/* ============================================================================
- * SECTION 25 — NAV CARDS
- * ========================================================================= */
 .nav-card{
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-  text-align:start;
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  background:var(--surface);
-  cursor:pointer;
+  display:flex;gap:14px;align-items:flex-start;text-align:start;
+  padding:16px;border:1px solid var(--border);border-radius:var(--r);
+  background:var(--surface);cursor:pointer;
   transition:all var(--dur-fast) var(--ease);
-  box-shadow:var(--sh-2);
-  width:100%;
-  position:relative;
-  overflow:hidden;
+  box-shadow:var(--sh-2);width:100%;position:relative;overflow:hidden;
 }
-.nav-card:hover{
-  transform:translateY(-3px);
-  box-shadow:var(--sh-3);
-  border-color:var(--border-2);
-}
+.nav-card:hover{transform:translateY(-3px);box-shadow:var(--sh-3);border-color:var(--border-2);}
 .nav-card-body{flex:1;min-width:0;}
-.nav-card b{
-  display:block;
-  font-size:14px;
-  font-weight:var(--fw-bold);
-  margin-bottom:4px;
-}
-.nav-card span{
-  font-size:12.5px;
-  color:var(--ink-2);
-  line-height:1.75;
-}
-.nav-card svg{
-  width:22px;
-  height:22px;
-}
+.nav-card b{display:block;font-size:14px;font-weight:var(--fw-bold);margin-bottom:4px;}
+.nav-card span{font-size:12.5px;color:var(--ink-2);line-height:1.75;}
+.nav-card svg{width:22px;height:22px;}
 
-/* ============================================================================
- * SECTION 26 — TOASTS
- * ========================================================================= */
 .toasts{
-  position:fixed;
-  z-index:var(--z-toast);
+  position:fixed;z-index:var(--z-toast);
   bottom:calc(var(--nav-h) + 48px + env(safe-area-inset-bottom));
-  inset-inline:12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  align-items:center;
+  inset-inline:12px;display:flex;flex-direction:column;gap:8px;align-items:center;
   pointer-events:none;
 }
 .toast{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  max-width:420px;
-  width:100%;
-  padding:12px 15px;
-  border-radius:14px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  box-shadow:var(--sh-4);
-  font-size:13px;
-  line-height:1.6;
-  opacity:0;
-  transform:translateY(12px) scale(.97);
+  display:flex;align-items:center;gap:10px;
+  max-width:420px;width:100%;padding:12px 15px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--border);
+  box-shadow:var(--sh-4);font-size:13px;line-height:1.6;
+  opacity:0;transform:translateY(12px) scale(.97);
   transition:all var(--dur-slow) var(--ease-out);
-  pointer-events:auto;
-  overflow-wrap:anywhere;
-  position:relative;
-  overflow:hidden;
+  pointer-events:auto;overflow-wrap:anywhere;
+  position:relative;overflow:hidden;
 }
-.toast::after{
-  content:'';
-  position:absolute;
-  bottom:0;
-  inset-inline-start:0;
-  height:3px;
-  width:100%;
-  background:linear-gradient(90deg,var(--brand),var(--brand-2));
-  transform-origin:right;
-  animation:toastBar 3.2s linear forwards;
-}
+.toast::after{content:'';position:absolute;bottom:0;inset-inline-start:0;height:3px;width:100%;background:linear-gradient(90deg,var(--brand),var(--brand-2));transform-origin:right;animation:toastBar 3.2s linear forwards;}
 .toast.in{opacity:1;transform:none;}
-.toast .tdot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--brand);
-  flex:none;
-  box-shadow:0 0 0 3px var(--brand-soft);
-}
+.toast .tdot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex:none;box-shadow:0 0 0 3px var(--brand-soft);}
 .toast.ok .tdot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft);}
 .toast.ok::after{background:linear-gradient(90deg,var(--ok),var(--ok-2));}
 .toast.error .tdot{background:var(--bad);box-shadow:0 0 0 3px var(--bad-soft);}
@@ -2640,320 +980,86 @@ body.zen-mode .card{
 .toast.warn .tdot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft);}
 .toast.warn::after{background:linear-gradient(90deg,var(--warn),var(--warn-2));}
 
-/* ============================================================================
- * SECTION 27 — MODAL
- * ========================================================================= */
-.modal-root{
-  position:fixed;
-  inset:0;
-  z-index:var(--z-modal);
-  display:none;
-}
+.modal-root{position:fixed;inset:0;z-index:var(--z-modal);display:none;}
 .modal-root.open{display:block;}
-
-.overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(9,13,22,.62);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  animation:fadeIn .25s var(--ease);
-}
-
+.overlay{position:absolute;inset:0;background:rgba(9,13,22,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadeIn .25s var(--ease);}
 .modal{
-  position:absolute;
-  inset-inline:0;
-  bottom:0;
-  max-height:92dvh;
-  overflow-y:auto;
-  background:var(--surface);
-  border-radius:28px 28px 0 0;
+  position:absolute;inset-inline:0;bottom:0;
+  max-height:92dvh;overflow-y:auto;
+  background:var(--surface);border-radius:28px 28px 0 0;
   border:1px solid var(--border);
   padding:22px 18px calc(26px + env(safe-area-inset-bottom));
   animation:sheetUp .38s var(--ease-out);
   box-shadow:0 -32px 60px -24px rgba(9,13,22,.55);
   overscroll-behavior:contain;
 }
+.modal-head{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.modal-head h3{font-size:16px;font-weight:var(--fw-extrabold);flex:1;letter-spacing:-.015em;}
+.modal-form{display:flex;flex-direction:column;gap:14px;}
+.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap;}
 
-.modal-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px;
-}
-.modal-head h3{
-  font-size:16px;
-  font-weight:var(--fw-extrabold);
-  flex:1;
-  letter-spacing:-.015em;
-}
-
-.modal-form{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.modal-actions{
-  display:flex;
-  gap:9px;
-  justify-content:flex-end;
-  margin-top:8px;
-  flex-wrap:wrap;
-}
-
-.form-grid{
-  display:grid;
-  gap:12px;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-}
+.form-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));}
 .form-grid.c2{grid-template-columns:repeat(2,1fr);}
 .form-grid.c3{grid-template-columns:repeat(3,1fr);}
 .form-grid.c4{grid-template-columns:repeat(2,1fr);}
-@media(min-width:640px){
-  .form-grid.c4{grid-template-columns:repeat(4,1fr);}
-}
+@media(min-width:640px){.form-grid.c4{grid-template-columns:repeat(4,1fr);}}
 .form-grid .span2{grid-column:span 2;}
 
-/* ============================================================================
- * SECTION 28 — IMAGE PREVIEW
- * ========================================================================= */
-.img-preview{
-  margin-top:8px;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  max-width:260px;
-  position:relative;
-}
-.img-preview img{
-  display:block;
-  width:100%;
-  height:auto;
-}
-.img-preview button{
-  position:absolute;
-  top:6px;
-  inset-inline-end:6px;
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  border:0;
-  background:rgba(0,0,0,.55);
-  color:#fff;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  transition:all var(--dur-fast);
-}
+.img-preview{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid var(--border);max-width:260px;position:relative;}
+.img-preview img{display:block;width:100%;height:auto;}
+.img-preview button{position:absolute;top:6px;inset-inline-end:6px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;cursor:pointer;transition:all var(--dur-fast);}
 .img-preview button:hover{background:rgba(220,38,38,.85);}
 
-/* ============================================================================
- * SECTION 29 — SPINNER
- * ========================================================================= */
-.spinner{
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  border:2.5px solid var(--border-strong);
-  border-top-color:var(--brand);
-  animation:spin .7s linear infinite;
-  display:inline-block;
-}
+.spinner{width:20px;height:20px;border-radius:50%;border:2.5px solid var(--border-strong);border-top-color:var(--brand);animation:spin .7s linear infinite;display:inline-block;}
 .spinner.lg{width:36px;height:36px;border-width:3px;}
 .spinner.sm{width:14px;height:14px;border-width:2px;}
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:34px 20px;text-align:center;}
+.loading-state p{font-size:13px;color:var(--ink-2);}
 
-.loading-state{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  padding:34px 20px;
-  text-align:center;
-}
-.loading-state p{
-  font-size:13px;
-  color:var(--ink-2);
-}
-
-/* ============================================================================
- * SECTION 30 — SYNC PILL
- * ========================================================================= */
 .sync-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:4px 10px;
-  border-radius:var(--r-pill);
-  font-size:11px;
-  font-weight:var(--fw-semibold);
-  background:var(--ok-soft);
-  color:var(--ok);
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:var(--r-pill);
+  font-size:11px;font-weight:var(--fw-semibold);
+  background:var(--ok-soft);color:var(--ok);
   border:1px solid transparent;
   transition:all var(--dur) var(--ease);
   white-space:nowrap;
 }
-.sync-pill.queue{
-  background:var(--warn-soft);
-  color:var(--warn);
-}
-.sync-pill.offline{
-  background:var(--bad-soft);
-  color:var(--bad);
-}
-.sync-pill .dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:currentColor;
-}
+.sync-pill.queue{background:var(--warn-soft);color:var(--warn);}
+.sync-pill.offline{background:var(--bad-soft);color:var(--bad);}
+.sync-pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
 
-/* ============================================================================
- * SECTION 31 — ACCOUNT
- * ========================================================================= */
 .acct-hero{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:16px;
+  display:flex;align-items:center;gap:14px;padding:16px;
   background:linear-gradient(135deg,#eef4ff,#f7f4ff);
-  border-radius:var(--r);
-  margin-bottom:14px;
+  border-radius:var(--r);margin-bottom:14px;
 }
-[data-theme="dark"] .acct-hero{
-  background:linear-gradient(135deg,#0e1830,#100a1e);
-}
-.acct-avatar{
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  flex:none;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(145deg,#7cb3ff,#1d4ed8);
-  color:#fff;
-  font-weight:var(--fw-extrabold);
-  font-size:20px;
-  box-shadow:0 10px 22px -8px rgba(37,99,235,.7);
-}
-.acct-hero b{
-  display:block;
-  font-size:15px;
-}
-.acct-hero span{
-  display:block;
-  font-size:12px;
-  color:var(--ink-3);
-  margin-top:2px;
-}
+[data-theme="dark"] .acct-hero{background:linear-gradient(135deg,#0e1830,#100a1e);}
+.acct-avatar{width:56px;height:56px;border-radius:50%;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,#7cb3ff,#1d4ed8);color:#fff;font-weight:var(--fw-extrabold);font-size:20px;box-shadow:0 10px 22px -8px rgba(37,99,235,.7);}
+.acct-hero b{display:block;font-size:15px;}
+.acct-hero span{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;}
 
-/* ============================================================================
- * SECTION 32 — RESPONSIVE — Desktop
- * ========================================================================= */
 @media(min-width:900px){
   .bottomnav{display:none;}
-  .toasts{
-    bottom:24px;
-    inset-inline:auto 24px;
-    align-items:flex-end;
-  }
+  .toasts{bottom:24px;inset-inline:auto 24px;align-items:flex-end;}
   .sidebar{display:flex;}
   .topbar{display:none;}
-  .main{
-    padding:var(--container-pad-desktop);
-    padding-bottom:60px;
-  }
+  .main{padding:var(--container-pad-desktop);padding-bottom:60px;}
   .hero-num{font-size:var(--fs-hero-desktop);}
   .view-title h2{font-size:22px;}
-  .fab{
-    inset-inline-end:auto;
-    inset-inline-start:calc(var(--sidebar-w) + 20px);
-    bottom:24px;
-  }
-  .modal{
-    inset:0;
-    margin:auto;
-    width:min(640px,94vw);
-    height:max-content;
-    max-height:88dvh;
-    border-radius:24px;
-    padding:26px;
-    animation:modalIn .3s var(--ease-out);
-  }
+  .fab{inset-inline-end:auto;inset-inline-start:calc(var(--sidebar-w) + 20px);bottom:24px;}
+  .modal{inset:0;margin:auto;width:min(640px,94vw);height:max-content;max-height:88dvh;border-radius:24px;padding:26px;animation:modalIn .3s var(--ease-out);}
   .modal.wide{width:min(840px,94vw);}
 }
-
-@media(min-width:1200px){
-  .sidebar{width:290px;}
-}
-
-/* ============================================================================
- * SECTION 33 — PREFERENCES
- * ========================================================================= */
-@media(prefers-reduced-motion:reduce){
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
-    scroll-behavior:auto!important;
-  }
-}
-
-@media(prefers-contrast:more){
-  .card,
-  .btn,
-  .input,
-  .select,
-  .textarea{
-    border-width:2px;
-  }
-}
-
-@media(prefers-color-scheme:dark){
-  html:not([data-theme]){
-    color-scheme:dark;
-  }
-}
-
-/* ============================================================================
- * SECTION 34 — PRINT STYLES
- * ========================================================================= */
-@media print{
-  .sidebar,
-  .bottomnav,
-  .topbar,
-  .toasts,
-  .modal-root,
-  .fab,
-  .cmd-root{
-    display:none!important;
-  }
-  .main{
-    padding:0;
-    max-width:100%;
-  }
-  .card{
-    break-inside:avoid;
-    box-shadow:none;
-    border:1px solid #ddd;
-  }
-  body{
-    background:#fff;
-    color:#000;
-  }
-}
+@media(min-width:1200px){.sidebar{width:290px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
+@media print{.sidebar,.bottomnav,.topbar,.toasts,.modal-root,.fab,.cmd-root{display:none!important;}.main{padding:0;max-width:100%;}.card{break-inside:avoid;box-shadow:none;border:1px solid #ddd;}body{background:#fff;color:#000;}}
 </style>
 </head>
 <body>
 
-<!-- =========================================================================
-     APP SHELL
-     ========================================================================= -->
 <div class="app" id="appRoot">
 
-  <!-- Sidebar (desktop) -->
   <aside class="sidebar" aria-label="ناوبری اصلی">
     <div class="sidebar-head">
       <div class="logo">KY</div>
@@ -2979,10 +1085,8 @@ body.zen-mode .card{
     </div>
   </aside>
 
-  <!-- Content -->
   <div class="content">
 
-    <!-- Topbar (mobile) -->
     <header class="topbar">
       <div class="brand">
         <div class="logo">KY</div>
@@ -3007,7 +1111,6 @@ body.zen-mode .card{
       </div>
     </header>
 
-    <!-- Main views -->
     <main class="main" id="main">
 
       <section id="view-home" class="view active" aria-label="خانه">
@@ -3057,20 +1160,14 @@ body.zen-mode .card{
     </main>
   </div>
 
-  <!-- Bottom nav (mobile) -->
   <nav class="bottomnav" id="bottomNav" aria-label="ناوبری پایین"></nav>
 </div>
 
-<!-- FAB -->
 <button class="fab hidden" id="fab" data-action="fab-main" aria-label="اقدام سریع"></button>
 
-<!-- Toasts -->
 <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
-
-<!-- Modal -->
 <div class="modal-root" id="modalRoot"></div>
 
-<!-- Command palette -->
 <div class="cmd-root" id="cmdRoot" role="dialog" aria-modal="true" aria-label="پالت فرمان" style="display:none;position:fixed;inset:0;z-index:300;padding-top:10vh;align-items:flex-start;justify-content:center">
   <div class="cmd-bg" data-action="close-cmd" style="position:absolute;inset:0;background:rgba(9,13,22,.62);backdrop-filter:blur(8px)"></div>
   <div class="cmd-box" style="position:relative;width:min(560px,92vw);max-height:70dvh;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--sh-5);display:flex;flex-direction:column">
@@ -3079,11 +1176,9 @@ body.zen-mode .card{
   </div>
 </div>
 
-<!-- Hidden file inputs -->
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <input type="file" id="imgFile" accept="image/*" hidden>
 
-<!-- Supabase SDK loader with fallback -->
 <script>
   (function(){
     var loaded = false;
@@ -3102,39 +1197,16 @@ body.zen-mode .card{
 <script>
 "use strict";
 /* ============================================================================
- * KONKOOR YAR — APPLICATION LOGIC
- * ---------------------------------------------------------------------------
- * این فایل به چند بخش تقسیم می‌شود:
- *   1. Utilities — توابع کمکی
- *   2. IndexedDB — لایه ذخیره‌سازی محلی
- *   3. Constants — ثابت‌های سراسری
- *   4. State — وضعیت برنامه
- *   5. Outbox — صف همگام‌سازی
- *   6. Domain — منطق دامنه
- *   7. Timer — موتور تایمر
- *   8. Icons — آیکون‌های SVG
- *   9. Toasts — اعلان‌ها
- *  10. Modal — پنجره‌های مودال
- *  11. Helpers — توابع کمکی رندر
+ * KONKOOR YAR — APPLICATION LOGIC v1.0.5
  * ========================================================================= */
-
 
 /* ============================================================================
  * SECTION 1 — UTILITIES
- * ---------------------------------------------------------------------------
- * توابع پایه‌ای که در همه جای برنامه استفاده می‌شوند.
  * ========================================================================= */
 
-/** انتخاب یک عنصر از DOM */
 const $ = (selector, root = document) => root.querySelector(selector);
-
-/** انتخاب همه عناصر مطابق selector */
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
-/**
- * تولید UUID v4 — روی مرورگرهای جدید از crypto.randomUUID استفاده می‌کند،
- * در غیر این صورت fallback به timestamp + random
- */
 const uid = () => {
   if (window.crypto && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
@@ -3142,46 +1214,36 @@ const uid = () => {
   return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
 };
 
-/** صفرپد کردن عدد به دو رقم */
 const pad2 = n => String(n).padStart(2, '0');
-
-/** محدود کردن عدد بین min و max */
 const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
-/** نگاشت ارقام فارسی به ASCII */
 const FA_DIGIT_MAP = {
   '۰': 0, '۱': 1, '۲': 2, '۳': 3, '۴': 4,
   '۵': 5, '۶': 6, '۷': 7, '۸': 8, '۹': 9
 };
-
-/** نگاشت ارقام عربی به ASCII */
 const AR_DIGIT_MAP = {
   '٠': 0, '١': 1, '٢': 2, '٣': 3, '٤': 4,
   '٥': 5, '٦': 6, '٧': 7, '٨': 8, '٩': 9
 };
 
-/** تبدیل ارقام فارسی/عربی به ASCII */
 function toAsciiDigits(s) {
   return String(s ?? '')
     .replace(/[۰-۹]/g, d => String(FA_DIGIT_MAP[d] ?? ''))
     .replace(/[٠-٩]/g, d => String(AR_DIGIT_MAP[d] ?? ''));
 }
 
-/** تبدیل به عدد صحیح با پشتیبانی از ارقام فارسی */
 function toInt(v, fallback = 0) {
   const cleaned = toAsciiDigits(v).replace(/[^\d\-+]/g, '');
   const n = parseInt(cleaned, 10);
   return Number.isFinite(n) ? n : fallback;
 }
 
-/** تبدیل به عدد اعشاری با پشتیبانی از ارقام فارسی */
 function toNum(v, fallback = 0) {
   const cleaned = toAsciiDigits(v).replace(/[^\d\-+.]/g, '');
   const n = parseFloat(cleaned);
   return Number.isFinite(n) ? n : fallback;
 }
 
-/** فرار دادن HTML برای جلوگیری از XSS */
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
     '&': '&amp;',
@@ -3192,25 +1254,18 @@ function esc(s) {
   }[c]));
 }
 
-/* ---------- Persian number formatting ---------- */
-
 const FA_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
-/** تبدیل ارقام لاتین به فارسی */
 function faNum(v) {
   if (v === null || v === undefined) return '—';
   return String(v).replace(/[0-9]/g, d => FA_DIGITS[+d]);
 }
 
-/** تبدیل عدد اعشاری به نمایش فارسی با تعداد رقم اعشار */
 function faNumFloat(v, decimals = 1) {
   if (!Number.isFinite(v)) return '—';
   return faNum(v.toFixed(decimals));
 }
 
-/* ---------- Time formatters ---------- */
-
-/** فرمت ثانیه به HH:MM:SS */
 function fmtClock(totalSeconds) {
   const s = Math.max(0, Math.floor(totalSeconds));
   const h = Math.floor(s / 3600);
@@ -3219,7 +1274,6 @@ function fmtClock(totalSeconds) {
   return pad2(h) + ':' + pad2(m) + ':' + pad2(sec);
 }
 
-/** فرمت دقیقه به HH:MM */
 function fmtHM(minutes) {
   const m = Math.max(0, Math.round(minutes));
   const h = Math.floor(m / 60);
@@ -3227,29 +1281,23 @@ function fmtHM(minutes) {
   return pad2(h) + ':' + pad2(min);
 }
 
-/** HH:MM با ارقام فارسی */
 function fmtHMfa(minutes) {
   return faNum(fmtHM(minutes));
 }
 
-/** فرمت درصد با یک رقم اعشار */
 function fmtPct(n) {
   if (!Number.isFinite(n)) return '—';
   return faNumFloat(n, 1) + '٪';
 }
 
-/* ---------- Date helpers ---------- */
-
 const DAY_MS = 86400000;
 
-/** تبدیل Date به YYYY-MM-DD */
 function isoDay(d = new Date()) {
   const dt = d instanceof Date ? d : new Date(d);
   if (isNaN(dt.getTime())) return '';
   return dt.getFullYear() + '-' + pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate());
 }
 
-/** تبدیل YYYY-MM-DD به Date */
 function parseDay(s) {
   const p = String(s || '').split('-').map(Number);
   if (p.length !== 3 || p.some(n => !Number.isFinite(n))) return new Date(NaN);
@@ -3257,12 +1305,10 @@ function parseDay(s) {
   return isNaN(d.getTime()) ? new Date(NaN) : d;
 }
 
-/** امروز به شکل YYYY-MM-DD */
 function todayKey() {
   return isoDay(new Date());
 }
 
-/** افزودن n روز به یک تاریخ */
 function addDays(key, n) {
   const d = parseDay(key);
   if (isNaN(d)) return key;
@@ -3270,7 +1316,6 @@ function addDays(key, n) {
   return isoDay(d);
 }
 
-/** اختلاف روز بین دو تاریخ */
 function diffDays(fromKey, toKey) {
   const a = parseDay(fromKey);
   const b = parseDay(toKey);
@@ -3278,7 +1323,6 @@ function diffDays(fromKey, toKey) {
   return Math.round((b.getTime() - a.getTime()) / DAY_MS);
 }
 
-/** فرمت تاریخ شمسی */
 function faDate(v, style) {
   const d = v instanceof Date ? v : parseDay(v);
   if (isNaN(d.getTime())) return '—';
@@ -3303,7 +1347,6 @@ function faDate(v, style) {
   }
 }
 
-/** نام کوتاه روز هفته */
 function faWeekdayShort(d) {
   const date = d instanceof Date ? d : parseDay(d);
   if (isNaN(date)) return '';
@@ -3311,7 +1354,6 @@ function faWeekdayShort(d) {
   return names[date.getDay()];
 }
 
-/** فرمت ساعت (HH:MM) از timestamp */
 function faTime(ts) {
   if (!ts) return '—';
   const d = new Date(ts);
@@ -3321,7 +1363,6 @@ function faTime(ts) {
   } catch (e) { return '—'; }
 }
 
-/** تاریخ نسبی: امروز/دیروز/فردا/N روز پیش */
 function relativeDay(key) {
   const diff = diffDays(key, todayKey());
   if (diff === 0) return 'امروز';
@@ -3331,9 +1372,6 @@ function relativeDay(key) {
   return faNum(-diff) + ' روز بعد';
 }
 
-/* ---------- Week helpers (Persian week starts Saturday) ---------- */
-
-/** برگرداندن ۷ روز از هفته جاری شمسی (شنبه تا جمعه) */
 function weekDaysFrom(key) {
   const d = parseDay(key);
   if (isNaN(d)) return [];
@@ -3350,9 +1388,6 @@ function weekDaysFrom(key) {
   return out;
 }
 
-/* ---------- Jalali month helpers ---------- */
-
-/** کلید ماه شمسی: "1406-04" */
 function jalaliMonthKey(v) {
   const d = v instanceof Date ? v : parseDay(v);
   if (isNaN(d.getTime())) return '';
@@ -3372,7 +1407,6 @@ function jalaliMonthKey(v) {
   }
 }
 
-/** برچسب ماه شمسی از یک روز: "تیر ۱۴۰۶" */
 function jalaliLabelFromDay(day) {
   try {
     const d = parseDay(day);
@@ -3384,36 +1418,19 @@ function jalaliLabelFromDay(day) {
   } catch (e) { return ''; }
 }
 
-/* ---------- Deep clone ---------- */
-
-/** کلون عمیق با JSON */
 function deepClone(o) {
   try { return JSON.parse(JSON.stringify(o)); }
   catch (e) { return o; }
 }
 
-/* ---------- Safe helpers ---------- */
-
-function safeArray(v) {
-  return Array.isArray(v) ? v.filter(x => x && typeof x === 'object') : [];
-}
-
-function safeString(v, fallback = '') {
-  return typeof v === 'string' ? v : fallback;
-}
-
-
 /* ============================================================================
  * SECTION 2 — INDEXEDDB
- * ---------------------------------------------------------------------------
- * لایه ذخیره‌سازی محلی. تمام داده‌ها اینجا ذخیره می‌شوند.
  * ========================================================================= */
 
 const DB_NAME = 'konkoorYar';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 let dbInstance = null;
 
-/** باز کردن اتصال IndexedDB */
 function openDB() {
   return new Promise((resolve, reject) => {
     if (dbInstance) return resolve(dbInstance);
@@ -3428,9 +1445,7 @@ function openDB() {
         if (d.objectStoreNames.contains(name)) return;
         const s = d.createObjectStore(name, { keyPath: 'id' });
         (indexes || []).forEach(idx => {
-          try {
-            s.createIndex(idx, idx, { unique: false });
-          } catch (e) {}
+          try { s.createIndex(idx, idx, { unique: false }); } catch (e) {}
         });
       };
       ensure('sessions', ['day', 'subject', 'updated_at']);
@@ -3460,7 +1475,6 @@ function openDB() {
   });
 }
 
-/** نوشتن یک رکورد در یک store */
 async function idbPut(store, obj) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3472,7 +1486,6 @@ async function idbPut(store, obj) {
   });
 }
 
-/** خواندن یک رکورد با id */
 async function idbGet(store, id) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3483,7 +1496,6 @@ async function idbGet(store, id) {
   });
 }
 
-/** خواندن همه رکوردهای یک store */
 async function idbGetAll(store) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3494,7 +1506,6 @@ async function idbGetAll(store) {
   });
 }
 
-/** حذف یک رکورد با id */
 async function idbDelete(store, id) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3506,7 +1517,6 @@ async function idbDelete(store, id) {
   });
 }
 
-/** پاک کردن تمام رکوردهای یک store */
 async function idbClear(store) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3518,7 +1528,6 @@ async function idbClear(store) {
   });
 }
 
-/** شمارش رکوردهای یک store */
 async function idbCount(store) {
   const d = await openDB();
   return new Promise((resolve, reject) => {
@@ -3529,20 +1538,19 @@ async function idbCount(store) {
   });
 }
 
-
 /* ============================================================================
  * SECTION 3 — CONSTANTS
- * ---------------------------------------------------------------------------
- * ثابت‌های سراسری برنامه.
  * ========================================================================= */
 
 const STORE_KEY = 'app';
 
-/* Supabase */
 const SUPABASE_URL = 'https://fsyfdwgtteeyxtoumltz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OAtQRxO5sP6unCn_5BnxMA_Wm0Z7LEN';
 
-/* دروس تجربی */
+/* کلیدهای AI */
+const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6JCmdeF2I4oVmCpmsVkn15DUfCws2d6d4uc3cggk_j3cg';
+const OPENROUTER_API_KEY_DEFAULT = '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';
+
 const SUBJECTS = [
   { id: 'bio',  name: 'زیست‌شناسی', short: 'زیست',  color: '#14b8a6', c1: '#4dd4c1', c2: '#0d9488' },
   { id: 'chem', name: 'شیمی',        short: 'شیمی',  color: '#3b82f6', c1: '#7cb3ff', c2: '#2563eb' },
@@ -3556,7 +1564,6 @@ const SUBJECTS = [
 
 const SUBJ_MAP = Object.fromEntries(SUBJECTS.map(s => [s.id, s]));
 
-/** گرفتن اطلاعات درس با id */
 function subj(id) {
   return SUBJ_MAP[id] || {
     id: id || 'unknown',
@@ -3568,42 +1575,28 @@ function subj(id) {
   };
 }
 
-/* فواصل Leitner به روز */
 const LEITNER_DAYS = [1, 3, 7, 14, 30];
+const SESSION_TYPES = ['آموزش', 'تست آموزشی', 'تست سنجشی', 'مرور', 'جمع‌بندی'];
+const MISTAKE_CAUSES = ['مفهوم', 'حفظ', 'محاسبه', 'زمان', 'بی‌دقتی', 'خواندن اشتباه سؤال'];
 
-/* انواع جلسه */
-const SESSION_TYPES = [
-  'آموزش',
-  'تست آموزشی',
-  'تست سنجشی',
-  'مرور',
-  'جمع‌بندی'
+/* مدل‌ها */
+const GEMINI_MODELS = [
+  { id: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash (پیشنهادی — سریع و رایگان)' },
+  { id: 'gemini-3.5-pro',   label: 'Gemini 3.5 Pro (دقیق‌تر — رایگان با محدودیت)' },
+  { id: 'gemini-3.0-flash', label: 'Gemini 3.0 Flash' },
+  { id: 'gemini-3.0-pro',   label: 'Gemini 3.0 Pro' }
 ];
 
-/* علت‌های غلط */
-const MISTAKE_CAUSES = [
-  'مفهوم',
-  'حفظ',
-  'محاسبه',
-  'زمان',
-  'بی‌دقتی',
-  'خواندن اشتباه سؤال'
+const OPENROUTER_MODELS = [
+  { id: 'qwen/qwen3.6-plus:free',           label: 'Qwen 3.6 Plus (رایگان — قوی در فارسی)' },
+  { id: 'google/gemma-3-27b-it:free',       label: 'Gemma 3 27B (رایگان — گوگل)' },
+  { id: 'meta-llama/llama-3.1-8b-instruct:free', label: 'Llama 3.1 8B (رایگان — سریع)' },
+  { id: 'mistralai/mistral-7b-instruct:free',    label: 'Mistral 7B (رایگان)' },
+  { id: 'openai/gpt-4o-mini',               label: 'GPT-4o mini (پرداختی)' }
 ];
-
-/* مدل‌های AI */
-const AI_MODELS = [
-  { id: 'meta-llama/llama-3.1-8b-instruct:free', label: 'Llama 3.1 8B (رایگان)' },
-  { id: 'google/gemini-flash-1.5-8b:free', label: 'Gemini Flash 1.5 (رایگان)' },
-  { id: 'mistralai/mistral-7b-instruct:free', label: 'Mistral 7B (رایگان)' },
-  { id: 'qwen/qwen-2-7b-instruct:free', label: 'Qwen 2 7B (رایگان)' },
-  { id: 'openai/gpt-4o-mini', label: 'GPT-4o mini (پرداختی)' }
-];
-
 
 /* ============================================================================
  * SECTION 4 — STATE
- * ---------------------------------------------------------------------------
- * وضعیت سراسری برنامه.
  * ========================================================================= */
 
 function defaultState() {
@@ -3623,9 +1616,11 @@ function defaultState() {
         anonKey: SUPABASE_PUBLISHABLE_KEY
       },
       ai: {
-        apiKey: '',
-        model: 'meta-llama/llama-3.1-8b-instruct:free',
-        useLocalKey: false
+        provider: 'gemini',
+        geminiKey: GEMINI_API_KEY_DEFAULT,
+        geminiModel: 'gemini-3.5-flash',
+        openrouterKey: OPENROUTER_API_KEY_DEFAULT,
+        openrouterModel: 'qwen/qwen3.6-plus:free'
       }
     }
   };
@@ -3647,33 +1642,46 @@ let CACHE = {
 
 let lastSaveErrorAt = 0;
 
-/** بارگذاری تنظیمات از IndexedDB */
 async function loadSettings() {
   const s = await idbGet('settings', STORE_KEY);
   if (s) {
     Object.assign(S.settings, s.settings || s);
     if (!S.settings.supabase || !S.settings.supabase.url) {
-      S.settings.supabase = {
-        url: SUPABASE_URL,
-        anonKey: SUPABASE_PUBLISHABLE_KEY
-      };
+      S.settings.supabase = { url: SUPABASE_URL, anonKey: SUPABASE_PUBLISHABLE_KEY };
     }
     if (!S.settings.supabase.anonKey) {
       S.settings.supabase.anonKey = SUPABASE_PUBLISHABLE_KEY;
     }
     if (!S.settings.ai) {
       S.settings.ai = {
-        apiKey: '',
-        model: 'meta-llama/llama-3.1-8b-instruct:free',
-        useLocalKey: false
+        provider: 'gemini',
+        geminiKey: GEMINI_API_KEY_DEFAULT,
+        geminiModel: 'gemini-3.5-flash',
+        openrouterKey: OPENROUTER_API_KEY_DEFAULT,
+        openrouterModel: 'qwen/qwen3.6-plus:free'
       };
+    }
+    /* مهاجرت از ساختار قدیمی */
+    if (!S.settings.ai.provider) {
+      S.settings.ai.provider = 'gemini';
+    }
+    if (!S.settings.ai.geminiKey) {
+      S.settings.ai.geminiKey = GEMINI_API_KEY_DEFAULT;
+    }
+    if (!S.settings.ai.geminiModel) {
+      S.settings.ai.geminiModel = 'gemini-3.5-flash';
+    }
+    if (!S.settings.ai.openrouterKey) {
+      S.settings.ai.openrouterKey = OPENROUTER_API_KEY_DEFAULT;
+    }
+    if (!S.settings.ai.openrouterModel) {
+      S.settings.ai.openrouterModel = 'qwen/qwen3.6-plus:free';
     }
   } else {
     await saveSettings();
   }
 }
 
-/** ذخیره تنظیمات */
 async function saveSettings() {
   try {
     await idbPut('settings', { key: STORE_KEY, ...S.settings });
@@ -3688,18 +1696,15 @@ async function saveSettings() {
   }
 }
 
-/** ذخیره یک مقدار متادیتا */
 async function saveMeta(key, value) {
   await idbPut('meta', { key, value });
 }
 
-/** خواندن یک مقدار متادیتا */
 async function getMeta(key) {
   const r = await idbGet('meta', key);
   return r ? r.value : null;
 }
 
-/** بازخوانی تمام CACHE از IndexedDB */
 async function refreshCache() {
   const [sessions, exams, mistakes, plans, notes, outbox, logs] = await Promise.all([
     idbGetAll('sessions'),
@@ -3714,14 +1719,10 @@ async function refreshCache() {
   updateSyncPill();
 }
 
-
 /* ============================================================================
  * SECTION 5 — OUTBOX & LOGS
- * ---------------------------------------------------------------------------
- * صف همگام‌سازی و ثبت خطاها.
  * ========================================================================= */
 
-/** افزودن عملیات به صف همگام‌سازی */
 async function queueOp(op, store, id, payload) {
   const entry = {
     id: uid(),
@@ -3742,7 +1743,6 @@ async function queueOp(op, store, id, payload) {
   }
 }
 
-/** ثبت خطا در لاگ */
 async function logError(msg, ctx) {
   try {
     const entry = {
@@ -3764,21 +1764,16 @@ async function logError(msg, ctx) {
   } catch (e) {}
 }
 
-
 /* ============================================================================
  * SECTION 6 — DOMAIN LOGIC
- * ---------------------------------------------------------------------------
- * منطق دامنه: محاسبات، آماری‌ها، دروس.
  * ========================================================================= */
 
-/** محاسبه درصد استاندارد کنکور: ((3×درست) - غلط) ÷ (3×کل) × 100 */
 function calcPercent(correct, wrong, blank) {
   const total = correct + wrong + blank;
   if (total <= 0) return 0;
   return ((3 * correct) - wrong) / (3 * total) * 100;
 }
 
-/** جمع‌بندی یک لیست جلسه */
 function aggregate(list) {
   let minutes = 0, correct = 0, wrong = 0, blank = 0;
   list.forEach(s => {
@@ -3799,7 +1794,6 @@ function aggregate(list) {
   };
 }
 
-/** جمع‌بندی یک بازه تاریخی */
 function aggregateRange(sessions, exams, fromDay, toDay) {
   const inS = sessions.filter(s => !s.deleted_at && s.day >= fromDay && s.day <= toDay);
   const inE = exams.filter(e => !e.deleted_at && e.day >= fromDay && e.day <= toDay);
@@ -3825,7 +1819,6 @@ function aggregateRange(sessions, exams, fromDay, toDay) {
   };
 }
 
-/** محاسبه تداوم (روزهای پیوسته مطالعه) */
 function computeStreak(sessions) {
   const days = new Set(
     sessions.filter(s => !s.deleted_at).map(s => s.day).filter(Boolean)
@@ -3841,13 +1834,11 @@ function computeStreak(sessions) {
   return count;
 }
 
-/** روزهای باقی‌مانده تا کنکور */
 function daysToExam() {
   const left = diffDays(todayKey(), S.settings.examDate);
   return Number.isFinite(left) ? Math.max(0, left) : 0;
 }
 
-/** نگاشت دقیقه مطالعه به هر درس */
 function subjectMinutesMap(sessions) {
   const map = {};
   SUBJECTS.forEach(s => map[s.id] = 0);
@@ -3858,18 +1849,8 @@ function subjectMinutesMap(sessions) {
   return map;
 }
 
-/** مرتب‌سازی آزمون‌ها به ترتیب تاریخی */
-function examSortedChronologically() {
-  return CACHE.exams
-    .filter(e => !e.deleted_at)
-    .sort((a, b) => String(a.day).localeCompare(String(b.day)));
-}
-
-
 /* ============================================================================
  * SECTION 7 — TIMER ENGINE
- * ---------------------------------------------------------------------------
- * موتور تایمر timestamp-based. مقاوم در برابر بستن اپ و قفل صفحه.
  * ========================================================================= */
 
 const Timer = {
@@ -3877,17 +1858,13 @@ const Timer = {
   tickHandle: null,
   pendingSubject: 'bio',
 
-  /** بارگذاری وضعیت تایمر از IndexedDB */
   async load() {
     try {
       const s = await idbGet('timer', 'state');
       if (s) this.state = s;
-    } catch (e) {
-      logError('Timer.load: ' + e.message);
-    }
+    } catch (e) { logError('Timer.load: ' + e.message); }
   },
 
-  /** ذخیره وضعیت تایمر */
   async save() {
     if (!this.state) return;
     try {
@@ -3895,12 +1872,9 @@ const Timer = {
       if (typeof trackPresence === 'function' && currentUser) {
         try { trackPresence(); } catch (e) {}
       }
-    } catch (e) {
-      logError('Timer.save: ' + e.message);
-    }
+    } catch (e) { logError('Timer.save: ' + e.message); }
   },
 
-  /** پاک کردن وضعیت تایمر */
   async clear() {
     try { await idbDelete('timer', 'state'); } catch (e) {}
     this.state = null;
@@ -3909,7 +1883,6 @@ const Timer = {
     }
   },
 
-  /** شروع تایمر برای یک درس */
   start(subject) {
     if (!SUBJ_MAP[subject]) return;
     const now = Date.now();
@@ -3930,7 +1903,6 @@ const Timer = {
     }
   },
 
-  /** توقف موقت */
   pause() {
     if (!this.state || this.state.status !== 'running') return;
     this.state.accumulated_ms += Math.max(0, Date.now() - this.state.started_at);
@@ -3944,7 +1916,6 @@ const Timer = {
     }
   },
 
-  /** ادامه */
   resume() {
     if (!this.state || this.state.status === 'running') return;
     this.state.status = 'running';
@@ -3954,14 +1925,12 @@ const Timer = {
     this.render();
   },
 
-  /** بازنشانی */
   async reset() {
     this.stopLoop();
     await this.clear();
     this.render();
   },
 
-  /** محاسبه زمان سپری‌شده به میلی‌ثانیه */
   elapsedMs() {
     if (!this.state) return 0;
     if (this.state.status === 'running' && this.state.started_at) {
@@ -3971,18 +1940,15 @@ const Timer = {
     return this.state.accumulated_ms;
   },
 
-  /** زمان سپری‌شده به ثانیه */
   elapsedSeconds() {
     return Math.floor(this.elapsedMs() / 1000);
   },
 
-  /** شروع حلقه رندر */
   loop() {
     this.stopLoop();
     this.tickHandle = setInterval(() => this.render(), 1000);
   },
 
-  /** توقف حلقه رندر */
   stopLoop() {
     if (this.tickHandle) {
       clearInterval(this.tickHandle);
@@ -3990,7 +1956,6 @@ const Timer = {
     }
   },
 
-  /** پایان و ثبت جلسه */
   async finish() {
     if (!this.state) return null;
     const seconds = this.elapsedSeconds();
@@ -4017,7 +1982,6 @@ const Timer = {
     return session;
   },
 
-  /** رندر تایمر */
   render() {
     const timeEl = $('#ringTime');
     const subEl = $('#ringSub');
@@ -4042,11 +2006,8 @@ const Timer = {
   }
 };
 
-
 /* ============================================================================
  * SECTION 8 — ICONS
- * ---------------------------------------------------------------------------
- * آیکون‌های SVG. همه با width/height صریح تا در همه مرورگرها درست رندر شوند.
  * ========================================================================= */
 
 const SVG_BASE = 'width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"';
@@ -4095,14 +2056,12 @@ const ICONS = {
   compass: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
   book: '<svg ' + SVG_BASE + '><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 18.5V21"/></svg>',
   chart: '<svg ' + SVG_BASE + '><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
-  sparkles: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M9 2 10.5 6l4.5 1.5L10.5 9 9 13 7.5 9 3 7.5 7.5 6z"/><path d="M18 12l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg>'
+  sparkles: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M9 2 10.5 6l4.5 1.5L10.5 9 9 13 7.5 9 3 7.5 7.5 6z"/><path d="M18 12l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg>',
+  robot: '<svg ' + SVG_BASE + '><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><path d="M12 7V3"/><circle cx="12" cy="2.5" r="1"/></svg>'
 };
-
 
 /* ============================================================================
  * SECTION 9 — TOASTS
- * ---------------------------------------------------------------------------
- * اعلان‌های کوچک که در پایین صفحه ظاهر می‌شوند.
  * ========================================================================= */
 
 function toast(message, type = 'info', ms = 3200) {
@@ -4120,11 +2079,8 @@ function toast(message, type = 'info', ms = 3200) {
   }, ms);
 }
 
-
 /* ============================================================================
  * SECTION 10 — MODAL
- * ---------------------------------------------------------------------------
- * پنجره‌های مودال با focus trap.
  * ========================================================================= */
 
 let modalPreviousFocus = null;
@@ -4165,7 +2121,6 @@ function closeModal() {
   modalPreviousFocus = null;
 }
 
-/* Focus trap */
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Tab') return;
   const modal = document.querySelector('#modalRoot.open .modal');
@@ -4215,11 +2170,8 @@ function confirmModal(opts) {
   });
 }
 
-
 /* ============================================================================
  * SECTION 11 — RENDER HELPERS
- * ---------------------------------------------------------------------------
- * توابع کمکی برای رندر کردن UI.
  * ========================================================================= */
 
 function statCard({ icon, label, value, sub, tint, accent }) {
@@ -4335,11 +2287,10 @@ async function copyToClipboard(text) {
   }
 }
 </script>
+
 <script>
 /* ============================================================================
  * SECTION 12 — SUPABASE CLIENT
- * ---------------------------------------------------------------------------
- * اتصال به Supabase برای همگام‌سازی اختیاری.
  * ========================================================================= */
 
 let sb = null;
@@ -4357,7 +2308,6 @@ const syncState = {
   lastError: null
 };
 
-/** راه‌اندازی کلاینت Supabase */
 function initSupabaseSDK() {
   const cfg = S.settings.supabase || {};
   if (!cfg.url || !cfg.anonKey) return false;
@@ -4372,9 +2322,7 @@ function initSupabaseSDK() {
         detectSessionInUrl: false,
         storageKey: 'ky.auth'
       },
-      realtime: {
-        params: { eventsPerSecond: 5 }
-      },
+      realtime: { params: { eventsPerSecond: 5 } },
       global: {
         fetch: (url, opts = {}) => {
           const ctrl = new AbortController();
@@ -4390,13 +2338,6 @@ function initSupabaseSDK() {
     return false;
   }
 }
-
-
-/* ============================================================================
- * SECTION 13 — AUTH
- * ---------------------------------------------------------------------------
- * ورود، ثبت‌نام، خروج، مدیریت پروفایل.
- * ========================================================================= */
 
 function faAuthError(msg) {
   const m = String(msg || '').toLowerCase();
@@ -4477,11 +2418,8 @@ async function linkPartner(email) {
   await fetchMyProfile();
 }
 
-
 /* ============================================================================
- * SECTION 14 — SYNC ENGINE
- * ---------------------------------------------------------------------------
- * همگام‌سازی دوطرفه با outbox و last-write-wins.
+ * SECTION 13 — SYNC ENGINE
  * ========================================================================= */
 
 const TS_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
@@ -4522,16 +2460,12 @@ async function retryFailedOps() {
 
 async function pushOutbox() {
   if (!sb || !currentUser) return { pushed: 0, failed: 0 };
-
   const pending = (await idbGetAll('outbox'))
     .filter(o => o.status === 'pending' || o.status === 'retry');
   pending.sort((a, b) => a.ts - b.ts);
-
   if (!pending.length) return { pushed: 0, failed: 0 };
-
   let pushed = 0;
   let failed = 0;
-
   for (const op of pending) {
     try {
       const table = op.store;
@@ -4539,11 +2473,9 @@ async function pushOutbox() {
         await idbDelete('outbox', op.id);
         continue;
       }
-
       const payload = op.payload ? toRemoteRow(op.payload, currentUser.id) : null;
       const res = await sb.from(table).upsert(payload, { onConflict: 'id' });
       if (res.error) throw new Error(res.error.message);
-
       op.status = 'done';
       op.tries = (op.tries || 0) + 1;
       op.last_error = null;
@@ -4558,7 +2490,6 @@ async function pushOutbox() {
       logError('push ' + op.store + ': ' + op.last_error);
     }
   }
-
   const cutoff = Date.now() - 24 * 3600 * 1000;
   const all = await idbGetAll('outbox');
   for (const o of all) {
@@ -4566,50 +2497,48 @@ async function pushOutbox() {
       await idbDelete('outbox', o.id);
     }
   }
-
   return { pushed, failed };
 }
 
 async function pullChanges() {
   if (!sb || !currentUser) return { pulled: 0 };
-
-  const since = lastPullTs
-    ? new Date(lastPullTs).toISOString()
-    : new Date(0).toISOString();
-
+  const startedAt = Date.now() - 60000;
   let totalPulled = 0;
-  let maxTs = lastPullTs;
-
+  let ok = true;
   const tables = ['sessions', 'exams', 'mistakes', 'plans', 'notes'];
 
   for (const t of tables) {
-    const { data, error } = await sb
-      .from(t)
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .gt('updated_at', since)
-      .order('updated_at', { ascending: true })
-      .limit(500);
-
-    if (error) {
-      logError('pull ' + t + ': ' + error.message);
-      continue;
-    }
-    if (!data || !data.length) continue;
-
-    for (const raw of data) {
-      const remote = fromRemoteRow(raw);
-      const local = await idbGet(t, remote.id);
-      if (!local || remote.updated_at > (local.updated_at || 0)) {
-        await idbPut(t, remote);
-        totalPulled++;
+    let cursor = lastPullTs;
+    for (let page = 0; page < 40; page++) {
+      const { data, error } = await sb.from(t).select('*')
+        .eq('user_id', currentUser.id)
+        .gte('updated_at', new Date(cursor).toISOString())
+        .order('updated_at', { ascending: true })
+        .limit(500);
+      if (error) {
+        ok = false;
+        logError('pull ' + t + ': ' + error.message);
+        break;
       }
-      if (remote.updated_at > maxTs) maxTs = remote.updated_at;
+      if (!data || !data.length) break;
+      let maxTs = cursor;
+      for (const raw of data) {
+        const remote = fromRemoteRow(raw);
+        const local = await idbGet(t, remote.id);
+        if (!local || remote.updated_at > (local.updated_at || 0)) {
+          await idbPut(t, remote);
+          totalPulled++;
+        }
+        if (remote.updated_at > maxTs) maxTs = remote.updated_at;
+      }
+      if (data.length < 500 || maxTs === cursor) break;
+      cursor = maxTs;
     }
   }
-
-  lastPullTs = maxTs;
-  await saveMeta('lastPullTs', lastPullTs);
+  if (ok) {
+    lastPullTs = startedAt;
+    await saveMeta('lastPullTs', lastPullTs);
+  }
   return { pulled: totalPulled };
 }
 
@@ -4617,10 +2546,8 @@ async function syncNow(force) {
   if (!sb || !currentUser) return;
   if (syncState.running && !force) return;
   if (!navigator.onLine) return;
-
   syncState.running = true;
   updateSyncPill();
-
   try {
     if (force) await retryFailedOps();
     const pr = await pushOutbox();
@@ -4649,7 +2576,7 @@ function startSyncLoop() {
   if (syncLoopHandle) clearInterval(syncLoopHandle);
   syncLoopHandle = setInterval(() => {
     if (!navigator.onLine || !sb || !currentUser || syncState.running) return;
-    if (Date.now() - syncState.lastAttempt < syncState.backoff) return;
+    if (Date.now() - syncState.lastAttempt < Math.max(syncState.backoff, 30000)) return;
     syncNow();
   }, 8000);
 }
@@ -4667,21 +2594,16 @@ async function refreshSharedStatsForToday() {
   }
 }
 
-
 /* ============================================================================
- * SECTION 15 — PRESENCE
- * ---------------------------------------------------------------------------
- * وضعیت زنده شریک با Realtime Presence.
+ * SECTION 14 — PRESENCE
  * ========================================================================= */
 
 async function startPresence() {
   if (!sb || !currentUser) return;
   try { await stopPresence(); } catch (e) {}
-
   presenceChannel = sb.channel('partners', {
     config: { presence: { key: currentUser.id } }
   });
-
   presenceChannel.on('presence', { event: 'sync' }, () => {
     const state = presenceChannel.presenceState();
     const others = Object.keys(state).filter(k => k !== currentUser.id);
@@ -4702,7 +2624,6 @@ async function startPresence() {
     }
     renderPartnerCard();
   });
-
   presenceChannel.on('presence', { event: 'leave' }, (e) => {
     const leaving = e.key || (e.leftPresences && e.leftPresences[0] && e.leftPresences[0].key);
     if (leaving && leaving !== currentUser.id) {
@@ -4710,7 +2631,6 @@ async function startPresence() {
       renderPartnerCard();
     }
   });
-
   await presenceChannel.subscribe(async (status) => {
     if (status === 'SUBSCRIBED') {
       await trackPresence();
@@ -4727,9 +2647,7 @@ async function trackPresence() {
     started_at: running ? Timer.state.started_at : null,
     updated_at: Date.now()
   };
-  try {
-    await presenceChannel.track(payload);
-  } catch (e) {}
+  try { await presenceChannel.track(payload); } catch (e) {}
 }
 
 async function stopPresence() {
@@ -4743,33 +2661,21 @@ async function stopPresence() {
 
 function partnerCardHtml() {
   if (!currentUser) return '';
-
   if (!currentProfile || !currentProfile.partner_id) {
     return '<div class="card section">' +
-      '<div class="card-head">' +
-        ICONS.info +
-        '<h3>شریک مطالعه</h3>' +
-      '</div>' +
-      '<p class="t-sm muted mb-3" style="line-height:2">' +
-        'برای دیدن وضعیت زنده و رقابت سالم، حساب شریک را لینک کن.' +
-      '</p>' +
+      '<div class="card-head">' + ICONS.info + '<h3>شریک مطالعه</h3></div>' +
+      '<p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده، حساب شریک را لینک کن.</p>' +
       '<button class="btn btn-sm btn-primary" data-action="open-link-partner">' +
         ICONS.plus + '<span>لینک</span>' +
       '</button>' +
     '</div>';
   }
-
   if (!partnerPresence) {
     return '<div class="card section">' +
-      '<div class="card-head">' +
-        ICONS.info +
-        '<h3>وضعیت شریک</h3>' +
-        '<span class="badge">آفلاین</span>' +
-      '</div>' +
+      '<div class="card-head">' + ICONS.info + '<h3>وضعیت شریک</h3><span class="badge">آفلاین</span></div>' +
       '<p class="t-sm muted">شریک آنلاین نیست.</p>' +
     '</div>';
   }
-
   if (partnerPresence.subject) {
     const sj = subj(partnerPresence.subject);
     const started = partnerPresence.started_at
@@ -4792,7 +2698,6 @@ function partnerCardHtml() {
       '</div>' +
     '</div>';
   }
-
   return '<div class="card section">' +
     '<div class="card-head">' +
       ICONS.info +
@@ -4818,84 +2723,187 @@ setInterval(() => {
   el.textContent = faNum(fmtClock(s));
 }, 1000);
 
-
 /* ============================================================================
- * SECTION 16 — AI CLIENT
+ * SECTION 15 — AI CLIENT (Gemini + OpenRouter)
  * ---------------------------------------------------------------------------
- * فراخوانی هوش مصنوعی از طریق کلید محلی یا Edge Function.
+ * دو provider: Gemini (مستقیم به گوگل) و OpenRouter (مستقیم به openrouter.ai)
+ * ---------------------------------------------------------------------------
  * ========================================================================= */
 
 async function aiCall(feature, payload) {
   const aiCfg = S.settings.ai || {};
-  const useLocal = aiCfg.useLocalKey && aiCfg.apiKey;
+  const provider = aiCfg.provider || 'gemini';
 
-  if (useLocal) {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  if (provider === 'gemini') {
+    return await callGeminiDirect(feature, payload);
+  }
+  return await callOpenRouterDirect(feature, payload);
+}
+
+/* ---------- Gemini API ---------- */
+async function callGeminiDirect(feature, payload) {
+  const aiCfg = S.settings.ai || {};
+  const apiKey = String(aiCfg.geminiKey || '').trim();
+  const model = aiCfg.geminiModel || 'gemini-3.5-flash';
+
+  if (!apiKey) throw new Error('کلید Gemini در تنظیمات ثبت نشده');
+
+  const system = getSystemPromptFor(feature);
+  const userPrompt = buildUserPromptLocal(feature, payload);
+
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
+    encodeURIComponent(model) + ':generateContent';
+
+  const body = {
+    contents: [{
+      role: 'user',
+      parts: [{ text: system + '\n\n' + userPrompt }]
+    }],
+    generationConfig: {
+      temperature: 0.4,
+      maxOutputTokens: 2000,
+      responseMimeType: 'application/json'
+    }
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+  let res;
+  try {
+    res = await fetch(url, {
       method: 'POST',
+      signal: controller.signal,
       headers: {
-        'Authorization': 'Bearer ' + aiCfg.apiKey.trim(),
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
+      body: JSON.stringify(body)
+    });
+  } catch (netErr) {
+    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی Gemini تمام شد');
+    throw new Error('خطا در اتصال به Gemini. اتصال یا VPN خود را بررسی کن.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    let msg = 'Gemini ' + res.status;
+    try {
+      const errJson = JSON.parse(errText);
+      if (errJson && errJson.error && errJson.error.message) {
+        msg = errJson.error.message;
+      }
+    } catch (e) {
+      if (errText) msg += ': ' + errText.slice(0, 200);
+    }
+    if (res.status === 400 && /api key/i.test(msg)) msg = 'کلید Gemini نامعتبر است. کلید جدید از aistudio.google.com بگیر.';
+    if (res.status === 403) msg = 'دسترسی به این مدل برای کلید تو مجاز نیست.';
+    if (res.status === 404) msg = 'مدل Gemini انتخاب‌شده در دسترس نیست.';
+    if (res.status === 429) msg = 'سهم روزانه Gemini تمام شد. فردا امتحان کن.';
+    throw new Error(msg);
+  }
+
+  const data = await res.json();
+  const cand = data && data.candidates && data.candidates[0];
+  const text = (cand && cand.content && Array.isArray(cand.content.parts))
+    ? cand.content.parts.map(p => p.text || '').join('')
+    : '';
+
+  if (!text.trim()) {
+    const finishReason = cand && cand.finishReason;
+    if (finishReason === 'SAFETY') throw new Error('پاسخ توسط فیلتر ایمنی مسدود شد');
+    if (finishReason === 'MAX_TOKENS') throw new Error('پاسخ ناقص (محدودیت توکن)');
+    if (finishReason === 'RECITATION') throw new Error('پاسخ به دلیل شباهت به منابع مسدود شد');
+    throw new Error('پاسخ خالی از Gemini');
+  }
+
+  const parsed = extractJSONLocal(text);
+  const validated = validateShapeLocal(feature, parsed);
+  return { ok: true, data: validated, remaining: 'gemini', provider: 'gemini' };
+}
+
+/* ---------- OpenRouter API ---------- */
+async function callOpenRouterDirect(feature, payload) {
+  const aiCfg = S.settings.ai || {};
+  const apiKey = String(aiCfg.openrouterKey || '').trim();
+  const model = aiCfg.openrouterModel || 'qwen/qwen3.6-plus:free';
+
+  if (!apiKey) throw new Error('کلید OpenRouter در تنظیمات ثبت نشده');
+
+  const system = getSystemPromptFor(feature);
+  const userPrompt = buildUserPromptLocal(feature, payload);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+  let res;
+  try {
+    res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        'Authorization': 'Bearer ' + apiKey,
         'Content-Type': 'application/json',
         'HTTP-Referer': location.origin,
         'X-Title': 'KonkoorYar'
       },
       body: JSON.stringify({
-        model: aiCfg.model || 'meta-llama/llama-3.1-8b-instruct:free',
+        model,
         messages: [
-          { role: 'system', content: getSystemPromptFor(feature) },
-          { role: 'user', content: buildUserPromptLocal(feature, payload) }
+          { role: 'system', content: system },
+          { role: 'user', content: userPrompt }
         ],
-        max_tokens: 1400,
+        max_tokens: 2000,
         temperature: 0.4,
         response_format: { type: 'json_object' }
       })
     });
+  } catch (netErr) {
+    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی OpenRouter تمام شد');
+    throw new Error('خطا در اتصال به OpenRouter. اتصال اینترنت خود را بررسی کن.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
-    if (!res.ok) {
-      const t = await res.text().catch(() => '');
-      throw new Error('OpenRouter ' + res.status + ': ' + t.slice(0, 200));
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    let msg = 'OpenRouter ' + res.status;
+    try {
+      const errJson = JSON.parse(errText);
+      if (errJson && errJson.error && errJson.error.message) msg = errJson.error.message;
+    } catch (e) {
+      if (errText) msg += ': ' + errText.slice(0, 200);
     }
-
-    const data = await res.json();
-    const text = data?.choices?.[0]?.message?.content || '';
-    const parsed = extractJSONLocal(text);
-    const validated = validateShapeLocal(feature, parsed);
-    return { ok: true, data: validated, remaining: 'local' };
+    if (res.status === 401) msg = 'کلید OpenRouter نامعتبر است.';
+    if (res.status === 402) msg = 'اعتبار OpenRouter کافی نیست.';
+    if (res.status === 429) msg = 'سهم روزانه OpenRouter تمام شد.';
+    throw new Error(msg);
   }
 
-  if (!sb) throw new Error('اول وارد حساب شو یا کلید محلی بگذار');
-  if (!currentUser) throw new Error('ابتدا وارد حساب شو');
+  const data = await res.json();
+  const text = (data && data.choices && data.choices[0] && data.choices[0].message)
+    ? String(data.choices[0].message.content || '')
+    : '';
 
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) throw new Error('نشست منقضی شده — دوباره وارد شو');
-
-  const url = (S.settings.supabase.url || '').replace(/\/$/, '') + '/functions/v1/ai-proxy';
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + session.access_token,
-      'apikey': S.settings.supabase.anonKey
-    },
-    body: JSON.stringify({ feature, payload })
-  });
-
-  const data = await res.json().catch(() => ({}));
-
-  if (res.status === 429 || data.error === 'quota_exceeded') {
-    aiQuota.remaining = 0;
-    throw new Error('سهم امروز تمام شد. فردا دوباره امتحان کن.');
+  if (!text.trim()) {
+    const finish = data && data.choices && data.choices[0] && data.choices[0].finish_reason;
+    if (finish === 'content_filter') throw new Error('پاسخ توسط فیلتر محتوا مسدود شد');
+    if (finish === 'length') throw new Error('پاسخ ناقص (محدودیت توکن)');
+    throw new Error('پاسخ خالی از OpenRouter');
   }
-  if (!res.ok || !data.ok) {
-    throw new Error(data.message || data.error || ('خطای ' + res.status));
-  }
-  if (typeof data.remaining === 'number') {
-    aiQuota.remaining = data.remaining;
-  }
-  return data;
+
+  const parsed = extractJSONLocal(text);
+  const validated = validateShapeLocal(feature, parsed);
+  return { ok: true, data: validated, remaining: 'openrouter', provider: 'openrouter' };
 }
 
 function getSystemPromptFor() {
-  return 'تو یک دستیار فارسی کنکور ایران هستی. کوتاه، عملی، بدون آمار ساختگی. خروجی JSON معتبر.';
+  return 'تو یک دستیار فارسی زبان و متخصص کنکور ایران (گروه تجربی) هستی. ' +
+    'قواعد: فقط فارسی جواب بده. کوتاه، عملی، بدون شعار. ' +
+    'هرگز آمار یا رتبه از خودت نساز. ' +
+    'خروجی همیشه JSON معتبر باشد، بدون بلوک کد مارک‌داون، بدون توضیح اضافه.';
 }
 
 function buildUserPromptLocal(feature, payload) {
@@ -4909,25 +2917,27 @@ function buildUserPromptLocal(feature, payload) {
       cause: limit(it?.cause, 20),
       question: limit(it?.question, 400)
     }));
-    return `این ${compact.length} غلط من است. JSON بده:\n` +
-      `{"categories":[],"patterns":[],"actions":["...","...","..."],"honest":"..."}\n` +
-      `داده: ${JSON.stringify(compact)}`;
+    return 'این ' + compact.length + ' مورد از دفترچه اشتباه من است. تحلیل کن و JSON بده:\n' +
+      '{"categories":["..."],"patterns":["..."],"actions":["...","...","..."],"honest":"..."}\n' +
+      'داده:\n' + JSON.stringify(compact);
   }
 
   if (feature === 'summary') {
-    return `موضوع: ${limit(payload?.topic, 100)}\n` +
-      `JSON:\n{"title":"","sections":[{"heading":"","bullets":[]}],"not_in_text":[]}\n` +
-      `متن: ${limit(payload?.text, 6000)}`;
+    return 'موضوع: ' + limit(payload?.topic, 100) + '\n' +
+      'فقط از متن زیر خلاصه بساز. JSON بده:\n' +
+      '{"title":"...","sections":[{"heading":"...","bullets":["..."]}],"not_in_text":["..."]}\n' +
+      'متن:\n' + limit(payload?.text, 6000);
   }
 
   if (feature === 'quiz-from-text') {
     const count = Math.min(Math.max(parseInt(payload?.count) || 5, 1), 10);
-    return `موضوع: ${limit(payload?.topic, 100)}\n${count} سؤال چهارگزینه‌ای.\n` +
-      `JSON:\n{"questions":[{"stem":"","options":["","","",""],"correct_index":0,"explanation":"","needs_review":false}]}\n` +
-      `متن: ${limit(payload?.text, 6000)}`;
+    return 'موضوع: ' + limit(payload?.topic, 100) + '\n' +
+      'از متن زیر ' + count + ' سؤال چهارگزینه‌ای بساز. JSON بده:\n' +
+      '{"questions":[{"stem":"...","options":["...","...","...","..."],"correct_index":0,"explanation":"...","needs_review":false}]}\n' +
+      'متن:\n' + limit(payload?.text, 6000);
   }
 
-  throw new Error('feature ناشناخته');
+  throw new Error('feature ناشناخته: ' + feature);
 }
 
 function extractJSONLocal(text) {
@@ -4936,7 +2946,7 @@ function extractJSONLocal(text) {
   t = t.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
   const s = t.indexOf('{');
   const e = t.lastIndexOf('}');
-  if (s < 0 || e <= s) throw new Error('JSON یافت نشد');
+  if (s < 0 || e <= s) throw new Error('JSON در پاسخ یافت نشد');
   return JSON.parse(t.slice(s, e + 1));
 }
 
@@ -4997,30 +3007,23 @@ function renderAiQuotaBadge() {
   const el = document.getElementById('aiQuotaLabel');
   if (!el) return;
   const aiCfg = S.settings.ai || {};
-  if (aiCfg.useLocalKey && aiCfg.apiKey) {
-    el.textContent = 'کلید محلی';
-    el.className = 'badge ok';
-    return;
-  }
-  el.textContent = faNum(aiQuota.remaining);
-  el.className = 'badge ' + (aiQuota.remaining > 5 ? 'ok' : aiQuota.remaining > 0 ? 'warn' : 'bad');
+  const provider = aiCfg.provider || 'gemini';
+  const label = provider === 'gemini' ? 'Gemini' : 'OpenRouter';
+  el.textContent = label;
+  el.className = 'badge brand';
 }
 
-
 /* ============================================================================
- * SECTION 17 — UI STATE HELPERS
+ * SECTION 16 — UI STATE HELPERS
  * ========================================================================= */
 
 function updateSyncPill() {
   const pill = $('#syncPill');
   const label = $('#syncLabel');
   if (!pill || !label) return;
-
   const pending = (CACHE.outbox || []).filter(o => o.status === 'pending' || o.status === 'retry').length;
   const failed = (CACHE.outbox || []).filter(o => o.status === 'failed').length;
-
   pill.className = 'sync-pill';
-
   if (!navigator.onLine) {
     pill.classList.add('offline');
     label.textContent = 'آفلاین';
@@ -5071,9 +3074,8 @@ function applyTheme() {
   updateThemeButtons();
 }
 
-
 /* ============================================================================
- * SECTION 18 — NAVIGATION
+ * SECTION 17 — NAVIGATION
  * ========================================================================= */
 
 const NAV_ITEMS = [
@@ -5104,7 +3106,6 @@ function buildNav() {
       '</button>'
     ).join('');
   }
-
   const bottom = $('#bottomNav');
   if (bottom) {
     bottom.innerHTML = BOTTOM_NAV.map(id => {
@@ -5122,11 +3123,9 @@ function buildNav() {
 function navigate(view) {
   if (!VIEW_TITLES[view]) view = 'home';
   S.activeView = view;
-
   $$('.view').forEach(v => {
     v.classList.toggle('active', v.id === 'view-' + view);
   });
-
   const bottomTarget = BOTTOM_NAV.includes(view) ? view : 'home';
   $$('#bottomNav button').forEach(b => {
     b.classList.toggle('active', b.dataset.nav === bottomTarget);
@@ -5134,22 +3133,18 @@ function navigate(view) {
   $$('#sideNav button').forEach(b => {
     b.classList.toggle('active', b.dataset.nav === view);
   });
-
   const titleEl = $('#topTitle');
   if (titleEl) titleEl.textContent = VIEW_TITLES[view] || '';
   const dateEl = $('#topDate');
   if (dateEl) dateEl.textContent = faDate(todayKey(), 'weekday');
-
-   if (window.RENDER && window.RENDER[view]) {
+  if (window.RENDER && window.RENDER[view]) {
     try {
       window.RENDER[view]();
     } catch (e) {
       logError('render ' + view + ': ' + e.message);
     }
   }
-
   updateFab();
-
   try {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (e) {
@@ -5168,17 +3163,15 @@ function updateFab() {
     fab.setAttribute('aria-label',
       v === 'plan' ? 'افزودن هدف' :
       v === 'mistakes' ? 'ثبت خطای جدید' :
-      v === 'exams' ? 'ثبت آزمون' :
-      'شروع تایمر'
+      v === 'exams' ? 'ثبت آزمون' : 'شروع تایمر'
     );
   } else {
     fab.classList.add('hidden');
   }
 }
 
-
 /* ============================================================================
- * SECTION 19 — COMMAND PALETTE
+ * SECTION 18 — COMMAND PALETTE
  * ========================================================================= */
 
 const CMD_ITEMS = [
@@ -5223,12 +3216,10 @@ function renderCmdList(query) {
   const items = CMD_ITEMS.filter(it =>
     !q || it.label.toLowerCase().includes(q) || it.id.includes(q)
   );
-
   if (!items.length) {
     list.innerHTML = '<p class="t-sm muted center" style="padding:20px">چیزی یافت نشد.</p>';
     return;
   }
-
   list.innerHTML = items.map((it, i) =>
     '<button type="button" class="cmd-item' + (i === 0 ? ' active' : '') + '" ' +
       'data-cmd-id="' + it.id + '" ' +
@@ -5259,9 +3250,13 @@ function runCmdItem(id) {
   }
 }
 </script>
-<script>
+  <script>
 /* ============================================================================
- * SECTION 20 — RENDER: HOME
+ * KONKOOR YAR — RENDERERS
+ * ========================================================================= */
+
+/* ============================================================================
+ * SECTION 19 — RENDER: HOME
  * ========================================================================= */
 
 async function renderHome() {
@@ -5282,7 +3277,6 @@ async function renderHome() {
     ? clamp((todaySeconds / 60) / S.settings.dailyGoalMinutes * 100, 0, 100)
     : 0;
 
-  /* ---------- HERO ---------- */
   const heroHtml = left != null
     ? '<div class="hero">' +
         '<div class="hero-body">' +
@@ -5296,25 +3290,20 @@ async function renderHome() {
             '<span>امروز: ' + esc(faDate(todayKey(), 'weekday')) + '</span>' +
           '</div>' +
           '<button class="btn btn-sm" data-action="edit-exam-date">' +
-            ICONS.settings +
-            '<span>تغییر</span>' +
+            ICONS.settings + '<span>تغییر</span>' +
           '</button>' +
         '</div>' +
       '</div>'
     : '<div class="card">' +
-        '<div class="card-head">' +
-          '<h3>تاریخ کنکور را تنظیم کن</h3>' +
-        '</div>' +
+        '<div class="card-head"><h3>تاریخ کنکور را تنظیم کن</h3></div>' +
         '<p class="t-sm muted mb-3" style="line-height:2">' +
           'تاریخ رسمی کنکور ۱۴۰۶ هنوز اعلام نشده. یک تاریخ تخمینی وارد کن تا شمارش معکوس کار کند.' +
         '</p>' +
         '<button class="btn btn-primary" data-action="edit-exam-date">' +
-          ICONS.settings +
-          '<span>تعیین تاریخ</span>' +
+          ICONS.settings + '<span>تعیین تاریخ</span>' +
         '</button>' +
       '</div>';
 
-  /* ---------- DAILY GOAL ---------- */
   const goalHtml =
     '<div class="card section">' +
       '<div class="card-head">' +
@@ -5334,7 +3323,6 @@ async function renderHome() {
       '</div>' +
     '</div>';
 
-  /* ---------- STATS ---------- */
   const statsHtml =
     '<div class="grid g4 section">' +
       statCard({
@@ -5373,30 +3361,25 @@ async function renderHome() {
       }) +
     '</div>';
 
-  /* ---------- EMPTY STATE ---------- */
   const emptyHtml = all.length === 0
     ? '<div class="empty section">' +
         '<b>میز کار خالی است</b>' +
         '<p>اولین جلسه مطالعه یا آزمونت را ثبت کن. تمام داده‌ها فقط روی همین دستگاه ذخیره می‌شوند.</p>' +
         '<div class="flex gap-2 flex-wrap justify-center mt-2">' +
           '<button class="btn btn-primary" data-nav="timer">' +
-            ICONS.timer +
-            '<span>شروع تایمر</span>' +
+            ICONS.timer + '<span>شروع تایمر</span>' +
           '</button>' +
           '<button class="btn" data-nav="exams">' +
-            ICONS.exams +
-            '<span>ثبت آزمون</span>' +
+            ICONS.exams + '<span>ثبت آزمون</span>' +
           '</button>' +
         '</div>' +
       '</div>'
     : '';
 
-  /* ---------- PARTNER CARD ---------- */
   const partnerHtml = '<div data-partner-card="1">' +
     (typeof partnerCardHtml === 'function' ? partnerCardHtml() : '') +
   '</div>';
 
-  /* ---------- RECENT SESSIONS ---------- */
   const recent = all
     .slice()
     .sort((a, b) => (b.created_at || 0) - (a.created_at || 0))
@@ -5424,7 +3407,6 @@ async function renderHome() {
       '</div>'
     : '';
 
-  /* ---------- QUICK ACTIONS ---------- */
   const quickCard = (nav, color, bg, icon, title, sub) =>
     '<button class="nav-card" data-nav="' + nav + '">' +
       '<span style="width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:' + bg + ';color:' + color + ';flex:none">' +
@@ -5459,9 +3441,8 @@ async function renderHome() {
     quickActions;
 }
 
-
 /* ============================================================================
- * SECTION 21 — RENDER: TIMER
+ * SECTION 20 — RENDER: TIMER
  * ========================================================================= */
 
 async function renderTimer() {
@@ -5617,9 +3598,8 @@ async function renderTimer() {
   Timer.render();
 }
 
-
 /* ============================================================================
- * SECTION 22 — RENDER: EXAMS
+ * SECTION 21 — RENDER: EXAMS
  * ========================================================================= */
 
 async function renderExams() {
@@ -5749,9 +3729,8 @@ function examItemHtml(e) {
   '</div>';
 }
 
-
 /* ============================================================================
- * SECTION 23 — RENDER: MISTAKES
+ * SECTION 22 — RENDER: MISTAKES
  * ========================================================================= */
 
 let pendingMistakeImage = null;
@@ -5991,9 +3970,8 @@ async function handleMistakeResult(id, wasRight) {
   renderMistakes();
 }
 
-
 /* ============================================================================
- * SECTION 24 — RENDER: SIM
+ * SECTION 23 — RENDER: SIM
  * ========================================================================= */
 
 let activeSim = null;
@@ -6128,7 +4106,18 @@ function renderActiveSim() {
   const c = $('#simCorrect');
   const w = $('#simWrong');
   const b = $('#simBlank');
+
+  const a0 = s.answers || {};
+  c.value = a0.c || 0;
+  w.value = a0.w || 0;
+  b.value = a0.b || 0;
+
   const recalc = () => {
+    if (activeSim) activeSim.answers = {
+      c: toInt(c.value),
+      w: toInt(w.value),
+      b: toInt(b.value)
+    };
     const pct = calcPercent(toInt(c.value), toInt(w.value), toInt(b.value));
     $('#simPct').textContent = fmtPct(pct);
   };
@@ -6138,16 +4127,17 @@ function renderActiveSim() {
 
 async function simTick() {
   if (!activeSim || !activeSim.started_at) return;
-  const el = $('#simTime');
-  if (!el) return;
 
   const elapsed = Math.floor((Date.now() - activeSim.started_at) / 1000);
   const remaining = Math.max(0, activeSim.duration_sec - elapsed);
-  el.textContent = faNum(fmtClock(remaining));
 
-  const bar = $('#simBar');
-  if (bar) {
-    bar.style.width = clamp((elapsed / activeSim.duration_sec) * 100, 0, 100).toFixed(1) + '%';
+  const el = $('#simTime');
+  if (el) {
+    el.textContent = faNum(fmtClock(remaining));
+    const bar = $('#simBar');
+    if (bar) {
+      bar.style.width = clamp((elapsed / activeSim.duration_sec) * 100, 0, 100).toFixed(1) + '%';
+    }
   }
 
   if (remaining <= 0) {
@@ -6164,9 +4154,10 @@ async function finishSim(auto) {
     simTick._handle = null;
   }
 
-  const c = toInt($('#simCorrect')?.value, 0);
-  const w = toInt($('#simWrong')?.value, 0);
-  const b = toInt($('#simBlank')?.value, 0);
+  const a = activeSim.answers || {};
+  const c = toInt($('#simCorrect')?.value, a.c || 0);
+  const w = toInt($('#simWrong')?.value, a.w || 0);
+  const b = toInt($('#simBlank')?.value, a.b || 0);
 
   if (c + w + b === 0) {
     if (!auto) toast('هیچ پاسخی ثبت نشد', 'warn');
@@ -6208,9 +4199,8 @@ async function finishSim(auto) {
   navigate('exams');
 }
 
-
 /* ============================================================================
- * SECTION 25 — RENDER: PLAN
+ * SECTION 24 — RENDER: PLAN
  * ========================================================================= */
 
 async function renderPlan() {
@@ -6376,9 +4366,8 @@ async function renderPlan() {
     '</div>';
 }
 
-
 /* ============================================================================
- * SECTION 26 — RENDER: STATS
+ * SECTION 25 — RENDER: STATS
  * ========================================================================= */
 
 async function renderStats() {
@@ -6418,10 +4407,12 @@ async function renderStats() {
     ? examsAll.reduce((a, e) => a + (e.percent || 0), 0) / examsAll.length
     : null;
 
+  const daysPassed = dayKeys.filter(k => k <= todayKey()).length;
+
   root.innerHTML =
     '<div class="view-title">' +
       '<h2>آمار هفته</h2>' +
-      '<span>۷ روز گذشته</span>' +
+      '<span>هفتهٔ جاری (شنبه تا جمعه)</span>' +
     '</div>' +
 
     '<div class="grid g4">' +
@@ -6494,15 +4485,14 @@ async function renderStats() {
         '</div>' +
         '<div class="flex justify-between">' +
           '<span class="muted">میانگین مطالعه روزانه</span>' +
-          '<b class="mono">' + fmtHMfa(weekAgg.minutes / 7) + '</b>' +
+          '<b class="mono">' + fmtHMfa(weekAgg.minutes / Math.max(1, daysPassed)) + '</b>' +
         '</div>' +
       '</div>' +
     '</div>';
 }
 
-
 /* ============================================================================
- * SECTION 27 — RENDER: MONTHLY
+ * SECTION 26 — RENDER: MONTHLY
  * ========================================================================= */
 
 async function renderMonthly() {
@@ -6540,7 +4530,7 @@ async function renderMonthly() {
   }
 
   const currentIdx = keys.indexOf(currentKey);
-  const prevKey = currentIdx >= 0 ? keys[currentIdx + 1] : keys[1];
+  const prevKey = currentIdx >= 0 ? keys[currentIdx + 1] : keys[0];
 
   const summary = (key) => {
     const b = buckets.get(key) || { sessions: [], exams: [] };
@@ -6670,7 +4660,7 @@ async function renderMonthly() {
 </script>
 <script>
 /* ============================================================================
- * SECTION 28 — RENDER: AI
+ * SECTION 27 — RENDER: AI
  * ========================================================================= */
 
 async function aiAnalyzeMistakes() {
@@ -6728,11 +4718,11 @@ async function aiAnalyzeMistakes() {
 
         '<hr class="divider">' +
         '<p class="t-sm muted" dir="auto">' + esc(d.honest) + '</p>' +
+        '<p class="t-xs muted mt-3">provider: ' + esc(res.provider || '?') + '</p>' +
       '</div>';
 
     const out = document.getElementById('aiMistakeOut');
     if (out) out.innerHTML = html;
-    renderAiQuotaBadge();
   } catch (err) {
     const out = document.getElementById('aiMistakeOut');
     if (out) {
@@ -6740,6 +4730,7 @@ async function aiAnalyzeMistakes() {
         '<div class="empty">' +
           '<b>خطا</b>' +
           '<p dir="auto">' + esc(err.message) + '</p>' +
+          '<button class="btn btn-sm mt-3" data-nav="settings">برو به تنظیمات AI</button>' +
         '</div>';
     }
   }
@@ -6834,13 +4825,13 @@ async function aiRunOnText(feature) {
     }
 
     if (out) out.innerHTML = html;
-    renderAiQuotaBadge();
   } catch (err) {
     if (out) {
       out.innerHTML =
         '<div class="empty">' +
           '<b>خطا</b>' +
           '<p dir="auto">' + esc(err.message) + '</p>' +
+          '<button class="btn btn-sm mt-3" data-nav="settings">تنظیمات AI</button>' +
         '</div>';
     }
   }
@@ -6851,33 +4842,15 @@ async function renderAI() {
   if (!root) return;
 
   const aiCfg = S.settings.ai || {};
-  const hasLocal = aiCfg.useLocalKey && aiCfg.apiKey;
-  const hasServer = sb && currentUser;
-
-  if (!hasLocal && !hasServer) {
-    root.innerHTML =
-      '<div class="view-title"><h2>دستیار هوشمند</h2></div>' +
-      '<div class="empty">' +
-        '<b>ابتدا تنظیمات AI را انجام بده</b>' +
-        '<p>می‌توانی کلید محلی بگذاری یا از حساب Supabase استفاده کنی.</p>' +
-        '<div class="flex gap-2 flex-wrap justify-center mt-3">' +
-          '<button class="btn btn-primary" data-nav="settings">' +
-            ICONS.settings + '<span>تنظیمات</span>' +
-          '</button>' +
-          '<button class="btn" data-action="open-account">' +
-            ICONS.key + '<span>حساب</span>' +
-          '</button>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
+  const provider = aiCfg.provider || 'gemini';
+  const providerLabel = provider === 'gemini' ? 'Gemini' : 'OpenRouter';
 
   root.innerHTML =
     '<div class="view-title">' +
       '<h2>دستیار هوشمند</h2>' +
-      '<span class="badge brand">وضعیت: <b id="aiQuotaLabel">' +
-        (hasLocal ? 'کلید محلی' : faNum(aiQuota.remaining)) +
-      '</b></span>' +
+      '<span class="badge brand">' +
+        ICONS.robot + ' ' + providerLabel +
+      '</span>' +
     '</div>' +
 
     '<div class="card">' +
@@ -6886,7 +4859,7 @@ async function renderAI() {
         '<h3>تحلیل غلط‌ها</h3>' +
       '</div>' +
       '<p class="t-sm muted mb-3" style="line-height:2">' +
-        'حداقل ۳ کارت در دفترچه غلط داشته باش.' +
+        'حداقل ۳ کارت در دفترچه غلط داشته باش. AI دسته‌ها و الگوهای تکرارشونده را پیدا می‌کند.' +
       '</p>' +
       '<button class="btn btn-primary" data-action="ai-mistakes">' +
         ICONS.spark +
@@ -6919,13 +4892,13 @@ async function renderAI() {
 
     '<div class="card section">' +
       '<div class="card-head">' +
-        ICONS.spark +
+        ICONS.sparkles +
         '<h3>تست‌ساز از متن</h3>' +
       '</div>' +
       '<form data-form="ai-text" data-feature="quiz-from-text" class="modal-form">' +
         '<p class="t-sm muted mb-3">همان متن بالا استفاده می‌شود.</p>' +
         '<div class="field">' +
-          '<label class="label">تعداد سؤال</label>' +
+          '<label class="label">تعداد سؤال (۱ تا ۱۰)</label>' +
           '<input class="input mono" id="aiCount" name="count" type="text" ' +
             'inputmode="numeric" value="5" dir="ltr">' +
         '</div>' +
@@ -6939,18 +4912,22 @@ async function renderAI() {
     '<div id="aiOutput" class="section"></div>' +
 
     '<div class="card card-inset section">' +
+      '<div class="flex items-center gap-2 mb-2">' +
+        ICONS.warning +
+        '<b class="t-sm">یادآوری</b>' +
+      '</div>' +
       '<p class="t-xs muted" style="line-height:2">' +
-        '🔒 خروجی AI ممکن است اشتباه باشد؛ همیشه با کتاب درسی چک کن.' +
+        'خروجی AI ممکن است اشتباه باشد؛ همیشه با کتاب درسی چک کن. ' +
+        'برای تغییر provider یا مدل، به تنظیمات برو.' +
       '</p>' +
+      '<button class="btn btn-sm mt-3" data-nav="settings">' +
+        ICONS.settings + '<span>تنظیمات AI</span>' +
+      '</button>' +
     '</div>';
-
-  renderAiQuotaBadge();
-  if (!hasLocal) refreshAiQuota();
 }
 
-
 /* ============================================================================
- * SECTION 29 — RENDER: SETTINGS
+ * SECTION 28 — RENDER: SETTINGS
  * ========================================================================= */
 
 async function renderSettings() {
@@ -6959,8 +4936,12 @@ async function renderSettings() {
 
   const sizeKb = (JSON.stringify(CACHE).length / 1024).toFixed(1);
   const aiCfg = S.settings.ai || {};
-  const maskedKey = aiCfg.apiKey
-    ? aiCfg.apiKey.slice(0, 8) + '…' + aiCfg.apiKey.slice(-4)
+  const provider = aiCfg.provider || 'gemini';
+  const maskedGemini = aiCfg.geminiKey
+    ? aiCfg.geminiKey.slice(0, 10) + '…' + aiCfg.geminiKey.slice(-6)
+    : '';
+  const maskedOpenRouter = aiCfg.openrouterKey
+    ? aiCfg.openrouterKey.slice(0, 12) + '…' + aiCfg.openrouterKey.slice(-6)
     : '';
 
   root.innerHTML =
@@ -7027,51 +5008,104 @@ async function renderSettings() {
       '</form>' +
     '</div>' +
 
-    /* AI */
+    /* دستیار AI */
     '<div class="settings-group">' +
       '<div class="settings-group-head">' +
-        ICONS.cpu +
+        ICONS.robot +
         '<div style="flex:1">' +
           '<h3>دستیار هوشمند (AI)</h3>' +
-          '<p>کلید OpenRouter و انتخاب مدل</p>' +
+          '<p>Gemini و OpenRouter — هر دو آماده</p>' +
         '</div>' +
       '</div>' +
       '<form data-form="ai-settings" class="modal-form">' +
+
+        '<div class="field">' +
+          '<label class="label">سرویس‌دهنده فعال</label>' +
+          '<select class="select" name="aiProvider">' +
+            '<option value="gemini"' + (provider === 'gemini' ? ' selected' : '') + '>' +
+              'Gemini (گوگل — نیاز به VPN در ایران)' +
+            '</option>' +
+            '<option value="openrouter"' + (provider === 'openrouter' ? ' selected' : '') + '>' +
+              'OpenRouter (پایدارتر در ایران)' +
+            '</option>' +
+          '</select>' +
+        '</div>' +
+
+        '<hr class="divider">' +
+
         '<div class="setting-row">' +
           '<div class="setting-row-main">' +
-            '<b>استفاده از کلید محلی</b>' +
-            '<span>بدون نیاز به Supabase</span>' +
+            '<b>' + ICONS.robot + ' Gemini</b>' +
+            '<span>کلید و مدل Gemini</span>' +
           '</div>' +
-          '<button type="button" class="toggle' + (aiCfg.useLocalKey ? ' on' : '') + '" ' +
-            'data-action="toggle-ai-local"></button>' +
         '</div>' +
+
         '<div class="field">' +
-          '<label class="label">کلید OpenRouter</label>' +
+          '<label class="label">کلید Gemini API</label>' +
           '<div class="key-input-wrap">' +
-            '<input class="input mono" type="password" name="aiApiKey" ' +
-              'placeholder="' + (aiCfg.apiKey ? esc(maskedKey) + ' — تغییر' : 'sk-or-v1-…') + '" ' +
+            '<input class="input mono" type="password" name="geminiKey" ' +
+              'placeholder="' + (aiCfg.geminiKey ? esc(maskedGemini) + ' — تغییر' : 'AIza… یا AQ.…') + '" ' +
               'dir="ltr" autocomplete="off">' +
             '<button type="button" class="key-toggle" ' +
-              'data-action="toggle-key-visibility" data-target="aiApiKey">' +
+              'data-action="toggle-key-visibility" data-target="geminiKey">' +
               ICONS.eye +
             '</button>' +
           '</div>' +
           '<p class="t-xs muted mt-2">' +
-            'رایگان از <b>openrouter.ai</b>. کلید فقط در همین مرورگر ذخیره می‌شود.' +
+            'رایگان از <b>aistudio.google.com</b>' +
           '</p>' +
         '</div>' +
+
         '<div class="field">' +
-          '<label class="label">مدل</label>' +
-          '<select class="select" name="aiModel">' +
-            AI_MODELS.map(m =>
+          '<label class="label">مدل Gemini</label>' +
+          '<select class="select" name="geminiModel">' +
+            GEMINI_MODELS.map(m =>
               '<option value="' + esc(m.id) + '"' +
-                (aiCfg.model === m.id ? ' selected' : '') + '>' +
+                (aiCfg.geminiModel === m.id ? ' selected' : '') + '>' +
                 esc(m.label) +
               '</option>'
             ).join('') +
           '</select>' +
         '</div>' +
-        '<div class="flex gap-2 flex-wrap">' +
+
+        '<hr class="divider">' +
+
+        '<div class="setting-row">' +
+          '<div class="setting-row-main">' +
+            '<b>' + ICONS.chart + ' OpenRouter</b>' +
+            '<span>کلید و مدل OpenRouter</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="field">' +
+          '<label class="label">کلید OpenRouter API</label>' +
+          '<div class="key-input-wrap">' +
+            '<input class="input mono" type="password" name="openrouterKey" ' +
+              'placeholder="' + (aiCfg.openrouterKey ? esc(maskedOpenRouter) + ' — تغییر' : 'sk-or-v1-…') + '" ' +
+              'dir="ltr" autocomplete="off">' +
+            '<button type="button" class="key-toggle" ' +
+              'data-action="toggle-key-visibility" data-target="openrouterKey">' +
+              ICONS.eye +
+            '</button>' +
+          '</div>' +
+          '<p class="t-xs muted mt-2">' +
+            'رایگان از <b>openrouter.ai/keys</b>' +
+          '</p>' +
+        '</div>' +
+
+        '<div class="field">' +
+          '<label class="label">مدل OpenRouter</label>' +
+          '<select class="select" name="openrouterModel">' +
+            OPENROUTER_MODELS.map(m =>
+              '<option value="' + esc(m.id) + '"' +
+                (aiCfg.openrouterModel === m.id ? ' selected' : '') + '>' +
+                esc(m.label) +
+              '</option>'
+            ).join('') +
+          '</select>' +
+        '</div>' +
+
+        '<div class="flex gap-2 flex-wrap mt-3">' +
           '<button type="submit" class="btn btn-primary">' +
             ICONS.save +
             '<span>ذخیره</span>' +
@@ -7081,7 +5115,7 @@ async function renderSettings() {
             '<span>تست اتصال</span>' +
           '</button>' +
         '</div>' +
-        '<div id="aiKeyTestResult"></div>' +
+        '<div id="aiKeyTestResult" class="mt-2"></div>' +
       '</form>' +
     '</div>' +
 
@@ -7091,7 +5125,7 @@ async function renderSettings() {
         ICONS.key +
         '<div style="flex:1">' +
           '<h3>حساب کاربری</h3>' +
-          '<p>' + (currentUser ? 'وارد شده — ' + esc(currentUser.email) : 'محلی') + '</p>' +
+          '<p>' + (currentUser ? 'وارد شده — ' + esc(currentUser.email) : 'محلی (بدون sync)') + '</p>' +
         '</div>' +
       '</div>' +
       '<div class="flex gap-2 flex-wrap">' +
@@ -7143,7 +5177,7 @@ async function renderSettings() {
       '</div>' +
     '</div>' +
 
-    /* خروجی CSV */
+    /* CSV */
     '<div class="settings-group">' +
       '<div class="settings-group-head">' +
         ICONS.download +
@@ -7154,16 +5188,13 @@ async function renderSettings() {
       '</div>' +
       '<div class="flex gap-2 flex-wrap">' +
         '<button class="btn btn-sm" data-action="csv-sessions">' +
-          ICONS.download +
-          '<span>جلسات</span>' +
+          ICONS.download + '<span>جلسات</span>' +
         '</button>' +
         '<button class="btn btn-sm" data-action="csv-exams">' +
-          ICONS.download +
-          '<span>آزمون‌ها</span>' +
+          ICONS.download + '<span>آزمون‌ها</span>' +
         '</button>' +
         '<button class="btn btn-sm" data-action="csv-mistakes">' +
-          ICONS.download +
-          '<span>دفترچه</span>' +
+          ICONS.download + '<span>دفترچه</span>' +
         '</button>' +
       '</div>' +
     '</div>' +
@@ -7174,17 +5205,15 @@ async function renderSettings() {
         ICONS.save +
         '<div style="flex:1">' +
           '<h3>پشتیبان‌گیری</h3>' +
-          '<p>JSON محلی</p>' +
+          '<p>JSON محلی (بدون کلیدهای API)</p>' +
         '</div>' +
       '</div>' +
       '<div class="flex gap-2 flex-wrap">' +
         '<button class="btn btn-primary" data-action="export">' +
-          ICONS.download +
-          '<span>خروجی JSON</span>' +
+          ICONS.download + '<span>خروجی JSON</span>' +
         '</button>' +
         '<button class="btn" data-action="import">' +
-          ICONS.upload +
-          '<span>بازیابی</span>' +
+          ICONS.upload + '<span>بازیابی</span>' +
         '</button>' +
       '</div>' +
     '</div>' +
@@ -7226,17 +5255,16 @@ async function renderSettings() {
         ICONS.diag +
         '<div style="flex:1">' +
           '<h3>سلامت داده</h3>' +
-          '<p>بررسی</p>' +
+          '<p>بررسی یکپارچگی</p>' +
         '</div>' +
       '</div>' +
       '<div id="healthOut"></div>' +
       '<button class="btn btn-sm btn-primary mt-3" data-action="health-check">' +
-        ICONS.check +
-        '<span>بررسی</span>' +
+        ICONS.check + '<span>بررسی</span>' +
       '</button>' +
     '</div>' +
 
-    /* اطلاعات نسخه */
+    /* نسخه */
     '<div class="settings-group">' +
       '<div class="settings-group-head">' +
         ICONS.info +
@@ -7246,7 +5274,7 @@ async function renderSettings() {
         '</div>' +
       '</div>' +
       '<div class="t-sm muted" style="line-height:2.4">' +
-        '<div>نسخه: <b class="mono">1.0.4</b></div>' +
+        '<div>نسخه: <b class="mono">1.0.5</b></div>' +
         '<div>وضعیت: <b>' + (currentUser ? 'Supabase' : 'محلی') + '</b></div>' +
         '<div>دستگاه: <span class="ltr mono">' +
           esc((S.settings.deviceId || '').slice(0, 8)) +
@@ -7256,9 +5284,8 @@ async function renderSettings() {
     '</div>';
 }
 
-
 /* ============================================================================
- * SECTION 30 — RENDER: DIAG
+ * SECTION 29 — RENDER: DIAG
  * ========================================================================= */
 
 async function renderDiag() {
@@ -7277,36 +5304,24 @@ async function renderDiag() {
 
     '<div class="grid g4">' +
       statCard({
-        icon: 'timer',
-        label: 'جلسات',
-        value: faNum(CACHE.sessions.length),
-        sub: 'IndexedDB',
-        tint: 'rgba(37,99,235,.08)',
-        accent: '#3b82f6'
+        icon: 'timer', label: 'جلسات',
+        value: faNum(CACHE.sessions.length), sub: 'IndexedDB',
+        tint: 'rgba(37,99,235,.08)', accent: '#3b82f6'
       }) +
       statCard({
-        icon: 'exams',
-        label: 'آزمون‌ها',
-        value: faNum(CACHE.exams.length),
-        sub: 'IndexedDB',
-        tint: 'rgba(234,88,12,.08)',
-        accent: '#f97316'
+        icon: 'exams', label: 'آزمون‌ها',
+        value: faNum(CACHE.exams.length), sub: 'IndexedDB',
+        tint: 'rgba(234,88,12,.08)', accent: '#f97316'
       }) +
       statCard({
-        icon: 'mistakes',
-        label: 'دفترچه',
-        value: faNum(CACHE.mistakes.length),
-        sub: 'IndexedDB',
-        tint: 'rgba(220,38,38,.08)',
-        accent: '#dc2626'
+        icon: 'mistakes', label: 'دفترچه',
+        value: faNum(CACHE.mistakes.length), sub: 'IndexedDB',
+        tint: 'rgba(220,38,38,.08)', accent: '#dc2626'
       }) +
       statCard({
-        icon: 'plan',
-        label: 'برنامه‌ها',
-        value: faNum(CACHE.plans.length),
-        sub: 'IndexedDB',
-        tint: 'rgba(5,150,105,.08)',
-        accent: '#059669'
+        icon: 'plan', label: 'برنامه‌ها',
+        value: faNum(CACHE.plans.length), sub: 'IndexedDB',
+        tint: 'rgba(5,150,105,.08)', accent: '#059669'
       }) +
     '</div>' +
 
@@ -7327,16 +5342,13 @@ async function renderDiag() {
       '</div>' +
       '<div class="flex gap-2 flex-wrap mt-3">' +
         '<button class="btn btn-sm" data-action="request-persist">' +
-          ICONS.save +
-          '<span>ذخیره دائمی</span>' +
+          ICONS.save + '<span>ذخیره دائمی</span>' +
         '</button>' +
         '<button class="btn btn-sm" data-action="sync-now">' +
-          ICONS.refresh +
-          '<span>sync اجباری</span>' +
+          ICONS.refresh + '<span>sync اجباری</span>' +
         '</button>' +
         '<button class="btn btn-sm btn-danger" data-action="clear-logs">' +
-          ICONS.trash +
-          '<span>پاک لاگ</span>' +
+          ICONS.trash + '<span>پاک لاگ</span>' +
         '</button>' +
       '</div>' +
     '</div>' +
@@ -7384,12 +5396,12 @@ async function renderDiag() {
       : '');
 }
 
-
 /* ============================================================================
- * SECTION 31 — ACCOUNT UI
+ * SECTION 30 — ACCOUNT UI
  * ========================================================================= */
 
 function openAccount() {
+  initSupabaseSDK();
   const cfg = S.settings.supabase || {};
   const configured = !!(cfg.url && cfg.anonKey);
   const sdkReady = typeof window.supabase !== 'undefined';
@@ -7406,7 +5418,7 @@ function openAccount() {
   } else if (!sdkReady) {
     body =
       '<div class="card card-inset" style="padding:14px">' +
-        '<p class="t-sm muted">SDK در حال بارگذاری است…</p>' +
+        '<p class="t-sm muted">SDK در حال بارگذاری است… چند لحظه بعد دوباره امتحان کن.</p>' +
       '</div>';
   } else if (!loggedIn) {
     body = buildLoginForm();
@@ -7553,15 +5565,29 @@ function openLinkPartnerModal() {
   );
 }
 
-
 /* ============================================================================
- * SECTION 32 — EXPORT / IMPORT / CSV
+ * SECTION 31 — EXPORT / IMPORT / CSV
  * ========================================================================= */
 
 async function exportData() {
   try {
+    const settingsClean = await (async () => {
+      const s = await idbGet('settings', STORE_KEY);
+      if (!s) return s;
+      const c = deepClone(s);
+      /* پاک کردن کلیدهای API و شناسه دستگاه از پشتیبان */
+      if (c.ai) {
+        c.ai.geminiKey = '';
+        c.ai.openrouterKey = '';
+      }
+      if (c.supabase) {
+        c.supabase.anonKey = '';
+      }
+      return c;
+    })();
+
     const data = {
-      settings: await idbGet('settings', STORE_KEY),
+      settings: settingsClean,
       sessions: await idbGetAll('sessions'),
       exams: await idbGetAll('exams'),
       mistakes: await idbGetAll('mistakes'),
@@ -7584,7 +5610,7 @@ async function exportData() {
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast('پشتیبان ساخته شد', 'ok');
+    toast('پشتیبان ساخته شد (بدون کلیدهای API)', 'ok');
   } catch (err) {
     logError('export: ' + err.message);
     toast('خطا در پشتیبان', 'error');
@@ -7610,7 +5636,19 @@ async function handleImport(file) {
 
       const d = parsed.data;
       if (d.settings) {
+        const keep = {
+          deviceId: S.settings.deviceId,
+          supabase: S.settings.supabase,
+          geminiKey: (S.settings.ai || {}).geminiKey || '',
+          openrouterKey: (S.settings.ai || {}).openrouterKey || ''
+        };
         Object.assign(S.settings, d.settings);
+        S.settings.deviceId = keep.deviceId;
+        S.settings.supabase = keep.supabase;
+        S.settings.ai = Object.assign({}, S.settings.ai, {
+          geminiKey: keep.geminiKey,
+          openrouterKey: keep.openrouterKey
+        });
         await saveSettings();
       }
 
@@ -7738,13 +5776,11 @@ async function runHealthCheck() {
       issues.push('جلسه با تاریخ نامعتبر: ' + s.id);
     }
   });
-
   CACHE.exams.filter(e => !e.deleted_at).forEach(e => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(e.day))) {
       issues.push('آزمون با تاریخ نامعتبر: ' + e.id);
     }
   });
-
   CACHE.mistakes.filter(m => !m.deleted_at).forEach(m => {
     const b = toInt(m.box, 1);
     if (b < 1 || b > 5) issues.push('کارت با مرحله خارج بازه: ' + m.id);
@@ -7763,7 +5799,7 @@ async function runHealthCheck() {
       '<div class="card card-inset" style="padding:12px;border:1px solid var(--warn)">' +
         '<div class="flex items-center gap-2" style="color:var(--warn)">' +
           ICONS.warning +
-          '<b class="t-sm">' + faNum(issues.length) + ' مورد یافت شد</b>' +
+          '<b class="t-sm">' + faNum(issues.length) + ' مورد</b>' +
         '</div>' +
         '<ul style="padding-inline-start:18px;margin-top:8px;font-size:12.5px;line-height:1.9">' +
           issues.slice(0, 20).map(x => '<li dir="auto">' + esc(x) + '</li>').join('') +
@@ -7805,9 +5841,8 @@ async function wipeStore(store) {
   toast(label + ' پاک شد', 'ok');
 }
 
-
 /* ============================================================================
- * SECTION 33 — FORM SUBMIT HELPERS
+ * SECTION 32 — FORM SUBMIT HELPERS
  * ========================================================================= */
 
 async function submitManualSession(form) {
@@ -7982,16 +6017,11 @@ async function submitTask(form) {
   renderPlan();
 }
 
-
 /* ============================================================================
- * SECTION 34 — EVENT BINDINGS
+ * SECTION 33 — EVENT BINDINGS
  * ========================================================================= */
 
 function bindEvents() {
-
-  /* --------------------------------------------------------------
-     CLICK
-     -------------------------------------------------------------- */
   document.addEventListener('click', async (e) => {
     const navBtn = e.target.closest('[data-nav]');
     if (navBtn && navBtn.dataset.nav) {
@@ -8012,19 +6042,10 @@ function bindEvents() {
     const id = el.dataset.id;
 
     switch (action) {
-      case 'close-modal':
-        closeModal();
-        break;
+      case 'close-modal': closeModal(); break;
+      case 'open-cmd': openCmd(); break;
+      case 'close-cmd': closeCmd(); break;
 
-      case 'open-cmd':
-        openCmd();
-        break;
-
-      case 'close-cmd':
-        closeCmd();
-        break;
-
-      /* Theme */
       case 'toggle-theme':
         S.settings.theme = S.settings.theme === 'dark' ? 'light' : 'dark';
         applyTheme();
@@ -8042,13 +6063,6 @@ function bindEvents() {
         S.settings.vibrationEnabled = !S.settings.vibrationEnabled;
         await saveSettings();
         if (S.activeView === 'settings') renderSettings();
-        break;
-
-      case 'toggle-ai-local':
-        S.settings.ai = S.settings.ai || {};
-        S.settings.ai.useLocalKey = !S.settings.ai.useLocalKey;
-        await saveSettings();
-        renderSettings();
         break;
 
       case 'toggle-key-visibility': {
@@ -8072,54 +6086,34 @@ function bindEvents() {
           '</div>';
 
         const form = document.querySelector('form[data-form="ai-settings"]');
-        const keyInput = form ? form.querySelector('input[name="aiApiKey"]') : null;
-        const modelSelect = form ? form.querySelector('select[name="aiModel"]') : null;
+        if (!form) break;
 
-        const testKey = (keyInput && keyInput.value.trim()) || S.settings.ai?.apiKey || '';
-        const testModel = (modelSelect && modelSelect.value) || S.settings.ai?.model;
+        /* ذخیره موقت کلیدها برای تست */
+        const testProvider = form.aiProvider.value;
+        const gKeyInput = form.geminiKey.value.trim();
+        const oKeyInput = form.openrouterKey.value.trim();
 
-        if (!testKey) {
-          resultEl.innerHTML =
-            '<div class="card card-inset" style="padding:12px;border:1px solid var(--bad)">' +
-              '<p class="t-sm" style="color:var(--bad)">کلید API را وارد کن</p>' +
-            '</div>';
-          break;
-        }
+        const backup = {
+          provider: S.settings.ai.provider,
+          geminiKey: S.settings.ai.geminiKey,
+          openrouterKey: S.settings.ai.openrouterKey
+        };
+
+        if (gKeyInput) S.settings.ai.geminiKey = gKeyInput;
+        if (oKeyInput) S.settings.ai.openrouterKey = oKeyInput;
+        S.settings.ai.provider = testProvider;
 
         try {
-          const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + testKey,
-              'Content-Type': 'application/json',
-              'HTTP-Referer': location.origin,
-              'X-Title': 'KonkoorYar'
-            },
-            body: JSON.stringify({
-              model: testModel,
-              messages: [
-                { role: 'system', content: 'فقط بگو: سلام' },
-                { role: 'user', content: 'سلام' }
-              ],
-              max_tokens: 30
-            })
+          const res = await aiCall('summary', {
+            topic: 'تست اتصال',
+            text: 'این یک تست اتصال است. JSON بده: {"title":"تست","sections":[],"not_in_text":[]}'
           });
-
-          if (!res.ok) {
-            const t = await res.text().catch(() => '');
-            throw new Error('HTTP ' + res.status + ': ' + t.slice(0, 150));
-          }
-
-          const data = await res.json();
-          const text = data?.choices?.[0]?.message?.content || '';
-
           resultEl.innerHTML =
             '<div class="card card-inset" style="padding:12px;border:1px solid var(--ok)">' +
               '<div class="flex items-center gap-2" style="color:var(--ok)">' +
                 ICONS.check +
-                '<b class="t-sm">اتصال موفق</b>' +
+                '<b class="t-sm">اتصال موفق (' + esc(res.provider || '?') + ')</b>' +
               '</div>' +
-              '<p class="t-xs muted mt-2" dir="auto">' + esc(text.slice(0, 100)) + '</p>' +
             '</div>';
         } catch (err) {
           resultEl.innerHTML =
@@ -8130,11 +6124,15 @@ function bindEvents() {
               '</div>' +
               '<p class="t-xs muted mt-2" dir="auto">' + esc(err.message) + '</p>' +
             '</div>';
+        } finally {
+          /* برگرداندن مقادیر اگر ذخیره نشدند */
+          if (!gKeyInput) S.settings.ai.geminiKey = backup.geminiKey;
+          if (!oKeyInput) S.settings.ai.openrouterKey = backup.openrouterKey;
+          S.settings.ai.provider = backup.provider;
         }
         break;
       }
 
-      /* Exam date */
       case 'edit-exam-date':
         navigate('settings');
         setTimeout(() => {
@@ -8143,7 +6141,6 @@ function bindEvents() {
         }, 250);
         break;
 
-      /* Timer */
       case 'timer-subj': {
         if (Timer.state && Timer.state.status === 'running') {
           toast('اول تایمر را متوقف کن', 'warn');
@@ -8164,21 +6161,23 @@ function bindEvents() {
         renderTimer();
         break;
 
-      case 'timer-pause':
-        Timer.pause();
-        renderTimer();
-        break;
-
-      case 'timer-resume':
-        Timer.resume();
-        renderTimer();
-        break;
+      case 'timer-pause': Timer.pause(); renderTimer(); break;
+      case 'timer-resume': Timer.resume(); renderTimer(); break;
 
       case 'timer-finish': {
         const s = await Timer.finish();
-        if (s) toast('ثبت شد — ' + fmtHMfa((s.seconds || 0) / 60), 'ok');
-        else toast('کمتر از ۱ دقیقه', 'warn');
-        navigate('home');
+        if (s) {
+          toast('ثبت شد — ' + fmtHMfa((s.seconds || 0) / 60), 'ok');
+          navigate('home');
+        } else {
+          const drop = await confirmModal({
+            title: 'جلسهٔ خیلی کوتاه',
+            message: 'مدت کمتر از ۱ دقیقه است و ثبت نمی‌شود. تایمر پاک شود؟',
+            confirmLabel: 'پاک کن',
+            danger: true
+          });
+          if (drop) { await Timer.reset(); renderTimer(); }
+        }
         break;
       }
 
@@ -8200,7 +6199,6 @@ function bindEvents() {
         document.body.classList.toggle('zen-mode');
         break;
 
-      /* Del exam */
       case 'del-exam': {
         const ok = await confirmModal({
           title: 'حذف',
@@ -8221,14 +6219,8 @@ function bindEvents() {
         break;
       }
 
-      /* Mistakes */
-      case 'mistake-right':
-        await handleMistakeResult(id, true);
-        break;
-
-      case 'mistake-wrong':
-        await handleMistakeResult(id, false);
-        break;
+      case 'mistake-right': await handleMistakeResult(id, true); break;
+      case 'mistake-wrong': await handleMistakeResult(id, false); break;
 
       case 'del-mistake': {
         const ok = await confirmModal({
@@ -8278,7 +6270,6 @@ function bindEvents() {
         renderMistakes();
         break;
 
-      /* Plan */
       case 'plan-toggle': {
         const tKey = todayKey();
         const sameDay = CACHE.plans.filter(p => p.day === tKey && !p.deleted_at);
@@ -8325,10 +6316,7 @@ function bindEvents() {
         break;
       }
 
-      /* Simulation */
-      case 'sim-finish':
-        await finishSim(false);
-        break;
+      case 'sim-finish': await finishSim(false); break;
 
       case 'sim-cancel': {
         const ok = await confirmModal({
@@ -8347,38 +6335,19 @@ function bindEvents() {
         break;
       }
 
-      /* CSV */
-      case 'csv-sessions':
-        exportSessionsCSV();
-        break;
-      case 'csv-exams':
-        exportExamsCSV();
-        break;
-      case 'csv-mistakes':
-        exportMistakesCSV();
-        break;
-
-      /* Backup */
-      case 'export':
-        exportData();
-        break;
+      case 'csv-sessions': exportSessionsCSV(); break;
+      case 'csv-exams': exportExamsCSV(); break;
+      case 'csv-mistakes': exportMistakesCSV(); break;
+      case 'export': exportData(); break;
 
       case 'import': {
         const fi = $('#importFile');
-        if (fi) {
-          fi.value = '';
-          fi.click();
-        }
+        if (fi) { fi.value = ''; fi.click(); }
         break;
       }
 
-      case 'wipe-store':
-        await wipeStore(el.dataset.store);
-        break;
-
-      case 'health-check':
-        await runHealthCheck();
-        break;
+      case 'wipe-store': await wipeStore(el.dataset.store); break;
+      case 'health-check': await runHealthCheck(); break;
 
       case 'request-persist':
         if (navigator.storage && navigator.storage.persist) {
@@ -8398,10 +6367,7 @@ function bindEvents() {
         toast('پاک شد', 'ok', 1500);
         break;
 
-      /* Account */
-      case 'open-account':
-        openAccount();
-        break;
+      case 'open-account': openAccount(); break;
 
       case 'show-signup': {
         const m = document.querySelector('#modalRoot .modal');
@@ -8476,12 +6442,8 @@ function bindEvents() {
         if ($('#modalRoot').classList.contains('open')) openAccount();
         break;
 
-      /* AI */
-      case 'ai-mistakes':
-        aiAnalyzeMistakes();
-        break;
+      case 'ai-mistakes': aiAnalyzeMistakes(); break;
 
-      /* FAB */
       case 'fab-main': {
         const v = $('#fab').dataset.view;
         if (v === 'plan') {
@@ -8499,19 +6461,14 @@ function bindEvents() {
         break;
       }
 
-      default:
-        break;
+      default: break;
     }
   });
 
-  /* --------------------------------------------------------------
-     SUBMIT
-     -------------------------------------------------------------- */
   document.addEventListener('submit', async (e) => {
     const form = e.target.closest('form[data-form]');
     if (!form) return;
     e.preventDefault();
-
     const kind = form.dataset.form;
 
     try {
@@ -8541,9 +6498,13 @@ function bindEvents() {
         renderSettings();
       } else if (kind === 'ai-settings') {
         S.settings.ai = S.settings.ai || {};
-        const keyVal = String(form.aiApiKey.value || '').trim();
-        if (keyVal) S.settings.ai.apiKey = keyVal;
-        S.settings.ai.model = String(form.aiModel.value || S.settings.ai.model);
+        S.settings.ai.provider = String(form.aiProvider.value || 'gemini');
+        const gKey = String(form.geminiKey.value || '').trim();
+        const oKey = String(form.openrouterKey.value || '').trim();
+        if (gKey) S.settings.ai.geminiKey = gKey;
+        if (oKey) S.settings.ai.openrouterKey = oKey;
+        S.settings.ai.geminiModel = String(form.geminiModel.value || S.settings.ai.geminiModel);
+        S.settings.ai.openrouterModel = String(form.openrouterModel.value || S.settings.ai.openrouterModel);
         await saveSettings();
         toast('ذخیره شد', 'ok');
         renderSettings();
@@ -8581,7 +6542,8 @@ function bindEvents() {
           count,
           minutes,
           duration_sec: minutes * 60,
-          started_at: Date.now()
+          started_at: Date.now(),
+          answers: { c: 0, w: 0, b: 0 }
         };
         if (simTick._handle) clearInterval(simTick._handle);
         simTick._handle = setInterval(simTick, 1000);
@@ -8661,9 +6623,6 @@ function bindEvents() {
     }
   });
 
-  /* --------------------------------------------------------------
-     INPUT
-     -------------------------------------------------------------- */
   document.addEventListener('input', (e) => {
     const t = e.target;
 
@@ -8683,9 +6642,6 @@ function bindEvents() {
     }
   });
 
-  /* --------------------------------------------------------------
-     KEYBOARD
-     -------------------------------------------------------------- */
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
@@ -8719,9 +6675,6 @@ function bindEvents() {
     }
   });
 
-  /* --------------------------------------------------------------
-     FILE INPUT
-     -------------------------------------------------------------- */
   const importFile = $('#importFile');
   if (importFile) {
     importFile.addEventListener('change', (e) => {
@@ -8729,9 +6682,6 @@ function bindEvents() {
     });
   }
 
-  /* --------------------------------------------------------------
-     NETWORK
-     -------------------------------------------------------------- */
   window.addEventListener('online', () => {
     updateSyncPill();
     if (currentUser) syncNow(true);
@@ -8740,9 +6690,6 @@ function bindEvents() {
     updateSyncPill();
   });
 
-  /* --------------------------------------------------------------
-     VISIBILITY
-     -------------------------------------------------------------- */
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       Timer.render();
@@ -8750,17 +6697,13 @@ function bindEvents() {
     }
   });
 
-  /* --------------------------------------------------------------
-     BEFORE UNLOAD
-     -------------------------------------------------------------- */
   window.addEventListener('beforeunload', () => {
     Timer.save();
   });
 }
 
-
 /* ============================================================================
- * SECTION 35 — AFTER SIGN IN
+ * SECTION 34 — AFTER SIGN IN
  * ========================================================================= */
 
 async function afterSignIn() {
@@ -8785,9 +6728,8 @@ async function afterSignIn() {
   if (S.activeView === 'home') renderHome();
 }
 
-
 /* ============================================================================
- * SECTION 36 — RENDER MAP
+ * SECTION 35 — RENDER MAP
  * ========================================================================= */
 
 window.RENDER = {
@@ -8804,9 +6746,8 @@ window.RENDER = {
   diag: renderDiag
 };
 
-
 /* ============================================================================
- * SECTION 37 — BOOTSTRAP
+ * SECTION 36 — BOOTSTRAP
  * ========================================================================= */
 
 async function bootstrap() {
