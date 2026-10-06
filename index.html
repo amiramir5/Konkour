@@ -1910,6 +1910,121 @@ body.zen-mode .zen-exit-btn{display:grid;}
   .sidebar,.bottomnav,.topbar,.toasts,.modal-root,.fab{display:none!important;}
   .main{padding:0;max-width:100%;}
 }
+
+/* ============================================================================
+ * PATCH — RESPONSIVE / MOBILE COMPLETENESS
+ * Added without removing any original rules.
+ * ========================================================================== */
+.mobile-more-btn{display:none;}
+.ky-mobile-nav-root{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:var(--z-modal);
+}
+.ky-mobile-nav-root.open{display:block;}
+.ky-mobile-nav-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(9,13,22,.62);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.ky-mobile-nav-sheet{
+  position:absolute;
+  inset-inline:0;
+  bottom:0;
+  max-height:min(82dvh,760px);
+  overflow:auto;
+  padding:14px 12px calc(18px + env(safe-area-inset-bottom));
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  box-shadow:var(--sh-5);
+}
+.ky-mobile-nav-head{
+  position:sticky;
+  top:0;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:4px 4px 12px;
+  margin-bottom:4px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.ky-mobile-nav-head h3{
+  flex:1;
+  min-width:0;
+  font-size:16px;
+  font-weight:var(--fw-extrabold);
+}
+.ky-mobile-nav-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  padding-top:10px;
+}
+.ky-mobile-nav-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  min-height:48px;
+  padding:10px 11px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--surface-2);
+  color:var(--ink-2);
+  text-align:start;
+  font-size:12.5px;
+  font-weight:var(--fw-semibold);
+}
+.ky-mobile-nav-item svg{width:19px;height:19px;flex:none;color:var(--brand);}
+.ky-mobile-nav-item.active{
+  color:var(--brand);
+  background:var(--brand-soft);
+  border-color:transparent;
+}
+body.ky-mobile-nav-open{overflow:hidden;}
+
+@media(max-width:899px){
+  .mobile-more-btn{display:grid;}
+  .topbar{padding-inline:10px;}
+  .top-actions{gap:6px;}
+  .bottomnav{padding-inline:2px;}
+  .bottomnav button{min-width:0;padding-inline:1px;}
+  .main{padding-inline:max(10px,env(safe-area-inset-left),env(safe-area-inset-right));}
+}
+@media(max-width:640px){
+  .form-grid.c2,
+  .form-grid.c3{grid-template-columns:1fr !important;}
+  .cal-week{gap:3px;}
+  .card{padding:14px;}
+  .hero{padding:16px;}
+  .hero-num{font-size:40px;}
+  .timer-stage{gap:16px;}
+  .ring-wrap{width:min(280px,78vw);}
+  .modal{padding-inline:13px;}
+  .modal-actions .btn{flex:1 1 140px;}
+  .setting-row{align-items:flex-start;}
+}
+@media(max-width:480px){
+  .sync-pill{display:none;}
+  .topbar .logo{width:36px;height:36px;border-radius:11px;font-size:12px;}
+  .topbar .brand{gap:8px;}
+  .topbar b{font-size:13.5px;}
+  .topbar .sub{font-size:10.5px;}
+  .icon-btn{width:40px;height:40px;}
+  .bottomnav button{font-size:9.5px;}
+  .bottomnav button svg{width:21px;height:21px;}
+  .ky-mobile-nav-grid{grid-template-columns:1fr;}
+}
+@media(min-width:900px){
+  .ky-mobile-nav-root{display:none!important;}
+}
+
 </style>
 </head><body>
 
@@ -4485,6 +4600,8 @@ function runCmdItem(id) {
 <script src="./vendor/supabase.min.js" onerror="window.__loadSupabaseCdn()"></script>
 
 <script>
+{
+
 "use strict";
 /* ============================================================================
  * KONKOOR YAR 2.0 — APPLICATION LOGIC
@@ -5683,9 +5800,12 @@ async function copyToClipboard(text) {
     return false;
   }
 }
+}
 </script>
 
 <script>
+{
+
 /* ============================================================================
  * SECTION 12 — SUPABASE CLIENT
  * ========================================================================= */
@@ -6759,6 +6879,7 @@ function runCmdItem(id) {
   } else if (it.action === 'sync-now') {
     syncNow(true);
   }
+}
 }
 </script>
 <script>
@@ -10934,5 +11055,412 @@ window.addEventListener('unhandledrejection', (e) => {
   } catch (_) {}
 });
 </script>
+
+<script>
+/* ============================================================================
+ * KONKOOR YAR 2.0 — HARDENING PATCH
+ * No existing project line is removed. This layer repairs:
+ *  - duplicated DOM IDs / duplicated shell
+ *  - mobile navigation access to every view
+ *  - Supabase SDK/client lifecycle
+ *  - file:// signup callback handling
+ *  - auth state/UI synchronization
+ *  - online/offline sync UI
+ * ========================================================================== */
+(function(){
+  "use strict";
+
+  let kySbFingerprint = "";
+  let kyAuthSubscription = null;
+  let kyMobileNavRoot = null;
+
+  function kyCfg(){
+    return (S && S.settings && S.settings.supabase) ? S.settings.supabase : {url:"",anonKey:""};
+  }
+
+  function kyHasValidHttpOrigin(){
+    return location.protocol === "http:" || location.protocol === "https:";
+  }
+
+  function kySupabaseFingerprint(cfg){
+    return String((cfg && cfg.url) || "") + "\n" + String((cfg && cfg.anonKey) || "");
+  }
+
+  function kyCleanupOldSupabase(){
+    try{
+      if (kyAuthSubscription && typeof kyAuthSubscription.unsubscribe === "function"){
+        kyAuthSubscription.unsubscribe();
+      }
+    }catch(_){}
+    kyAuthSubscription = null;
+
+    try{
+      if (presenceChannel && sb && typeof sb.removeChannel === "function"){
+        sb.removeChannel(presenceChannel);
+      }
+    }catch(_){}
+    try{ presenceChannel = null; }catch(_){}
+    try{ partnerPresence = null; }catch(_){}
+    try{ currentUser = null; currentProfile = null; }catch(_){}
+    sb = null;
+    kySbFingerprint = "";
+  }
+
+  function kyBindAuthState(client){
+    if (!client || !client.auth || typeof client.auth.onAuthStateChange !== "function") return;
+    try{
+      const result = client.auth.onAuthStateChange((event, session) => {
+        try{
+          if (session && session.user){
+            currentUser = {id:session.user.id, email:session.user.email || ""};
+            updateAccountBtn();
+            updateSyncPill();
+
+            if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED"){
+              setTimeout(async () => {
+                try{
+                  if (!currentUser || !sb) return;
+                  await fetchMyProfile();
+                  updateAccountBtn();
+                  if (S.activeView === "home") renderHome();
+                }catch(err){ try{ logError("auth state: " + (err.message || err)); }catch(_){} }
+              }, 0);
+            }
+          }else if (event === "SIGNED_OUT"){
+            currentUser = null;
+            currentProfile = null;
+            partnerPresence = null;
+            try{ stopPresence(); }catch(_){}
+            updateAccountBtn();
+            updateSyncPill();
+            if (S.activeView === "home") renderHome();
+          }
+        }catch(_){}
+      });
+      kyAuthSubscription = result && result.data ? result.data.subscription : null;
+    }catch(err){
+      try{ logError("auth listener: " + (err.message || err)); }catch(_){}
+    }
+  }
+
+  function kyInitSupabaseSDK(){
+    const cfg = kyCfg();
+    if (!cfg.url || !cfg.anonKey) return false;
+    if (typeof window.supabase === "undefined" || typeof window.supabase.createClient !== "function") return false;
+
+    const fp = kySupabaseFingerprint(cfg);
+    if (sb && kySbFingerprint === fp) return true;
+
+    if (sb && kySbFingerprint !== fp) kyCleanupOldSupabase();
+
+    try{
+      sb = window.supabase.createClient(cfg.url, cfg.anonKey, {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:false,
+          storageKey:"ky.auth"
+        },
+        realtime:{params:{eventsPerSecond:5}},
+        global:{
+          fetch:(url, opts={}) => {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), 20000);
+            return fetch(url, {...opts, signal:opts.signal || ctrl.signal})
+              .finally(() => clearTimeout(t));
+          }
+        }
+      });
+      kySbFingerprint = fp;
+      try{ sb.__kyConfigFingerprint = fp; }catch(_){}
+      kyBindAuthState(sb);
+      return true;
+    }catch(err){
+      try{ logError("SB init hardened: " + (err.message || err)); }catch(_){}
+      sb = null;
+      kySbFingerprint = "";
+      return false;
+    }
+  }
+
+  async function kyLoadSupabaseSDK(timeoutMs=8500){
+    if (typeof window.supabase !== "undefined" && typeof window.supabase.createClient === "function") return true;
+
+    try{
+      if (typeof window.__loadSupabaseCdn === "function") window.__loadSupabaseCdn();
+    }catch(_){}
+
+    if (!document.querySelector('script[data-ky-supabase-cdn]')){
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+      s.async = true;
+      s.dataset.kySupabaseCdn = "1";
+      document.head.appendChild(s);
+    }
+
+    const started = Date.now();
+    while (Date.now() - started < timeoutMs){
+      if (typeof window.supabase !== "undefined" && typeof window.supabase.createClient === "function") return true;
+      await new Promise(r => setTimeout(r, 120));
+    }
+    return typeof window.supabase !== "undefined" && typeof window.supabase.createClient === "function";
+  }
+
+  function kyBuildAccountBody(){
+    const cfg = kyCfg();
+    if (!cfg.url || !cfg.anonKey){
+      return '<div class="card card-inset mb-3" style="padding:14px">' +
+        '<p class="t-sm muted" style="line-height:2">URL و anon key را وارد کن.</p></div>' +
+        buildSupabaseConfigForm(cfg);
+    }
+
+    if (!currentUser){
+      return buildLoginForm();
+    }
+    return buildAccountBody();
+  }
+
+  async function kyOpenAccount(){
+    const cfg = kyCfg();
+    if (!cfg.url || !cfg.anonKey){
+      openModal(
+        '<div class="modal-head"><h3>حساب کاربری</h3>' +
+        '<button class="icon-btn sm" data-action="close-modal">' + ICONS.close + '</button></div>' +
+        kyBuildAccountBody()
+      );
+      return;
+    }
+
+    const sdkOk = await kyLoadSupabaseSDK(8500);
+    if (!sdkOk){
+      openModal(
+        '<div class="modal-head"><h3>حساب کاربری</h3>' +
+        '<button class="icon-btn sm" data-action="close-modal">' + ICONS.close + '</button></div>' +
+        '<div class="card card-inset" style="padding:14px">' +
+        '<b class="t-sm">اتصال حساب آماده نیست</b>' +
+        '<p class="t-sm muted" style="margin-top:6px;line-height:2">کتابخانه Supabase بارگذاری نشد. اینترنت و فایل vendor/supabase.min.js را بررسی کن و دوباره تلاش کن.</p>' +
+        '<button type="button" class="btn btn-primary btn-block mt-3" data-action="open-account">تلاش دوباره</button>' +
+        '</div>'
+      );
+      return;
+    }
+
+    if (!kyInitSupabaseSDK()){
+      openModal(
+        '<div class="modal-head"><h3>حساب کاربری</h3>' +
+        '<button class="icon-btn sm" data-action="close-modal">' + ICONS.close + '</button></div>' +
+        '<div class="card card-inset" style="padding:14px">' +
+        '<p class="t-sm muted">پیکربندی Supabase معتبر نیست.</p></div>' +
+        buildSupabaseConfigForm(cfg)
+      );
+      return;
+    }
+
+    try{
+      const sessionRes = await sb.auth.getSession();
+      const session = sessionRes && sessionRes.data ? sessionRes.data.session : null;
+      if (session && session.user){
+        currentUser = {id:session.user.id, email:session.user.email || ""};
+        if (!currentProfile) await fetchMyProfile();
+      }else{
+        currentUser = null;
+        currentProfile = null;
+      }
+    }catch(err){
+      try{ logError("account getSession: " + (err.message || err)); }catch(_){}
+    }
+
+    openModal(
+      '<div class="modal-head"><h3>حساب کاربری</h3>' +
+      '<button class="icon-btn sm" data-action="close-modal">' + ICONS.close + '</button></div>' +
+      kyBuildAccountBody()
+    );
+    updateAccountBtn();
+  }
+
+  async function kyAuthSignIn(email, password){
+    if (!kyInitSupabaseSDK()) throw new Error("Supabase پیکربندی نشده یا SDK آماده نیست");
+    const {data,error} = await sb.auth.signInWithPassword({
+      email:String(email || "").trim().toLowerCase(),
+      password:String(password || "")
+    });
+    if (error) throw new Error(faAuthError(error.message));
+    if (data && data.user){
+      currentUser = {id:data.user.id, email:data.user.email || String(email || "").trim().toLowerCase()};
+      try{ await fetchMyProfile(); }catch(_){}
+      updateAccountBtn();
+      updateSyncPill();
+    }
+    return data && data.user;
+  }
+
+  async function kyAuthSignUp(email, password){
+    if (!kyInitSupabaseSDK()) throw new Error("Supabase پیکربندی نشده یا SDK آماده نیست");
+    const payload = {
+      email:String(email || "").trim().toLowerCase(),
+      password:String(password || "")
+    };
+    if (kyHasValidHttpOrigin()){
+      payload.options = {emailRedirectTo:location.origin + location.pathname};
+    }
+    const {data,error} = await sb.auth.signUp(payload);
+    if (error) throw new Error(faAuthError(error.message));
+    if (data && data.session && data.user){
+      currentUser = {id:data.user.id, email:data.user.email || payload.email};
+      try{ await fetchMyProfile(); }catch(_){}
+      updateAccountBtn();
+      updateSyncPill();
+    }
+    return data && data.user;
+  }
+
+  async function kyAuthSignOut(){
+    try{ await stopPresence(); }catch(_){}
+    try{ if (sb && sb.auth) await sb.auth.signOut(); }catch(_){}
+    currentUser = null;
+    currentProfile = null;
+    partnerPresence = null;
+    updateAccountBtn();
+    updateSyncPill();
+    if (S.activeView === "home") renderHome();
+  }
+
+  function kyDedupeDuplicateIds(){
+    const seen = new Set();
+    document.querySelectorAll("[id]").forEach(el => {
+      const id = el.id;
+      if (!id) return;
+      if (!seen.has(id)){ seen.add(id); return; }
+      el.setAttribute("data-ky-duplicate","1");
+      el.setAttribute("aria-hidden","true");
+      el.style.setProperty("display","none","important");
+      if ("disabled" in el) {
+        try{ el.disabled = true; }catch(_){}
+      }
+    });
+
+    const apps = document.querySelectorAll("body > .app");
+    apps.forEach((el,i) => {
+      if (i > 0){
+        el.setAttribute("data-ky-duplicate-app","1");
+        el.style.setProperty("display","none","important");
+      }
+    });
+  }
+
+  function kyCreateMobileMenu(){
+    if (document.querySelector(".mobile-more-btn")) return;
+
+    const actions = document.querySelector(".top-actions");
+    if (!actions) return;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "icon-btn mobile-more-btn";
+    btn.setAttribute("aria-label","همه بخش‌ها");
+    btn.setAttribute("title","همه بخش‌ها");
+    btn.setAttribute("data-ky-action","open-mobile-nav");
+    btn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="19" height="19">' +
+      '<path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    actions.appendChild(btn);
+
+    const root = document.createElement("div");
+    root.className = "ky-mobile-nav-root";
+    root.id = "kyMobileNavRoot";
+    root.setAttribute("aria-hidden","true");
+    root.innerHTML =
+      '<div class="ky-mobile-nav-overlay" data-ky-action="close-mobile-nav"></div>' +
+      '<section class="ky-mobile-nav-sheet" role="dialog" aria-modal="true" aria-label="همه بخش‌ها">' +
+        '<div class="ky-mobile-nav-head">' +
+          '<h3>همه بخش‌های کنکوریار</h3>' +
+          '<button type="button" class="icon-btn sm" data-ky-action="close-mobile-nav" aria-label="بستن">' + ICONS.close + '</button>' +
+        '</div>' +
+        '<div class="ky-mobile-nav-grid" id="kyMobileNavGrid"></div>' +
+      '</section>';
+    document.body.appendChild(root);
+    kyMobileNavRoot = root;
+    kyRenderMobileMenu();
+  }
+
+  function kyRenderMobileMenu(){
+    const grid = document.getElementById("kyMobileNavGrid");
+    if (!grid || !Array.isArray(NAV_ITEMS)) return;
+    grid.innerHTML = NAV_ITEMS.map(n =>
+      '<button type="button" class="ky-mobile-nav-item' + (S.activeView === n.id ? ' active' : '') +
+      '" data-nav="' + esc(n.id) + '">' +
+      (ICONS[n.icon] || '') +
+      '<span>' + esc(n.label) + '</span></button>'
+    ).join("");
+  }
+
+  function kyToggleMobileMenu(open){
+    if (!kyMobileNavRoot) return;
+    const shouldOpen = !!open;
+    kyMobileNavRoot.classList.toggle("open", shouldOpen);
+    kyMobileNavRoot.setAttribute("aria-hidden", shouldOpen ? "false" : "true");
+    document.body.classList.toggle("ky-mobile-nav-open", shouldOpen);
+    if (shouldOpen) kyRenderMobileMenu();
+  }
+
+  function kyInstallMobileDelegation(){
+    document.addEventListener("click", async (e) => {
+      const target = e.target.closest && e.target.closest("[data-ky-action]");
+      if (target){
+        const action = target.getAttribute("data-ky-action");
+        if (action === "open-mobile-nav"){
+          e.preventDefault();
+          kyToggleMobileMenu(true);
+          return;
+        }
+        if (action === "close-mobile-nav"){
+          e.preventDefault();
+          kyToggleMobileMenu(false);
+          return;
+        }
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && kyMobileNavRoot && kyMobileNavRoot.classList.contains("open")){
+        e.preventDefault();
+        kyToggleMobileMenu(false);
+      }
+    });
+
+    window.addEventListener("online", () => {
+      try{ updateSyncPill(); }catch(_){}
+      try{ if (currentUser) syncNow(true); }catch(_){}
+    });
+
+    window.addEventListener("offline", () => {
+      try{ updateSyncPill(); }catch(_){}
+    });
+  }
+
+  // Expose repaired implementations to the existing app's global function calls.
+  window.initSupabaseSDK = kyInitSupabaseSDK;
+  window.openAccount = kyOpenAccount;
+  window.authSignIn = kyAuthSignIn;
+  window.authSignUp = kyAuthSignUp;
+  window.authSignOut = kyAuthSignOut;
+
+  kyDedupeDuplicateIds();
+  kyCreateMobileMenu();
+  kyInstallMobileDelegation();
+
+  const originalNavigate = window.navigate;
+  window.navigate = function(view){
+    const result = originalNavigate(view);
+    try{ kyRenderMobileMenu(); kyToggleMobileMenu(false); }catch(_){}
+    return result;
+  };
+
+  // Re-apply duplicate-ID cleanup after the original bootstrap's initial rendering.
+  setTimeout(kyDedupeDuplicateIds, 0);
+  setTimeout(kyDedupeDuplicateIds, 500);
+})();
+</script>
+
 </body>
 </html>
