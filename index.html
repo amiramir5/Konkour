@@ -23,7 +23,7 @@
 
 <style>
 /* ============================================================================
- * KONKOOR YAR — DESIGN SYSTEM v1.0.5
+ * KONKOOR YAR — DESIGN SYSTEM v1.0.6
  * ========================================================================= */
 
 :root{
@@ -564,7 +564,13 @@ bdi{unicode-bidi:isolate;}
 
 .btn-primary{background:linear-gradient(145deg,#7cb3ff,#2563eb 55%,#1d4ed8);border-color:transparent;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 8px rgba(0,0,0,.1),0 10px 22px -10px rgba(37,99,235,.8);}
 .btn-primary::before{background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 50%);}
-.btn-primary:hover{filter:brightness(1.06);color:#fff;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 28px -10px rgba(37,99,235,.9);}
+/* [فاز ۱ - تغییر ۲] hover با گرادیان روشن‌تر جای filter */
+.btn-primary:hover{
+  background:linear-gradient(145deg,#93c5fd,#3b82f6 55%,#2563eb);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 14px 28px -10px rgba(37,99,235,.9);
+}
 .btn-success{background:linear-gradient(145deg,#6ee7b7,#059669 55%,#047857);border-color:transparent;color:#fff;box-shadow:0 10px 22px -10px rgba(5,150,105,.7);}
 .btn-success:hover{filter:brightness(1.06);color:#fff;}
 .btn-danger{background:var(--surface);color:var(--bad);border-color:var(--border);}
@@ -696,11 +702,13 @@ bdi{unicode-bidi:isolate;}
   position:relative;
   transition:box-shadow var(--dur) var(--ease),border-color var(--dur) var(--ease),transform var(--dur) var(--ease);
 }
+/* [فاز ۱ - تغییر ۲] z-index صریح برای ::before کارت */
 .card::before{
   content:'';position:absolute;inset:0;border-radius:inherit;
   background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 40%);
-  pointer-events:none;opacity:.5;
+  pointer-events:none;opacity:.5;z-index:0;
 }
+.card > *{position:relative;z-index:1;}
 [data-theme="dark"] .card::before{background:linear-gradient(160deg,rgba(255,255,255,.04),transparent 40%);}
 .card:hover{box-shadow:var(--sh-3);border-color:var(--border-2);}
 .card.no-hover:hover{box-shadow:var(--sh-2);border-color:var(--border);}
@@ -841,7 +849,8 @@ bdi{unicode-bidi:isolate;}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(255,255,255,.32),transparent 55%),radial-gradient(circle at 0% 100%,rgba(0,0,0,.22),transparent 60%);pointer-events:none;}
 .hero::after{content:'';position:absolute;inset:-50%;background:conic-gradient(from 180deg,transparent 0%,rgba(255,255,255,.1) 25%,transparent 50%);animation:heroSpin 24s linear infinite;pointer-events:none;}
 .hero-body{position:relative;display:flex;align-items:center;gap:16px;flex-wrap:wrap;z-index:1;}
-.hero-num{font-family:var(--font-mono);font-size:var(--fs-hero);line-height:1;font-weight:var(--fw-extrabold);letter-spacing:-2px;text-shadow:0 4px 12px rgba(0,0,0,.25);font-variant-numeric:tabular-nums;}
+/* [فاز ۱ - تغییر ۳] hero-num با letter-spacing صفر و direction ltr */
+.hero-num{font-family:var(--font-mono);font-size:var(--fs-hero);line-height:1;font-weight:var(--fw-extrabold);letter-spacing:0;direction:ltr;unicode-bidi:isolate;text-shadow:0 4px 12px rgba(0,0,0,.25);font-variant-numeric:tabular-nums;}
 .hero-meta{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
 .hero-meta b{font-size:14.5px;font-weight:var(--fw-bold);}
 .hero-meta span{font-size:12px;opacity:.9;}
@@ -878,7 +887,20 @@ bdi{unicode-bidi:isolate;}
 .ring-bg{fill:none;stroke:var(--surface-3);stroke-width:11;}
 .ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset .6s linear;filter:drop-shadow(0 4px 16px var(--brand-glow));}
 .ring-inner{position:absolute;inset:0;display:grid;place-items:center;text-align:center;}
-.ring-time{font-family:var(--font-mono);font-size:clamp(34px,10vw,52px);font-weight:var(--fw-extrabold);line-height:1.15;letter-spacing:-1px;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;}
+/* [فاز ۱ - تغییر ۳] ring-time با فونت sans و direction ltr */
+.ring-time{
+  font-family:var(--font-sans);
+  font-size:clamp(34px,10vw,52px);
+  font-weight:var(--fw-extrabold);
+  line-height:1.15;
+  letter-spacing:0;
+  direction:ltr;
+  unicode-bidi:isolate;
+  color:var(--ink);
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:'tnum';
+}
 .ring-sub{font-size:12px;color:var(--ink-3);font-weight:var(--fw-semibold);margin-top:6px;padding:0 20px;}
 .timer-ctrl{display:flex;align-items:center;gap:14px;}
 .ctrl-fab{
@@ -908,6 +930,31 @@ body.zen-mode .ring-time{font-size:clamp(56px,17vw,120px);letter-spacing:-2px;co
 body.zen-mode .ring-sub{color:rgba(255,255,255,.7);font-size:14px;}
 body.zen-mode .ring-bg{stroke:rgba(255,255,255,.1);}
 body.zen-mode .card{background:transparent!important;border:0!important;box-shadow:none!important;}
+
+/* [فاز ۱ - تغییر ۸] دکمه خروج حالت تمرکز (Zen exit) */
+.zen-exit{
+  display:none;
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top));
+  inset-inline-start:16px;
+  z-index:999;
+  width:48px;height:48px;
+  border-radius:50%;
+  place-items:center;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.24);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  cursor:pointer;
+  transition:all .16s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}
+.zen-exit:hover{background:rgba(255,255,255,.26);transform:scale(1.06);}
+.zen-exit:active{transform:scale(.94);}
+.zen-exit svg{width:22px;height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));}
+body.zen-mode .zen-exit{display:grid!important;}
 
 .bars{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;height:140px;padding:6px 0;}
 .bar-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;}
@@ -1053,7 +1100,7 @@ body.zen-mode .card{background:transparent!important;border:0!important;box-shad
 }
 @media(min-width:1200px){.sidebar{width:290px;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
-@media print{.sidebar,.bottomnav,.topbar,.toasts,.modal-root,.fab,.cmd-root{display:none!important;}.main{padding:0;max-width:100%;}.card{break-inside:avoid;box-shadow:none;border:1px solid #ddd;}body{background:#fff;color:#000;}}
+@media print{.sidebar,.bottomnav,.topbar,.toasts,.modal-root,.fab,.cmd-root,.zen-exit{display:none!important;}.main{padding:0;max-width:100%;}.card{break-inside:avoid;box-shadow:none;border:1px solid #ddd;}body{background:#fff;color:#000;}}
 </style>
 </head>
 <body>
@@ -1165,6 +1212,13 @@ body.zen-mode .card{background:transparent!important;border:0!important;box-shad
 
 <button class="fab hidden" id="fab" data-action="fab-main" aria-label="اقدام سریع"></button>
 
+<!-- [فاز ۱ - تغییر ۸] دکمه خروج حالت تمرکز (Zen exit) — فقط در حالت Zen دیده می‌شود -->
+<button class="zen-exit" id="zenExit" data-action="timer-zen" aria-label="خروج از حالت تمرکز">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6l12 12M18 6 6 18"/>
+  </svg>
+</button>
+
 <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
 <div class="modal-root" id="modalRoot"></div>
 
@@ -1197,7 +1251,20 @@ body.zen-mode .card{background:transparent!important;border:0!important;box-shad
 <script>
 "use strict";
 /* ============================================================================
- * KONKOOR YAR — APPLICATION LOGIC v1.0.5
+ * KONKOOR YAR — APPLICATION LOGIC v1.0.6
+ * ----------------------------------------------------------------------------
+ * فاز ۱ اعمال شد:
+ *   - تغییر ۱: دکمه Play تکراری تایمر
+ *   - تغییر ۲: hover دکمه آبی + z-index کارت‌ها
+ *   - تغییر ۳: فونت اعداد تایمر
+ *   - تغییر ۴: تاریخ CSV به فرمت متن
+ *   - تغییر ۵: faDateShort برای نمایش تاریخ
+ *   - تغییر ۶: سه درس جدید (زمین، هویت، سلامت)
+ *   - تغییر ۷: هدف پیش‌فرض ۶۰۰ دقیقه / ۱۰۰ تست
+ *   - تغییر ۸: دکمه خروج حالت تمرکز (CSS + HTML)
+ *   - تغییر ۹: خطای sync (pullChanges + visibilitychange)
+ *   - تغییر ۱۰: مودال جزئیات پایان تایمر
+ *   - تغییر ۱۱: کارت وضعیت AI در صفحه دستیار
  * ========================================================================= */
 
 /* ============================================================================
@@ -1344,6 +1411,21 @@ function faDate(v, style) {
     } catch (e2) {
       return faNum(d.toLocaleDateString('en-GB'));
     }
+  }
+}
+
+/* [فاز ۱ - تغییر ۵] تابع کمکی برای نمایش تاریخ به شکل «۱۴ مهر ۱۴۰۶» */
+function faDateShort(v) {
+  const d = v instanceof Date ? v : parseDay(v);
+  if (isNaN(d.getTime())) return '—';
+  try {
+    return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(d);
+  } catch (e) {
+    return faDate(v, 'long');
   }
 }
 
@@ -1547,19 +1629,23 @@ const STORE_KEY = 'app';
 const SUPABASE_URL = 'https://fsyfdwgtteeyxtoumltz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OAtQRxO5sP6unCn_5BnxMA_Wm0Z7LEN';
 
-/* کلیدهای AI */
-const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6JCmdeF2I4oVmCpmsVkn15DUfCws2d6d4uc3cggk_j3cg';
-const OPENROUTER_API_KEY_DEFAULT = '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';
+/* کلیدهای AI (پیش‌فرض داخل اپ) */
+const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6JC..............cggk_j3cg';
+const OPENROUTER_API_KEY_DEFAULT = 'sk-or-v1-7912cd5aae1d..............14abf8a90';
 
+/* [فاز ۱ - تغییر ۶] سه درس جدید اضافه شد: زمین‌شناسی، هویت اجتماعی، سلامت و بهداشت */
 const SUBJECTS = [
-  { id: 'bio',  name: 'زیست‌شناسی', short: 'زیست',  color: '#14b8a6', c1: '#4dd4c1', c2: '#0d9488' },
-  { id: 'chem', name: 'شیمی',        short: 'شیمی',  color: '#3b82f6', c1: '#7cb3ff', c2: '#2563eb' },
-  { id: 'phy',  name: 'فیزیک',       short: 'فیزیک', color: '#f97316', c1: '#fdba74', c2: '#ea580c' },
-  { id: 'math', name: 'ریاضی',       short: 'ریاضی', color: '#8b5cf6', c1: '#c4b5fd', c2: '#7c3aed' },
-  { id: 'lit',  name: 'ادبیات',      short: 'ادبیات', color: '#ec4899', c1: '#f9a8d4', c2: '#db2777' },
-  { id: 'ar',   name: 'عربی',        short: 'عربی',  color: '#ef4444', c1: '#fca5a5', c2: '#dc2626' },
-  { id: 'din',  name: 'دین و زندگی', short: 'دین',   color: '#06b6d4', c1: '#67e8f9', c2: '#0891b2' },
-  { id: 'eng',  name: 'زبان انگلیسی', short: 'زبان',  color: '#10b981', c1: '#6ee7b7', c2: '#059669' }
+  { id: 'bio',  name: 'زیست‌شناسی',    short: 'زیست',  color: '#14b8a6', c1: '#4dd4c1', c2: '#0d9488' },
+  { id: 'chem', name: 'شیمی',          short: 'شیمی',  color: '#3b82f6', c1: '#7cb3ff', c2: '#2563eb' },
+  { id: 'phy',  name: 'فیزیک',         short: 'فیزیک', color: '#f97316', c1: '#fdba74', c2: '#ea580c' },
+  { id: 'math', name: 'ریاضی',         short: 'ریاضی', color: '#8b5cf6', c1: '#c4b5fd', c2: '#7c3aed' },
+  { id: 'lit',  name: 'ادبیات',        short: 'ادبیات', color: '#ec4899', c1: '#f9a8d4', c2: '#db2777' },
+  { id: 'ar',   name: 'عربی',          short: 'عربی',  color: '#ef4444', c1: '#fca5a5', c2: '#dc2626' },
+  { id: 'din',  name: 'دین و زندگی',   short: 'دین',   color: '#06b6d4', c1: '#67e8f9', c2: '#0891b2' },
+  { id: 'eng',  name: 'زبان انگلیسی',  short: 'زبان',  color: '#10b981', c1: '#6ee7b7', c2: '#059669' },
+  { id: 'geo',  name: 'زمین‌شناسی',    short: 'زمین',  color: '#92400e', c1: '#d97706', c2: '#78350f' },
+  { id: 'soc',  name: 'هویت اجتماعی',  short: 'هویت',  color: '#7c3aed', c1: '#a78bfa', c2: '#5b21b6' },
+  { id: 'hea',  name: 'سلامت و بهداشت', short: 'سلامت', color: '#059669', c1: '#34d399', c2: '#047857' }
 ];
 
 const SUBJ_MAP = Object.fromEntries(SUBJECTS.map(s => [s.id, s]));
@@ -1599,6 +1685,7 @@ const OPENROUTER_MODELS = [
  * SECTION 4 — STATE
  * ========================================================================= */
 
+/* [فاز ۱ - تغییر ۷] هدف روزانه ۱۰ ساعت / ۱۰۰ تست */
 function defaultState() {
   return {
     version: 1,
@@ -1606,8 +1693,8 @@ function defaultState() {
       theme: 'light',
       examDate: '2027-07-01',
       examTitle: 'کنکور سراسری ۱۴۰۶ — تجربی',
-      dailyGoalMinutes: 240,
-      dailyGoalTests: 60,
+      dailyGoalMinutes: 600,
+      dailyGoalTests: 100,
       soundEnabled: true,
       vibrationEnabled: true,
       deviceId: uid(),
@@ -1677,6 +1764,10 @@ async function loadSettings() {
     if (!S.settings.ai.openrouterModel) {
       S.settings.ai.openrouterModel = 'qwen/qwen3.6-plus:free';
     }
+
+    /* [فاز ۱ - تغییر ۷] مهاجرت هدف‌های قدیمی به ۱۰ ساعت / ۱۰۰ تست */
+    if (S.settings.dailyGoalMinutes === 240) S.settings.dailyGoalMinutes = 600;
+    if (S.settings.dailyGoalTests === 60) S.settings.dailyGoalTests = 100;
   } else {
     await saveSettings();
   }
@@ -2006,7 +2097,63 @@ const Timer = {
   }
 };
 
-/* ============================================================================
+/* [فاز ۱ - تغییر ۱۰] مودال جزئیات پس از پایان تایمر */
+function openTimerFinishModal(session) {
+  openModal(
+    '<div class="modal-head">' +
+      '<h3>جزئیات جلسه</h3>' +
+      '<button class="icon-btn sm" data-action="close-modal">' + ICONS.close + '</button>' +
+    '</div>' +
+    '<form data-form="timer-finish-details" data-session-id="' + esc(session.id) + '" class="modal-form">' +
+      '<div class="form-grid c2">' +
+        '<div class="field">' +
+          '<label class="label">درس</label>' +
+          '<select class="select" name="subject">' + subjectOptionsHtml(session.subject) + '</select>' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="label">نوع مطالعه</label>' +
+          '<select class="select" name="type">' +
+            SESSION_TYPES.map(t =>
+              '<option value="' + esc(t) + '"' + (t === session.type ? ' selected' : '') + '>' +
+                esc(t) +
+              '</option>'
+            ).join('') +
+          '</select>' +
+        '</div>' +
+      '</div>' +
+      '<div class="field">' +
+        '<label class="label">مبحث دقیق</label>' +
+        '<input class="input" name="topic" dir="auto" maxlength="150" ' +
+          'placeholder="مثال: فصل ۴ — گردش مواد در بدن">' +
+      '</div>' +
+      '<div class="form-grid c3">' +
+        '<div class="field">' +
+          '<label class="label">درست</label>' +
+          '<input class="input mono" type="text" inputmode="numeric" name="correct" value="0" dir="ltr">' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="label">غلط</label>' +
+          '<input class="input mono" type="text" inputmode="numeric" name="wrong" value="0" dir="ltr">' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="label">نزده</label>' +
+          '<input class="input mono" type="text" inputmode="numeric" name="blank" value="0" dir="ltr">' +
+        '</div>' +
+      '</div>' +
+      '<div class="field">' +
+        '<label class="label">توضیح</label>' +
+        '<textarea class="textarea" name="note" dir="auto" maxlength="400" rows="2"></textarea>' +
+      '</div>' +
+      '<div class="modal-actions">' +
+        '<button type="button" class="btn" data-action="close-modal">بعداً</button>' +
+        '<button type="submit" class="btn btn-primary">' +
+          ICONS.save + '<span>ذخیره</span>' +
+        '</button>' +
+      '</div>' +
+    '</form>'
+  );
+}
+  /* ============================================================================
  * SECTION 8 — ICONS
  * ========================================================================= */
 
@@ -2286,971 +2433,8 @@ async function copyToClipboard(text) {
     return false;
   }
 }
-</script>
-
+  </script>
 <script>
-/* ============================================================================
- * SECTION 12 — SUPABASE CLIENT
- * ========================================================================= */
-
-let sb = null;
-let currentUser = null;
-let currentProfile = null;
-let partnerPresence = null;
-let presenceChannel = null;
-let lastPullTs = 0;
-let aiQuota = { used: 0, remaining: 20, busy: false };
-
-const syncState = {
-  running: false,
-  lastAttempt: 0,
-  backoff: 5000,
-  lastError: null
-};
-
-function initSupabaseSDK() {
-  const cfg = S.settings.supabase || {};
-  if (!cfg.url || !cfg.anonKey) return false;
-  if (typeof window.supabase === 'undefined' || !window.supabase.createClient) return false;
-  if (sb) return true;
-
-  try {
-    sb = window.supabase.createClient(cfg.url, cfg.anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: false,
-        storageKey: 'ky.auth'
-      },
-      realtime: { params: { eventsPerSecond: 5 } },
-      global: {
-        fetch: (url, opts = {}) => {
-          const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 15000);
-          return fetch(url, { ...opts, signal: opts.signal || ctrl.signal })
-            .finally(() => clearTimeout(t));
-        }
-      }
-    });
-    return true;
-  } catch (err) {
-    logError('SB init: ' + (err.message || err));
-    return false;
-  }
-}
-
-function faAuthError(msg) {
-  const m = String(msg || '').toLowerCase();
-  if (m.includes('invalid login')) return 'ایمیل یا رمز اشتباه است';
-  if (m.includes('already registered')) return 'این ایمیل قبلاً ثبت شده';
-  if (m.includes('password') && m.includes('6')) return 'رمز باید حداقل ۶ کاراکتر باشد';
-  if (m.includes('registration not allowed')) return 'این ایمیل مجاز نیست';
-  if (m.includes('database error saving new user')) return 'این ایمیل در لیست مجاز نیست';
-  if (m.includes('email not confirmed')) return 'ایمیل هنوز تأیید نشده';
-  if (m.includes('rate limit')) return 'تعداد تلاش زیاد است؛ چند دقیقه بعد امتحان کن';
-  if (m.includes('abort') || m.includes('failed to fetch')) return 'ارتباط با سرور برقرار نشد';
-  return msg || 'خطای احراز هویت';
-}
-
-async function authSignIn(email, password) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { data, error } = await sb.auth.signInWithPassword({
-    email: String(email).trim().toLowerCase(),
-    password
-  });
-  if (error) throw new Error(faAuthError(error.message));
-  return data.user;
-}
-
-async function authSignUp(email, password) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { data, error } = await sb.auth.signUp({
-    email: String(email).trim().toLowerCase(),
-    password,
-    options: { emailRedirectTo: location.origin + location.pathname }
-  });
-  if (error) throw new Error(faAuthError(error.message));
-  return data.user;
-}
-
-async function authSignOut() {
-  try { await stopPresence(); } catch (e) {}
-  if (sb) {
-    try { await sb.auth.signOut(); } catch (e) {}
-  }
-  currentUser = null;
-  currentProfile = null;
-  partnerPresence = null;
-  updateAccountBtn();
-}
-
-async function fetchMyProfile() {
-  if (!sb || !currentUser) return null;
-  const { data, error } = await sb
-    .from('profiles')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .maybeSingle();
-  if (error) {
-    logError('profile fetch: ' + error.message);
-    return null;
-  }
-  currentProfile = data;
-  return data;
-}
-
-async function fetchPartnerProfile() {
-  if (!sb || !currentProfile || !currentProfile.partner_id) return null;
-  const { data } = await sb
-    .from('profiles')
-    .select('*')
-    .eq('user_id', currentProfile.partner_id)
-    .maybeSingle();
-  return data;
-}
-
-async function linkPartner(email) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { error } = await sb.rpc('link_partner', {
-    partner_email: String(email).trim().toLowerCase()
-  });
-  if (error) throw new Error(error.message || 'خطا در لینک شریک');
-  await fetchMyProfile();
-}
-
-/* ============================================================================
- * SECTION 13 — SYNC ENGINE
- * ========================================================================= */
-
-const TS_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
-
-function toRemoteRow(row, userId) {
-  const r = deepClone(row);
-  TS_FIELDS.forEach(k => {
-    const v = r[k];
-    r[k] = (v === null || v === undefined || v === '')
-      ? null
-      : (typeof v === 'number' ? new Date(v).toISOString() : v);
-  });
-  r.user_id = userId;
-  return r;
-}
-
-function fromRemoteRow(row) {
-  const r = { ...row };
-  TS_FIELDS.forEach(k => {
-    r[k] = r[k] == null
-      ? null
-      : (typeof r[k] === 'number' ? r[k] : new Date(r[k]).getTime());
-  });
-  return r;
-}
-
-async function retryFailedOps() {
-  const all = await idbGetAll('outbox');
-  for (const o of all) {
-    if (o.status === 'failed') {
-      o.status = 'pending';
-      o.tries = 0;
-      o.last_error = null;
-      await idbPut('outbox', o);
-    }
-  }
-}
-
-async function pushOutbox() {
-  if (!sb || !currentUser) return { pushed: 0, failed: 0 };
-  const pending = (await idbGetAll('outbox'))
-    .filter(o => o.status === 'pending' || o.status === 'retry');
-  pending.sort((a, b) => a.ts - b.ts);
-  if (!pending.length) return { pushed: 0, failed: 0 };
-  let pushed = 0;
-  let failed = 0;
-  for (const op of pending) {
-    try {
-      const table = op.store;
-      if (!['sessions', 'exams', 'mistakes', 'plans', 'notes'].includes(table)) {
-        await idbDelete('outbox', op.id);
-        continue;
-      }
-      const payload = op.payload ? toRemoteRow(op.payload, currentUser.id) : null;
-      const res = await sb.from(table).upsert(payload, { onConflict: 'id' });
-      if (res.error) throw new Error(res.error.message);
-      op.status = 'done';
-      op.tries = (op.tries || 0) + 1;
-      op.last_error = null;
-      await idbPut('outbox', op);
-      pushed++;
-    } catch (err) {
-      failed++;
-      op.tries = (op.tries || 0) + 1;
-      op.last_error = String(err.message || err).slice(0, 300);
-      op.status = op.tries >= 5 ? 'failed' : 'retry';
-      await idbPut('outbox', op);
-      logError('push ' + op.store + ': ' + op.last_error);
-    }
-  }
-  const cutoff = Date.now() - 24 * 3600 * 1000;
-  const all = await idbGetAll('outbox');
-  for (const o of all) {
-    if (o.status === 'done' && o.ts < cutoff) {
-      await idbDelete('outbox', o.id);
-    }
-  }
-  return { pushed, failed };
-}
-
-async function pullChanges() {
-  if (!sb || !currentUser) return { pulled: 0 };
-  const startedAt = Date.now() - 60000;
-  let totalPulled = 0;
-  let ok = true;
-  const tables = ['sessions', 'exams', 'mistakes', 'plans', 'notes'];
-
-  for (const t of tables) {
-    let cursor = lastPullTs;
-    for (let page = 0; page < 40; page++) {
-      const { data, error } = await sb.from(t).select('*')
-        .eq('user_id', currentUser.id)
-        .gte('updated_at', new Date(cursor).toISOString())
-        .order('updated_at', { ascending: true })
-        .limit(500);
-      if (error) {
-        ok = false;
-        logError('pull ' + t + ': ' + error.message);
-        break;
-      }
-      if (!data || !data.length) break;
-      let maxTs = cursor;
-      for (const raw of data) {
-        const remote = fromRemoteRow(raw);
-        const local = await idbGet(t, remote.id);
-        if (!local || remote.updated_at > (local.updated_at || 0)) {
-          await idbPut(t, remote);
-          totalPulled++;
-        }
-        if (remote.updated_at > maxTs) maxTs = remote.updated_at;
-      }
-      if (data.length < 500 || maxTs === cursor) break;
-      cursor = maxTs;
-    }
-  }
-  if (ok) {
-    lastPullTs = startedAt;
-    await saveMeta('lastPullTs', lastPullTs);
-  }
-  return { pulled: totalPulled };
-}
-
-async function syncNow(force) {
-  if (!sb || !currentUser) return;
-  if (syncState.running && !force) return;
-  if (!navigator.onLine) return;
-  syncState.running = true;
-  updateSyncPill();
-  try {
-    if (force) await retryFailedOps();
-    const pr = await pushOutbox();
-    await pullChanges();
-    await refreshSharedStatsForToday();
-    syncState.backoff = pr.failed > 0
-      ? Math.min(300000, syncState.backoff * 2)
-      : 5000;
-    syncState.lastError = null;
-  } catch (err) {
-    syncState.lastError = err.message || String(err);
-    logError('sync: ' + syncState.lastError);
-    syncState.backoff = Math.min(300000, syncState.backoff * 2);
-  } finally {
-    syncState.running = false;
-    syncState.lastAttempt = Date.now();
-    await refreshCache();
-    updateSyncPill();
-    updateAccountBtn();
-  }
-}
-
-let syncLoopHandle = null;
-
-function startSyncLoop() {
-  if (syncLoopHandle) clearInterval(syncLoopHandle);
-  syncLoopHandle = setInterval(() => {
-    if (!navigator.onLine || !sb || !currentUser || syncState.running) return;
-    if (Date.now() - syncState.lastAttempt < Math.max(syncState.backoff, 30000)) return;
-    syncNow();
-  }, 8000);
-}
-
-async function refreshSharedStatsForToday() {
-  if (!sb || !currentUser) return;
-  const streak = computeStreak(CACHE.sessions.filter(s => !s.deleted_at));
-  try {
-    await sb.rpc('refresh_shared_stats', {
-      day_date: todayKey(),
-      streak_days: streak
-    });
-  } catch (err) {
-    logError('refresh_shared_stats: ' + (err.message || err));
-  }
-}
-
-/* ============================================================================
- * SECTION 14 — PRESENCE
- * ========================================================================= */
-
-async function startPresence() {
-  if (!sb || !currentUser) return;
-  try { await stopPresence(); } catch (e) {}
-  presenceChannel = sb.channel('partners', {
-    config: { presence: { key: currentUser.id } }
-  });
-  presenceChannel.on('presence', { event: 'sync' }, () => {
-    const state = presenceChannel.presenceState();
-    const others = Object.keys(state).filter(k => k !== currentUser.id);
-    if (!others.length) {
-      partnerPresence = null;
-      renderPartnerCard();
-      return;
-    }
-    const list = state[others[0]] || [];
-    if (list[0]) {
-      partnerPresence = {
-        subject: list[0].subject,
-        started_at: list[0].started_at,
-        online: true
-      };
-    } else {
-      partnerPresence = null;
-    }
-    renderPartnerCard();
-  });
-  presenceChannel.on('presence', { event: 'leave' }, (e) => {
-    const leaving = e.key || (e.leftPresences && e.leftPresences[0] && e.leftPresences[0].key);
-    if (leaving && leaving !== currentUser.id) {
-      partnerPresence = null;
-      renderPartnerCard();
-    }
-  });
-  await presenceChannel.subscribe(async (status) => {
-    if (status === 'SUBSCRIBED') {
-      await trackPresence();
-    }
-  });
-}
-
-async function trackPresence() {
-  if (!presenceChannel || !currentUser) return;
-  const running = Timer.state && Timer.state.status === 'running';
-  const payload = {
-    online: true,
-    subject: running ? Timer.state.subject : null,
-    started_at: running ? Timer.state.started_at : null,
-    updated_at: Date.now()
-  };
-  try { await presenceChannel.track(payload); } catch (e) {}
-}
-
-async function stopPresence() {
-  if (presenceChannel) {
-    try { await presenceChannel.untrack(); } catch (e) {}
-    try { await sb.removeChannel(presenceChannel); } catch (e) {}
-    presenceChannel = null;
-  }
-  partnerPresence = null;
-}
-
-function partnerCardHtml() {
-  if (!currentUser) return '';
-  if (!currentProfile || !currentProfile.partner_id) {
-    return '<div class="card section">' +
-      '<div class="card-head">' + ICONS.info + '<h3>شریک مطالعه</h3></div>' +
-      '<p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده، حساب شریک را لینک کن.</p>' +
-      '<button class="btn btn-sm btn-primary" data-action="open-link-partner">' +
-        ICONS.plus + '<span>لینک</span>' +
-      '</button>' +
-    '</div>';
-  }
-  if (!partnerPresence) {
-    return '<div class="card section">' +
-      '<div class="card-head">' + ICONS.info + '<h3>وضعیت شریک</h3><span class="badge">آفلاین</span></div>' +
-      '<p class="t-sm muted">شریک آنلاین نیست.</p>' +
-    '</div>';
-  }
-  if (partnerPresence.subject) {
-    const sj = subj(partnerPresence.subject);
-    const started = partnerPresence.started_at
-      ? Math.floor((Date.now() - partnerPresence.started_at) / 1000)
-      : 0;
-    return '<div class="card section">' +
-      '<div class="card-head">' +
-        ICONS.flame +
-        '<h3>وضعیت زنده شریک</h3>' +
-        '<span class="badge ok"><span class="dot"></span>آنلاین</span>' +
-      '</div>' +
-      '<div class="flex items-center gap-3">' +
-        '<span style="width:12px;height:12px;border-radius:50%;background:' + sj.color + ';flex:none"></span>' +
-        '<div style="flex:1;min-width:0">' +
-          '<b class="t-sm">در حال مطالعه ' + esc(sj.name) + '</b>' +
-          '<div class="mono" style="font-size:22px;font-weight:800;letter-spacing:-.5px" id="partnerTimer">' +
-            faNum(fmtClock(started)) +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }
-  return '<div class="card section">' +
-    '<div class="card-head">' +
-      ICONS.info +
-      '<h3>وضعیت شریک</h3>' +
-      '<span class="badge ok"><span class="dot"></span>آنلاین</span>' +
-    '</div>' +
-    '<p class="t-sm muted">آنلاین است ولی مشغول مطالعه نیست.</p>' +
-  '</div>';
-}
-
-function renderPartnerCard() {
-  const host = document.querySelector('#homeRoot');
-  if (!host) return;
-  const el = host.querySelector('[data-partner-card]');
-  if (!el) return;
-  el.innerHTML = partnerCardHtml();
-}
-
-setInterval(() => {
-  const el = document.getElementById('partnerTimer');
-  if (!el || !partnerPresence || !partnerPresence.started_at) return;
-  const s = Math.floor((Date.now() - partnerPresence.started_at) / 1000);
-  el.textContent = faNum(fmtClock(s));
-}, 1000);
-
-/* ============================================================================
- * SECTION 15 — AI CLIENT (Gemini + OpenRouter)
- * ---------------------------------------------------------------------------
- * دو provider: Gemini (مستقیم به گوگل) و OpenRouter (مستقیم به openrouter.ai)
- * ---------------------------------------------------------------------------
- * ========================================================================= */
-
-async function aiCall(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const provider = aiCfg.provider || 'gemini';
-
-  if (provider === 'gemini') {
-    return await callGeminiDirect(feature, payload);
-  }
-  return await callOpenRouterDirect(feature, payload);
-}
-
-/* ---------- Gemini API ---------- */
-async function callGeminiDirect(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const apiKey = String(aiCfg.geminiKey || '').trim();
-  const model = aiCfg.geminiModel || 'gemini-3.5-flash';
-
-  if (!apiKey) throw new Error('کلید Gemini در تنظیمات ثبت نشده');
-
-  const system = getSystemPromptFor(feature);
-  const userPrompt = buildUserPromptLocal(feature, payload);
-
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
-    encodeURIComponent(model) + ':generateContent';
-
-  const body = {
-    contents: [{
-      role: 'user',
-      parts: [{ text: system + '\n\n' + userPrompt }]
-    }],
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: 2000,
-      responseMimeType: 'application/json'
-    }
-  };
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-  let res;
-  try {
-    res = await fetch(url, {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify(body)
-    });
-  } catch (netErr) {
-    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی Gemini تمام شد');
-    throw new Error('خطا در اتصال به Gemini. اتصال یا VPN خود را بررسی کن.');
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    let msg = 'Gemini ' + res.status;
-    try {
-      const errJson = JSON.parse(errText);
-      if (errJson && errJson.error && errJson.error.message) {
-        msg = errJson.error.message;
-      }
-    } catch (e) {
-      if (errText) msg += ': ' + errText.slice(0, 200);
-    }
-    if (res.status === 400 && /api key/i.test(msg)) msg = 'کلید Gemini نامعتبر است. کلید جدید از aistudio.google.com بگیر.';
-    if (res.status === 403) msg = 'دسترسی به این مدل برای کلید تو مجاز نیست.';
-    if (res.status === 404) msg = 'مدل Gemini انتخاب‌شده در دسترس نیست.';
-    if (res.status === 429) msg = 'سهم روزانه Gemini تمام شد. فردا امتحان کن.';
-    throw new Error(msg);
-  }
-
-  const data = await res.json();
-  const cand = data && data.candidates && data.candidates[0];
-  const text = (cand && cand.content && Array.isArray(cand.content.parts))
-    ? cand.content.parts.map(p => p.text || '').join('')
-    : '';
-
-  if (!text.trim()) {
-    const finishReason = cand && cand.finishReason;
-    if (finishReason === 'SAFETY') throw new Error('پاسخ توسط فیلتر ایمنی مسدود شد');
-    if (finishReason === 'MAX_TOKENS') throw new Error('پاسخ ناقص (محدودیت توکن)');
-    if (finishReason === 'RECITATION') throw new Error('پاسخ به دلیل شباهت به منابع مسدود شد');
-    throw new Error('پاسخ خالی از Gemini');
-  }
-
-  const parsed = extractJSONLocal(text);
-  const validated = validateShapeLocal(feature, parsed);
-  return { ok: true, data: validated, remaining: 'gemini', provider: 'gemini' };
-}
-
-/* ---------- OpenRouter API ---------- */
-async function callOpenRouterDirect(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const apiKey = String(aiCfg.openrouterKey || '').trim();
-  const model = aiCfg.openrouterModel || 'qwen/qwen3.6-plus:free';
-
-  if (!apiKey) throw new Error('کلید OpenRouter در تنظیمات ثبت نشده');
-
-  const system = getSystemPromptFor(feature);
-  const userPrompt = buildUserPromptLocal(feature, payload);
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-  let res;
-  try {
-    res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Authorization': 'Bearer ' + apiKey,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': location.origin,
-        'X-Title': 'KonkoorYar'
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 2000,
-        temperature: 0.4,
-        response_format: { type: 'json_object' }
-      })
-    });
-  } catch (netErr) {
-    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی OpenRouter تمام شد');
-    throw new Error('خطا در اتصال به OpenRouter. اتصال اینترنت خود را بررسی کن.');
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    let msg = 'OpenRouter ' + res.status;
-    try {
-      const errJson = JSON.parse(errText);
-      if (errJson && errJson.error && errJson.error.message) msg = errJson.error.message;
-    } catch (e) {
-      if (errText) msg += ': ' + errText.slice(0, 200);
-    }
-    if (res.status === 401) msg = 'کلید OpenRouter نامعتبر است.';
-    if (res.status === 402) msg = 'اعتبار OpenRouter کافی نیست.';
-    if (res.status === 429) msg = 'سهم روزانه OpenRouter تمام شد.';
-    throw new Error(msg);
-  }
-
-  const data = await res.json();
-  const text = (data && data.choices && data.choices[0] && data.choices[0].message)
-    ? String(data.choices[0].message.content || '')
-    : '';
-
-  if (!text.trim()) {
-    const finish = data && data.choices && data.choices[0] && data.choices[0].finish_reason;
-    if (finish === 'content_filter') throw new Error('پاسخ توسط فیلتر محتوا مسدود شد');
-    if (finish === 'length') throw new Error('پاسخ ناقص (محدودیت توکن)');
-    throw new Error('پاسخ خالی از OpenRouter');
-  }
-
-  const parsed = extractJSONLocal(text);
-  const validated = validateShapeLocal(feature, parsed);
-  return { ok: true, data: validated, remaining: 'openrouter', provider: 'openrouter' };
-}
-
-function getSystemPromptFor() {
-  return 'تو یک دستیار فارسی زبان و متخصص کنکور ایران (گروه تجربی) هستی. ' +
-    'قواعد: فقط فارسی جواب بده. کوتاه، عملی، بدون شعار. ' +
-    'هرگز آمار یا رتبه از خودت نساز. ' +
-    'خروجی همیشه JSON معتبر باشد، بدون بلوک کد مارک‌داون، بدون توضیح اضافه.';
-}
-
-function buildUserPromptLocal(feature, payload) {
-  const limit = (s, n) => String(s || '').slice(0, n);
-
-  if (feature === 'mistake-analysis') {
-    const items = Array.isArray(payload?.items) ? payload.items.slice(0, 15) : [];
-    const compact = items.map((it, i) => ({
-      n: i + 1,
-      subject: limit(it?.subject, 40),
-      cause: limit(it?.cause, 20),
-      question: limit(it?.question, 400)
-    }));
-    return 'این ' + compact.length + ' مورد از دفترچه اشتباه من است. تحلیل کن و JSON بده:\n' +
-      '{"categories":["..."],"patterns":["..."],"actions":["...","...","..."],"honest":"..."}\n' +
-      'داده:\n' + JSON.stringify(compact);
-  }
-
-  if (feature === 'summary') {
-    return 'موضوع: ' + limit(payload?.topic, 100) + '\n' +
-      'فقط از متن زیر خلاصه بساز. JSON بده:\n' +
-      '{"title":"...","sections":[{"heading":"...","bullets":["..."]}],"not_in_text":["..."]}\n' +
-      'متن:\n' + limit(payload?.text, 6000);
-  }
-
-  if (feature === 'quiz-from-text') {
-    const count = Math.min(Math.max(parseInt(payload?.count) || 5, 1), 10);
-    return 'موضوع: ' + limit(payload?.topic, 100) + '\n' +
-      'از متن زیر ' + count + ' سؤال چهارگزینه‌ای بساز. JSON بده:\n' +
-      '{"questions":[{"stem":"...","options":["...","...","...","..."],"correct_index":0,"explanation":"...","needs_review":false}]}\n' +
-      'متن:\n' + limit(payload?.text, 6000);
-  }
-
-  throw new Error('feature ناشناخته: ' + feature);
-}
-
-function extractJSONLocal(text) {
-  if (!text || !text.trim()) throw new Error('پاسخ خالی');
-  let t = String(text).trim();
-  t = t.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
-  const s = t.indexOf('{');
-  const e = t.lastIndexOf('}');
-  if (s < 0 || e <= s) throw new Error('JSON در پاسخ یافت نشد');
-  return JSON.parse(t.slice(s, e + 1));
-}
-
-function validateShapeLocal(feature, obj) {
-  if (!obj || typeof obj !== 'object') throw new Error('ساختار نامعتبر');
-
-  if (feature === 'mistake-analysis') {
-    return {
-      categories: Array.isArray(obj.categories) ? obj.categories.slice(0, 8).map(String) : [],
-      patterns: Array.isArray(obj.patterns) ? obj.patterns.slice(0, 8).map(String) : [],
-      actions: Array.isArray(obj.actions) ? obj.actions.slice(0, 5).map(String) : ['داده کافی نیست.'],
-      honest: String(obj.honest || 'تحلیل قطعی نیست.').slice(0, 300)
-    };
-  }
-
-  if (feature === 'summary') {
-    const sections = Array.isArray(obj.sections) ? obj.sections.slice(0, 12).map(s => ({
-      heading: String(s?.heading || '').slice(0, 120),
-      bullets: Array.isArray(s?.bullets) ? s.bullets.slice(0, 8).map(b => String(b).slice(0, 400)) : []
-    })) : [];
-    return {
-      title: String(obj.title || 'خلاصه').slice(0, 140),
-      sections,
-      not_in_text: Array.isArray(obj.not_in_text) ? obj.not_in_text.slice(0, 8).map(String) : []
-    };
-  }
-
-  if (feature === 'quiz-from-text') {
-    const questions = Array.isArray(obj.questions) ? obj.questions.slice(0, 12).map(q => {
-      const opts = Array.isArray(q?.options) ? q.options.slice(0, 4).map(x => String(x).slice(0, 300)) : [];
-      while (opts.length < 4) opts.push('—');
-      return {
-        stem: String(q?.stem || '').slice(0, 500),
-        options: opts,
-        correct_index: Math.min(Math.max(parseInt(q?.correct_index) || 0, 0), 3),
-        explanation: String(q?.explanation || '').slice(0, 400),
-        needs_review: !!q?.needs_review
-      };
-    }) : [];
-    return { questions };
-  }
-
-  throw new Error('feature ناشناخته');
-}
-
-async function refreshAiQuota() {
-  if (!sb || !currentUser) return;
-  try {
-    const { data } = await sb.rpc('ai_usage_today');
-    const used = typeof data === 'number' ? data : 0;
-    aiQuota.used = used;
-    aiQuota.remaining = Math.max(0, 20 - used);
-    renderAiQuotaBadge();
-  } catch (e) {}
-}
-
-function renderAiQuotaBadge() {
-  const el = document.getElementById('aiQuotaLabel');
-  if (!el) return;
-  const aiCfg = S.settings.ai || {};
-  const provider = aiCfg.provider || 'gemini';
-  const label = provider === 'gemini' ? 'Gemini' : 'OpenRouter';
-  el.textContent = label;
-  el.className = 'badge brand';
-}
-
-/* ============================================================================
- * SECTION 16 — UI STATE HELPERS
- * ========================================================================= */
-
-function updateSyncPill() {
-  const pill = $('#syncPill');
-  const label = $('#syncLabel');
-  if (!pill || !label) return;
-  const pending = (CACHE.outbox || []).filter(o => o.status === 'pending' || o.status === 'retry').length;
-  const failed = (CACHE.outbox || []).filter(o => o.status === 'failed').length;
-  pill.className = 'sync-pill';
-  if (!navigator.onLine) {
-    pill.classList.add('offline');
-    label.textContent = 'آفلاین';
-    return;
-  }
-  if (!currentUser) {
-    label.textContent = 'محلی';
-    return;
-  }
-  if (failed > 0) {
-    pill.classList.add('offline');
-    label.textContent = 'خطا';
-    return;
-  }
-  if (syncState.running) {
-    pill.classList.add('queue');
-    label.textContent = 'sync…';
-    return;
-  }
-  if (pending > 0) {
-    pill.classList.add('queue');
-    label.textContent = 'صف: ' + faNum(pending);
-    return;
-  }
-  label.textContent = 'همگام';
-}
-
-function updateAccountBtn() {
-  const btn = $('#accountBtn');
-  if (btn) btn.classList.toggle('on', !!currentUser);
-}
-
-function updateThemeButtons() {
-  const dark = S.settings.theme === 'dark';
-  const lbl = $('#themeLabel');
-  if (lbl) lbl.textContent = dark ? 'حالت روشن' : 'حالت شب';
-  const ti = $('#themeIcon');
-  if (ti) ti.innerHTML = dark ? ICONS.sun : ICONS.moon;
-  const tt = $('#themeBtn');
-  if (tt) tt.innerHTML = dark ? ICONS.sun : ICONS.moon;
-}
-
-function applyTheme() {
-  const t = S.settings.theme === 'dark' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', t);
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', t === 'dark' ? '#080d18' : '#f0f4fa');
-  updateThemeButtons();
-}
-
-/* ============================================================================
- * SECTION 17 — NAVIGATION
- * ========================================================================= */
-
-const NAV_ITEMS = [
-  { id: 'home', label: 'خانه', icon: 'home' },
-  { id: 'timer', label: 'اتاق تمرکز', icon: 'timer' },
-  { id: 'exams', label: 'آزمون‌ها', icon: 'exams' },
-  { id: 'mistakes', label: 'دفترچه غلط', icon: 'mistakes' },
-  { id: 'sim', label: 'آزمون شبیه‌ساز', icon: 'sim' },
-  { id: 'plan', label: 'برنامه روزانه', icon: 'plan' },
-  { id: 'stats', label: 'آمار هفته', icon: 'stats' },
-  { id: 'monthly', label: 'گزارش ماهانه', icon: 'stats' },
-  { id: 'ai', label: 'دستیار AI', icon: 'spark' },
-  { id: 'settings', label: 'تنظیمات', icon: 'settings' },
-  { id: 'diag', label: 'عیب‌یابی', icon: 'diag' }
-];
-
-const BOTTOM_NAV = ['home', 'timer', 'exams', 'mistakes', 'stats'];
-const VIEW_TITLES = Object.fromEntries(NAV_ITEMS.map(n => [n.id, n.label]));
-
-function buildNav() {
-  const side = $('#sideNav');
-  if (side) {
-    side.innerHTML = NAV_ITEMS.map(n =>
-      '<button type="button" data-nav="' + n.id + '" class="' +
-        (S.activeView === n.id ? 'active' : '') + '">' +
-        (ICONS[n.icon] || '') +
-        '<span>' + esc(n.label) + '</span>' +
-      '</button>'
-    ).join('');
-  }
-  const bottom = $('#bottomNav');
-  if (bottom) {
-    bottom.innerHTML = BOTTOM_NAV.map(id => {
-      const n = NAV_ITEMS.find(x => x.id === id);
-      if (!n) return '';
-      return '<button type="button" data-nav="' + n.id + '" class="' +
-        (S.activeView === n.id ? 'active' : '') + '">' +
-        (ICONS[n.icon] || '') +
-        '<span>' + esc(n.label) + '</span>' +
-      '</button>';
-    }).join('');
-  }
-}
-
-function navigate(view) {
-  if (!VIEW_TITLES[view]) view = 'home';
-  S.activeView = view;
-  $$('.view').forEach(v => {
-    v.classList.toggle('active', v.id === 'view-' + view);
-  });
-  const bottomTarget = BOTTOM_NAV.includes(view) ? view : 'home';
-  $$('#bottomNav button').forEach(b => {
-    b.classList.toggle('active', b.dataset.nav === bottomTarget);
-  });
-  $$('#sideNav button').forEach(b => {
-    b.classList.toggle('active', b.dataset.nav === view);
-  });
-  const titleEl = $('#topTitle');
-  if (titleEl) titleEl.textContent = VIEW_TITLES[view] || '';
-  const dateEl = $('#topDate');
-  if (dateEl) dateEl.textContent = faDate(todayKey(), 'weekday');
-  if (window.RENDER && window.RENDER[view]) {
-    try {
-      window.RENDER[view]();
-    } catch (e) {
-      logError('render ' + view + ': ' + e.message);
-    }
-  }
-  updateFab();
-  try {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } catch (e) {
-    window.scrollTo(0, 0);
-  }
-}
-
-function updateFab() {
-  const fab = $('#fab');
-  if (!fab) return;
-  const v = S.activeView;
-  if (['home', 'plan', 'mistakes', 'exams'].includes(v)) {
-    fab.classList.remove('hidden');
-    fab.dataset.view = v;
-    fab.innerHTML = ICONS.plus;
-    fab.setAttribute('aria-label',
-      v === 'plan' ? 'افزودن هدف' :
-      v === 'mistakes' ? 'ثبت خطای جدید' :
-      v === 'exams' ? 'ثبت آزمون' : 'شروع تایمر'
-    );
-  } else {
-    fab.classList.add('hidden');
-  }
-}
-
-/* ============================================================================
- * SECTION 18 — COMMAND PALETTE
- * ========================================================================= */
-
-const CMD_ITEMS = [
-  { id: 'go-home', label: 'خانه', icon: 'home', nav: 'home' },
-  { id: 'go-timer', label: 'اتاق تمرکز', icon: 'timer', nav: 'timer' },
-  { id: 'go-exams', label: 'آزمون‌ها', icon: 'exams', nav: 'exams' },
-  { id: 'go-mistakes', label: 'دفترچه', icon: 'mistakes', nav: 'mistakes' },
-  { id: 'go-sim', label: 'آزمون شبیه‌ساز', icon: 'sim', nav: 'sim' },
-  { id: 'go-plan', label: 'برنامه روزانه', icon: 'plan', nav: 'plan' },
-  { id: 'go-stats', label: 'آمار هفته', icon: 'stats', nav: 'stats' },
-  { id: 'go-monthly', label: 'گزارش ماهانه', icon: 'stats', nav: 'monthly' },
-  { id: 'go-ai', label: 'دستیار AI', icon: 'spark', nav: 'ai' },
-  { id: 'go-settings', label: 'تنظیمات', icon: 'settings', nav: 'settings' },
-  { id: 'go-diag', label: 'عیب‌یابی', icon: 'diag', nav: 'diag' },
-  { id: 'act-theme', label: 'تغییر پوسته', icon: 'moon', action: 'toggle-theme' },
-  { id: 'act-account', label: 'حساب کاربری', icon: 'key', action: 'open-account' },
-  { id: 'act-export', label: 'خروجی JSON', icon: 'download', action: 'export' },
-  { id: 'act-sync', label: 'همگام‌سازی', icon: 'refresh', action: 'sync-now' }
-];
-
-function openCmd() {
-  const root = $('#cmdRoot');
-  if (!root) return;
-  root.style.display = 'flex';
-  const input = $('#cmdInput');
-  if (input) {
-    input.value = '';
-    input.focus();
-  }
-  renderCmdList('');
-}
-
-function closeCmd() {
-  const root = $('#cmdRoot');
-  if (root) root.style.display = 'none';
-}
-
-function renderCmdList(query) {
-  const list = $('#cmdList');
-  if (!list) return;
-  const q = String(query || '').toLowerCase().trim();
-  const items = CMD_ITEMS.filter(it =>
-    !q || it.label.toLowerCase().includes(q) || it.id.includes(q)
-  );
-  if (!items.length) {
-    list.innerHTML = '<p class="t-sm muted center" style="padding:20px">چیزی یافت نشد.</p>';
-    return;
-  }
-  list.innerHTML = items.map((it, i) =>
-    '<button type="button" class="cmd-item' + (i === 0 ? ' active' : '') + '" ' +
-      'data-cmd-id="' + it.id + '" ' +
-      'style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;color:var(--ink);border:0;background:none;width:100%;text-align:start;font-family:inherit' +
-      (i === 0 ? ';background:var(--brand-soft);color:var(--brand)' : '') + '">' +
-      (ICONS[it.icon] || '') +
-      '<span>' + esc(it.label) + '</span>' +
-    '</button>'
-  ).join('');
-}
-
-function runCmdItem(id) {
-  const it = CMD_ITEMS.find(x => x.id === id);
-  if (!it) return;
-  closeCmd();
-  if (it.nav) {
-    navigate(it.nav);
-  } else if (it.action === 'toggle-theme') {
-    S.settings.theme = S.settings.theme === 'dark' ? 'light' : 'dark';
-    applyTheme();
-    saveSettings();
-  } else if (it.action === 'open-account') {
-    openAccount();
-  } else if (it.action === 'export') {
-    exportData();
-  } else if (it.action === 'sync-now') {
-    syncNow(true);
-  }
-}
-</script>
-  <script>
 /* ============================================================================
  * KONKOOR YAR — RENDERERS
  * ========================================================================= */
@@ -3277,6 +2461,7 @@ async function renderHome() {
     ? clamp((todaySeconds / 60) / S.settings.dailyGoalMinutes * 100, 0, 100)
     : 0;
 
+  /* [فاز ۱ - تغییر ۵] استفاده از faDateShort برای نمایش تاریخ با فرمت «۱۴ مهر ۱۴۰۶» */
   const heroHtml = left != null
     ? '<div class="hero">' +
         '<div class="hero-body">' +
@@ -3286,7 +2471,7 @@ async function renderHome() {
           '</div>' +
           '<div class="hero-meta">' +
             '<b>' + esc(S.settings.examTitle) + '</b>' +
-            '<span>' + esc(faDate(S.settings.examDate, 'long')) + '</span>' +
+            '<span>' + esc(faDateShort(S.settings.examDate)) + '</span>' +
             '<span>امروز: ' + esc(faDate(todayKey(), 'weekday')) + '</span>' +
           '</div>' +
           '<button class="btn btn-sm" data-action="edit-exam-date">' +
@@ -3385,6 +2570,7 @@ async function renderHome() {
     .sort((a, b) => (b.created_at || 0) - (a.created_at || 0))
     .slice(0, 6);
 
+  /* [فاز ۱ - تغییر ۵] نمایش تاریخ آخرین جلسات با faDateShort */
   const recentHtml = recent.length > 0
     ? '<div class="card section">' +
         '<div class="card-head">' +
@@ -3397,7 +2583,7 @@ async function renderHome() {
             '<span style="width:10px;height:10px;border-radius:50%;background:' + sj.color + ';margin-top:6px;flex:none"></span>' +
             '<div class="item-main">' +
               '<b>' + esc(sj.name) + '</b>' +
-              '<span>' + esc(faDate(s.day, 'short')) + ' · ' + esc(relativeDay(s.day)) + '</span>' +
+              '<span>' + esc(faDateShort(s.day)) + ' · ' + esc(relativeDay(s.day)) + '</span>' +
             '</div>' +
             '<div class="mono t-xs" style="align-self:center">' +
               fmtHMfa((s.seconds || 0) / 60) +
@@ -3468,6 +2654,7 @@ async function renderTimer() {
     '<option value="' + esc(t) + '">' + esc(t) + '</option>'
   ).join('');
 
+  /* [فاز ۱ - تغییر ۱] دکمه Play فقط وقتی نه در حال اجرا و نه در توقف است */
   root.innerHTML =
     '<div class="view-title">' +
       '<h2>اتاق تمرکز</h2>' +
@@ -3506,7 +2693,7 @@ async function renderTimer() {
                 ICONS.trash +
               '</button>'
             : '') +
-          (!running
+          (!running && !paused
             ? '<button class="ctrl-fab" data-action="timer-start" aria-label="شروع">' +
                 ICONS.play +
               '</button>'
@@ -3698,6 +2885,7 @@ async function renderExams() {
     allHtml;
 }
 
+/* [فاز ۱ - تغییر ۵] استفاده از faDateShort در آیتم آزمون */
 function examItemHtml(e) {
   const sj = subj(e.subject);
   const pct = e.percent || 0;
@@ -3710,7 +2898,7 @@ function examItemHtml(e) {
         ' — <span class="mono" style="color:var(--brand)">' + fmtPct(pct) + '</span>' +
       '</b>' +
       '<span>' +
-        esc(faDate(e.day, 'short')) + ' · ' +
+        esc(faDateShort(e.day)) + ' · ' +
         'درست ' + faNum(e.correct || 0) + ' / ' +
         'غلط ' + faNum(e.wrong || 0) + ' / ' +
         'نزده ' + faNum(e.blank || 0) +
@@ -3876,6 +3064,7 @@ async function renderMistakes() {
     upcomingHtml;
 }
 
+/* [فاز ۱ - تغییر ۵] استفاده از faDateShort برای نمایش تاریخ مرور */
 function mistakeItemHtml(m, showButtons) {
   const sj = subj(m.subject);
   const box = m.box || 1;
@@ -3900,7 +3089,7 @@ function mistakeItemHtml(m, showButtons) {
         esc(sj.short) + ' · ' +
         esc(m.cause || '—') + ' · ' +
         'مرحله ' + faNum(box) + '/۵ ' + boxDots +
-        (m.next_review ? ' · ' + esc(faDate(m.next_review, 'short')) : '') +
+        (m.next_review ? ' · ' + esc(faDateShort(m.next_review)) : '') +
       '</span>' +
       (m.source ? '<span style="color:var(--ink-2)">📎 ' + esc(m.source) + '</span>' : '') +
       imgHtml +
@@ -3961,7 +3150,7 @@ async function handleMistakeResult(id, wasRight) {
 
   toast(
     wasRight
-      ? 'مرحله ' + faNum(newBox) + ' — ' + faDate(nextReview, 'short')
+      ? 'مرحله ' + faNum(newBox) + ' — ' + faDateShort(nextReview)
       : 'به مرحله ۱ برگشت',
     wasRight ? 'ok' : 'warn',
     2400
@@ -4657,7 +3846,7 @@ async function renderMonthly() {
       '<div class="list">' + historyHtml + '</div>' +
     '</div>';
 }
-</script>
+  </script>
 <script>
 /* ============================================================================
  * SECTION 27 — RENDER: AI
@@ -4845,6 +4034,39 @@ async function renderAI() {
   const provider = aiCfg.provider || 'gemini';
   const providerLabel = provider === 'gemini' ? 'Gemini' : 'OpenRouter';
 
+  /* [فاز ۱ - تغییر ۱۱] کارت وضعیت کلیدهای AI در بالای صفحه */
+  const aiKey = (aiCfg.geminiKey) || '';
+  const aiKeySet = !!(aiKey && aiKey.trim());
+  const orKey = (aiCfg.openrouterKey) || '';
+  const orKeySet = !!(orKey && orKey.trim());
+
+  const aiSetupCard =
+    '<div class="card card-brand">' +
+      '<div class="card-head">' +
+        ICONS.key +
+        '<h3>وضعیت کلیدهای AI</h3>' +
+        '<span class="badge brand">' + providerLabel + '</span>' +
+      '</div>' +
+      '<div class="t-sm" style="line-height:2.2">' +
+        '<div class="flex justify-between items-center">' +
+          '<span class="muted">Gemini</span>' +
+          '<span class="badge ' + (aiKeySet ? 'ok' : 'warn') + '">' +
+            (aiKeySet ? 'ثبت شده' : 'ثبت نشده') +
+          '</span>' +
+        '</div>' +
+        '<div class="flex justify-between items-center">' +
+          '<span class="muted">OpenRouter</span>' +
+          '<span class="badge ' + (orKeySet ? 'ok' : 'warn') + '">' +
+            (orKeySet ? 'ثبت شده' : 'ثبت نشده') +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+      '<button class="btn btn-primary btn-sm mt-3" data-action="goto-ai-settings">' +
+        ICONS.settings +
+        '<span>باز کردن تنظیمات AI</span>' +
+      '</button>' +
+    '</div>';
+
   root.innerHTML =
     '<div class="view-title">' +
       '<h2>دستیار هوشمند</h2>' +
@@ -4853,7 +4075,9 @@ async function renderAI() {
       '</span>' +
     '</div>' +
 
-    '<div class="card">' +
+    aiSetupCard +
+
+    '<div class="card section">' +
       '<div class="card-head">' +
         ICONS.spark +
         '<h3>تحلیل غلط‌ها</h3>' +
@@ -4920,7 +4144,7 @@ async function renderAI() {
         'خروجی AI ممکن است اشتباه باشد؛ همیشه با کتاب درسی چک کن. ' +
         'برای تغییر provider یا مدل، به تنظیمات برو.' +
       '</p>' +
-      '<button class="btn btn-sm mt-3" data-nav="settings">' +
+      '<button class="btn btn-sm mt-3" data-action="goto-ai-settings">' +
         ICONS.settings + '<span>تنظیمات AI</span>' +
       '</button>' +
     '</div>';
@@ -5274,7 +4498,7 @@ async function renderSettings() {
         '</div>' +
       '</div>' +
       '<div class="t-sm muted" style="line-height:2.4">' +
-        '<div>نسخه: <b class="mono">1.0.5</b></div>' +
+        '<div>نسخه: <b class="mono">1.0.6</b></div>' +
         '<div>وضعیت: <b>' + (currentUser ? 'Supabase' : 'محلی') + '</b></div>' +
         '<div>دستگاه: <span class="ltr mono">' +
           esc((S.settings.deviceId || '').slice(0, 8)) +
@@ -5693,6 +4917,11 @@ function downloadText(name, text, mime) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+/* [فاز ۱ - تغییر ۴] تاریخ به فرمت متن برای Excel: "='2025-10-06' */
+function csvDateCell(day) {
+  return "='" + String(day || '') + "'";
+}
+
 function exportSessionsCSV() {
   const list = CACHE.sessions
     .filter(s => !s.deleted_at)
@@ -5701,7 +4930,7 @@ function exportSessionsCSV() {
 
   const headers = ['تاریخ', 'درس', 'نوع', 'دقیقه', 'درست', 'غلط', 'نزده', 'درصد', 'توضیح'];
   const rows = list.map(s => [
-    s.day,
+    csvDateCell(s.day),
     subj(s.subject).name,
     s.type || '',
     Math.round((s.seconds || 0) / 60),
@@ -5726,7 +4955,7 @@ function exportExamsCSV() {
 
   const headers = ['تاریخ', 'درس', 'درست', 'غلط', 'نزده', 'مدت', 'درصد', 'توضیح'];
   const rows = list.map(e => [
-    e.day,
+    csvDateCell(e.day),
     subj(e.subject).name,
     e.correct || 0,
     e.wrong || 0,
@@ -5753,7 +4982,7 @@ function exportMistakesCSV() {
     m.cause || '',
     String(m.question || '').replace(/\s+/g, ' ').slice(0, 500),
     m.source || '',
-    m.next_review || ''
+    csvDateCell(m.next_review)
   ]);
 
   downloadText('ky-mistakes-' + todayKey() + '.csv', toCSV(headers, rows));
@@ -6074,6 +5303,22 @@ function bindEvents() {
         break;
       }
 
+      /* [فاز ۱ - تغییر ۱۱] پرش به تنظیمات AI با اسکرول و فوکوس */
+      case 'goto-ai-settings': {
+        navigate('settings');
+        setTimeout(() => {
+          const form = document.querySelector('form[data-form="ai-settings"]');
+          if (form) {
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const firstInput = form.querySelector('select[name="aiProvider"]');
+            if (firstInput) {
+              setTimeout(() => { try { firstInput.focus(); } catch (e) {} }, 400);
+            }
+          }
+        }, 320);
+        break;
+      }
+
       case 'test-ai-key': {
         const resultEl = $('#aiKeyTestResult');
         if (!resultEl) break;
@@ -6088,7 +5333,6 @@ function bindEvents() {
         const form = document.querySelector('form[data-form="ai-settings"]');
         if (!form) break;
 
-        /* ذخیره موقت کلیدها برای تست */
         const testProvider = form.aiProvider.value;
         const gKeyInput = form.geminiKey.value.trim();
         const oKeyInput = form.openrouterKey.value.trim();
@@ -6125,7 +5369,6 @@ function bindEvents() {
               '<p class="t-xs muted mt-2" dir="auto">' + esc(err.message) + '</p>' +
             '</div>';
         } finally {
-          /* برگرداندن مقادیر اگر ذخیره نشدند */
           if (!gKeyInput) S.settings.ai.geminiKey = backup.geminiKey;
           if (!oKeyInput) S.settings.ai.openrouterKey = backup.openrouterKey;
           S.settings.ai.provider = backup.provider;
@@ -6164,11 +5407,11 @@ function bindEvents() {
       case 'timer-pause': Timer.pause(); renderTimer(); break;
       case 'timer-resume': Timer.resume(); renderTimer(); break;
 
+      /* [فاز ۱ - تغییر ۱۰] پس از پایان تایمر، مودال جزئیات باز می‌شود */
       case 'timer-finish': {
         const s = await Timer.finish();
         if (s) {
-          toast('ثبت شد — ' + fmtHMfa((s.seconds || 0) / 60), 'ok');
-          navigate('home');
+          openTimerFinishModal(s);
         } else {
           const drop = await confirmModal({
             title: 'جلسهٔ خیلی کوتاه',
@@ -6491,8 +5734,8 @@ function bindEvents() {
         toast('ذخیره شد', 'ok');
         renderSettings();
       } else if (kind === 'goals') {
-        S.settings.dailyGoalMinutes = clamp(toInt(form.dailyGoalMinutes.value, 240), 30, 900);
-        S.settings.dailyGoalTests = clamp(toInt(form.dailyGoalTests.value, 60), 0, 500);
+        S.settings.dailyGoalMinutes = clamp(toInt(form.dailyGoalMinutes.value, 600), 30, 900);
+        S.settings.dailyGoalTests = clamp(toInt(form.dailyGoalTests.value, 100), 0, 500);
         await saveSettings();
         toast('ذخیره شد', 'ok');
         renderSettings();
@@ -6616,6 +5859,25 @@ function bindEvents() {
         }
       } else if (kind === 'ai-text') {
         await aiRunOnText(form.dataset.feature);
+      } else if (kind === 'timer-finish-details') {
+        /* [فاز ۱ - تغییر ۱۰] ذخیره جزئیات جلسه پس از پایان تایمر */
+        const sid = form.dataset.sessionId;
+        const s = await idbGet('sessions', sid);
+        if (!s) break;
+        s.subject = String(form.subject.value || s.subject);
+        s.type = String(form.type.value || s.type || SESSION_TYPES[0]);
+        s.topic = String(form.topic.value || '').trim();
+        s.correct = clamp(toInt(form.correct.value, 0), 0, 1000);
+        s.wrong = clamp(toInt(form.wrong.value, 0), 0, 1000);
+        s.blank = clamp(toInt(form.blank.value, 0), 0, 1000);
+        s.note = String(form.note.value || '').trim();
+        s.updated_at = Date.now();
+        await idbPut('sessions', s);
+        await queueOp('upsert', 'sessions', s.id, s);
+        await refreshCache();
+        closeModal();
+        toast('جزئیات ذخیره شد — ' + fmtHMfa((s.seconds || 0) / 60), 'ok');
+        navigate('home');
       }
     } catch (err) {
       logError(err.message || String(err));
@@ -6684,16 +5946,19 @@ function bindEvents() {
 
   window.addEventListener('online', () => {
     updateSyncPill();
-    if (currentUser) syncNow(true);
+    if (currentUser && sb) syncNow(true);
   });
   window.addEventListener('offline', () => {
     updateSyncPill();
   });
 
+  /* [فاز ۱ - تغییر ۹] در visibilitychange هم وجود sb را چک کن */
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       Timer.render();
-      if (currentUser && navigator.onLine) syncNow();
+      if (currentUser && navigator.onLine && sb && !syncState.running) {
+        syncNow();
+      }
     }
   });
 
