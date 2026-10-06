@@ -11462,5 +11462,692 @@ window.addEventListener('unhandledrejection', (e) => {
 })();
 </script>
 
+
+
+<!-- ============================================================================
+ * KONKOOR YAR 2.0 — PATCH LAYER 2026-10-07
+ * Additive fixes: no existing project source lines are removed.
+ * ============================================================================ -->
+<style id="ky-final-patches">
+/* ---------------------------------------------------------------------------
+ * Persian date + mobile wake time picker
+ * --------------------------------------------------------------------------- */
+.wake-picker-shell{display:flex;flex-direction:column;gap:14px;}
+.wake-picker-step{font-size:12px;color:var(--ink-3);font-weight:600;text-align:center;}
+.wake-picker-time{font-family:var(--font-num);font-size:38px;font-weight:800;line-height:1;text-align:center;letter-spacing:0;direction:ltr;unicode-bidi:isolate;}
+.wake-wheel-wrap{position:relative;width:min(220px,72vw);margin:0 auto;}
+.wake-wheel-wrap::before,.wake-wheel-wrap::after{content:'';position:absolute;inset-inline:0;height:58px;z-index:3;pointer-events:none;}
+.wake-wheel-wrap::before{top:0;background:linear-gradient(to bottom,var(--surface),transparent);}
+.wake-wheel-wrap::after{bottom:0;background:linear-gradient(to top,var(--surface),transparent);}
+.wake-wheel{height:292px;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;padding-block:116px;}
+.wake-wheel::-webkit-scrollbar{display:none;}
+.wake-wheel-item{height:48px;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;font-family:var(--font-num);font-size:22px;font-weight:600;color:var(--ink-3);opacity:.52;transform:scale(.86);transition:all .14s ease;direction:ltr;cursor:pointer;user-select:none;}
+.wake-wheel-item.is-selected{font-size:30px;font-weight:900;color:var(--brand);opacity:1;transform:scale(1);}
+.wake-wheel-center{position:absolute;inset-inline:8px;top:50%;height:52px;transform:translateY(-50%);border-radius:16px;border:1px solid var(--brand-soft);background:color-mix(in srgb,var(--brand-soft) 42%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);pointer-events:none;z-index:2;}
+.wake-picker-colon{font-size:30px;font-weight:900;color:var(--ink-2);display:grid;place-items:center;height:48px;}
+.wake-picker-dual{display:flex;align-items:center;justify-content:center;gap:7px;}
+.wake-picker-current{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);font-family:var(--font-num);font-weight:800;direction:ltr;}
+.wake-picker-display{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:56px;padding:10px 12px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);width:100%;}
+.wake-picker-display .value{font-family:var(--font-num);font-size:22px;font-weight:900;direction:ltr;unicode-bidi:isolate;}
+.wake-picker-display .hint{font-size:11.5px;color:var(--ink-3);}
+
+/* Calendar numbers must be Jalali, not Gregorian. */
+.cal-day{min-width:0;cursor:pointer;transition:transform .14s ease,background .14s ease;}
+.cal-day:hover{transform:translateY(-1px);}
+.cal-day .cal-day-num{font-family:var(--font-num);font-variant-numeric:tabular-nums;}
+
+/* Sync status variants */
+.sync-pill.degraded{background:var(--warn-soft);color:var(--warn);}
+.sync-pill.network-error{background:var(--bad-soft);color:var(--bad);}
+.sync-pill.missing-table{background:var(--warn-soft);color:var(--warn);}
+
+/* Couple live card */
+.partner-live-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;}
+.partner-live-metric{padding:10px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);text-align:center;}
+.partner-live-metric .v{font-family:var(--font-num);font-size:19px;font-weight:900;line-height:1.15;}
+.partner-live-metric .l{font-size:10.5px;color:var(--ink-3);margin-top:3px;}
+.partner-live-status{display:inline-flex;align-items:center;gap:5px;}
+.partner-live-status .live-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft);}
+
+@media(max-width:639px){
+  .wake-picker-time{font-size:34px;}
+  .wake-wheel{height:276px;padding-block:108px;}
+  .wake-wheel-item{height:44px;font-size:20px;}
+  .wake-wheel-item.is-selected{font-size:28px;}
+  .wake-wheel-center{height:48px;}
+  .partner-live-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+<script>
+(function(){
+  'use strict';
+
+  /* =======================================================================
+   * 1) Persian date formatting — explicit DAY MONTH YEAR order
+   * ======================================================================= */
+  function kyJalaliParts(value, withWeekday){
+    const d = value instanceof Date ? value : parseDay(value);
+    if (!d || isNaN(d.getTime())) return null;
+    try{
+      const opts = withWeekday
+        ? {weekday:'long', day:'numeric', month:'long', year:'numeric'}
+        : {day:'numeric', month:'long', year:'numeric'};
+      const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn', opts).formatToParts(d);
+      const out = {day:'',month:'',year:'',weekday:''};
+      for(const part of parts){
+        if(part.type === 'day') out.day = part.value;
+        else if(part.type === 'month') out.month = part.value;
+        else if(part.type === 'year') out.year = part.value;
+        else if(part.type === 'weekday') out.weekday = part.value;
+      }
+      return out;
+    }catch(e){ return null; }
+  }
+
+  window.faDate = function(value, style){
+    const p = kyJalaliParts(value, style === 'weekday');
+    if(!p) return '—';
+    const core = [faNum(p.day), p.month, faNum(p.year)].filter(Boolean).join(' ');
+    if(style === 'weekday') return p.weekday + '، ' + core;
+    return core;
+  };
+
+  window.kyJalaliDayNumber = function(value){
+    const p = kyJalaliParts(value, false);
+    return p ? faNum(p.day) : '—';
+  };
+
+  /* =======================================================================
+   * 2) All visible numeric text -> Persian digits
+   *    Do not touch editable LTR fields, code, scripts, or styles.
+   * ======================================================================= */
+  function kyNormalizeDigits(root){
+    if(!root || typeof document === 'undefined') return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes=[];
+    let n;
+    while((n=walker.nextNode())) nodes.push(n);
+    for(const node of nodes){
+      const parent=node.parentElement;
+      if(!parent) continue;
+      if(parent.closest('script,style,textarea,input,[dir="ltr"],.ltr,[data-no-fa-numbers]')) continue;
+      const next=node.nodeValue.replace(/[0-9]/g, d => FA_DIGITS[Number(d)]);
+      if(next !== node.nodeValue) node.nodeValue = next;
+    }
+  }
+  window.kyNormalizeDigits = kyNormalizeDigits;
+
+  /* =======================================================================
+   * 3) Wake-time wheel picker (hour first, then minute)
+   * ======================================================================= */
+  const wakeState = {
+    step: 1,
+    hour: 7,
+    minute: 0,
+    root: null
+  };
+  window.kyWakeState = wakeState;
+
+  function kyPad(n){ return String(Math.max(0,Number(n)||0)).padStart(2,'0'); }
+  function kyWakeText(h,m){ return faNum(kyPad(h) + ':' + kyPad(m)); }
+
+  function wheelHtml(type, selected){
+    const max = type === 'hour' ? 23 : 59;
+    let html = '<div class="wake-wheel-wrap"><div class="wake-wheel-center"></div><div class="wake-wheel" data-wake-wheel="' + type + '">';
+    for(let i=0;i<=max;i++) html += '<div class="wake-wheel-item' + (i===selected?' is-selected':'') + '" data-wake-value="' + i + '">' + faNum(kyPad(i)) + '</div>';
+    html += '</div></div>';
+    return html;
+  }
+
+  function renderWakePicker(){
+    const root = $('#modalRoot');
+    if(!root) return;
+    const isHour = wakeState.step === 1;
+    const selected = isHour ? wakeState.hour : wakeState.minute;
+    const title = isHour ? 'انتخاب ساعت بیدارباش' : 'انتخاب دقیقه بیدارباش';
+    const stepText = isHour ? 'مرحله اول از دو: ساعت' : 'مرحله دوم از دو: دقیقه';
+    const action = isHour ? 'wake-next' : 'wake-save';
+    const label = isHour ? 'بعدی: انتخاب دقیقه' : 'ذخیره ساعت بیدارباش';
+    root.className = 'modal-root open';
+    root.innerHTML =
+      '<div class="overlay" data-action="close-modal"></div>' +
+      '<div class="modal" role="dialog" aria-modal="true" aria-label="' + title + '">' +
+        '<div class="modal-head"><h3>' + title + '</h3>' +
+          '<button class="icon-btn sm" data-action="close-modal" aria-label="بستن">' + ICONS.close + '</button></div>' +
+        '<div class="wake-picker-shell">' +
+          '<div class="wake-picker-step">' + stepText + '</div>' +
+          '<div class="wake-picker-time">' + kyWakeText(wakeState.hour,wakeState.minute) + '</div>' +
+          wheelHtml(isHour?'hour':'minute', selected) +
+          '<div class="wake-picker-current"><span>انتخاب فعلی</span><b>' + kyWakeText(wakeState.hour,wakeState.minute) + '</b></div>' +
+          '<div class="modal-actions">' +
+            '<button type="button" class="btn" data-action="close-modal">لغو</button>' +
+            '<button type="button" class="btn btn-primary" data-action="' + action + '">' + label + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    wakeState.root = root;
+    const wheel = root.querySelector('[data-wake-wheel]');
+    if(wheel){
+      requestAnimationFrame(() => {
+        const idx = selected;
+        wheel.scrollTop = idx * (window.innerWidth < 640 ? 44 : 48);
+        kyUpdateWakeWheelVisual(wheel);
+      });
+      let timer=null;
+      wheel.addEventListener('scroll', () => {
+        clearTimeout(timer);
+        timer=setTimeout(() => {
+          const row = window.innerWidth < 640 ? 44 : 48;
+          const idx = Math.max(0,Math.min(typeMax(wheel),Math.round(wheel.scrollTop/row)));
+          if(isHour) wakeState.hour=idx; else wakeState.minute=idx;
+          kyUpdateWakeWheelVisual(wheel);
+          const time=root.querySelector('.wake-picker-time');
+          const cur=root.querySelector('.wake-picker-current b');
+          const value=kyWakeText(wakeState.hour,wakeState.minute);
+          if(time) time.textContent=value;
+          if(cur) cur.textContent=value;
+        },70);
+      },{passive:true});
+      wheel.addEventListener('click',e=>{
+        const item=e.target.closest('.wake-wheel-item');
+        if(!item) return;
+        const v=Number(item.dataset.wakeValue);
+        if(isHour) wakeState.hour=v; else wakeState.minute=v;
+        const row = window.innerWidth < 640 ? 44 : 48;
+        wheel.scrollTo({top:v*row,behavior:'smooth'});
+      });
+    }
+  }
+  function typeMax(wheel){ return wheel && wheel.dataset.wakeWheel === 'hour' ? 23 : 59; }
+  function kyUpdateWakeWheelVisual(wheel){
+    const row = window.innerWidth < 640 ? 44 : 48;
+    const idx = Math.round(wheel.scrollTop/row);
+    wheel.querySelectorAll('.wake-wheel-item').forEach((el,i)=>el.classList.toggle('is-selected',i===idx));
+  }
+
+  window.kyOpenWakePicker = function(current){
+    let h=7,m=0;
+    const match=String(current||'').match(/^(\d{1,2}):(\d{2})$/);
+    if(match){ h=Math.max(0,Math.min(23,Number(match[1]))); m=Math.max(0,Math.min(59,Number(match[2]))); }
+    wakeState.step=1; wakeState.hour=h; wakeState.minute=m;
+    renderWakePicker();
+  };
+
+  function kySaveWakeTime(){
+    const tKey=todayKey();
+    let plan=CACHE.plans.find(p=>p.day===tKey && !p.deleted_at);
+    if(!plan){
+      plan={id:uid(),day:tKey,wake_time:'',items:[],created_at:Date.now(),updated_at:Date.now(),device_id:S.settings.deviceId,deleted_at:null};
+    }
+    plan.wake_time=kyPad(wakeState.hour)+':'+kyPad(wakeState.minute);
+    plan.updated_at=Date.now();
+    idbPut('plans',plan).then(()=>queueOp('upsert','plans',plan.id,plan)).then(refreshCache).then(()=>{
+      closeModal();
+      window.renderPlan && window.renderPlan();
+      toast('ساعت بیدارباش ذخیره شد','ok');
+    }).catch(err=>toast('خطا در ذخیره: '+(err.message||err),'error',4200));
+  }
+
+  document.addEventListener('click',function(e){
+    const el=e.target.closest('[data-action]');
+    if(!el) return;
+    const action=el.dataset.action;
+    if(action==='open-wake-picker'){
+      e.preventDefault(); e.stopPropagation();
+      window.kyOpenWakePicker(el.dataset.wake || '');
+      return;
+    }
+    if(action==='wake-next'){
+      e.preventDefault(); e.stopPropagation();
+      wakeState.step=2; renderWakePicker();
+      return;
+    }
+    if(action==='wake-save'){
+      e.preventDefault(); e.stopPropagation();
+      kySaveWakeTime();
+      return;
+    }
+  },true);
+
+  /* =======================================================================
+   * 4) Replace Plan renderer with Jalali day numbers + wheel launcher
+   * ======================================================================= */
+  window.renderPlan = async function(){
+    const root=$('#planRoot');
+    if(!root) return;
+    const tKey=todayKey();
+    const weeks=weekDaysFrom(tKey);
+    const my=jalaliMonthYearFromDay(tKey);
+    const weekHtml=weeks.map(d=>{
+      const k=isoDay(d);
+      const hasData=CACHE.sessions.some(s=>s.day===k && !s.deleted_at);
+      const isToday=k===tKey;
+      return '<div class="cal-day' + (isToday?' today':'') + (hasData?' has-data':'') + '" data-day="' + k + '" title="' + esc(faDate(k,'long')) + '">' +
+        '<span class="cal-day-name">' + faWeekdayShort(d) + '</span>' +
+        '<span class="cal-day-num">' + kyJalaliDayNumber(k) + '</span>' +
+        (hasData?'<span class="cal-day-dot"></span>':'') +
+      '</div>';
+    }).join('');
+
+    const sameDay=CACHE.plans.filter(p=>p.day===tKey && !p.deleted_at).sort((a,b)=>(b.updated_at||0)-(a.updated_at||0));
+    const plan=sameDay[0] || {day:tKey,wake_time:'',items:[]};
+    const done=Array.isArray(plan.items)?plan.items.filter(i=>i.done).length:0;
+    const items=Array.isArray(plan.items)?plan.items:[];
+    const prog=items.length?(done/items.length)*100:0;
+
+    let listHtml;
+    if(!items.length) listHtml='<p class="t-sm muted center" style="padding:16px 0">هنوز آیتمی اضافه نکردی.</p>';
+    else listHtml='<div class="list">'+items.map((it,idx)=>
+      '<div class="item">'+
+        '<button class="icon-btn sm' + (it.done?' on':'') + '" data-action="plan-toggle" data-idx="'+idx+'" aria-label="'+(it.done?'لغو':'انجام')+'">'+(it.done?ICONS.check:ICONS.plus)+'</button>'+
+        '<div class="item-main"><b' + (it.done?' style="text-decoration:line-through;opacity:.6"':'') + ' dir="auto">'+esc(it.text)+'</b><span>'+(it.done?'انجام شد':'در انتظار')+'</span></div>'+
+        '<button class="icon-btn xs danger" data-action="plan-del" data-idx="'+idx+'" aria-label="حذف">'+ICONS.trash+'</button>'+
+      '</div>'
+    ).join('')+'</div>';
+
+    const todayProgress=(CACHE.progress||[]).filter(p=>p.day===tKey && !p.deleted_at);
+    const progressHtml=todayProgress.length?'$LIST$':'<p class="t-sm muted" style="padding:8px 0">امروز پیشرفتی ثبت نکردی.</p>';
+    const progList=todayProgress.map(p=>{
+      const sj=subj(p.subject);
+      return '<div class="item">'+i3dSafe(sj.color)+'<div class="item-main"><b>'+esc(sj.name)+' — '+esc(p.chapter||'—')+'</b>'+(p.note?'<p dir="auto" style="margin-top:4px">'+esc(p.note)+'</p>':'')+'</div><button class="icon-btn xs danger" data-action="progress-del" data-id="'+esc(p.id)+'" aria-label="حذف">'+ICONS.trash+'</button></div>';
+    }).join('');
+
+    const progressFinal=todayProgress.length?'<div class="list">'+progList+'</div>':'<p class="t-sm muted" style="padding:8px 0">امروز پیشرفتی ثبت نکردی.</p>';
+    const dayAgg=aggregate(CACHE.sessions.filter(s=>s.day===tKey));
+    const wake=plan.wake_time||'';
+
+    root.innerHTML=
+      '<div class="view-title"><h2>برنامه روزانه</h2><span>'+esc(faDate(tKey,'long'))+'</span></div>'+
+      '<div class="card"><div class="card-head">'+ICONS.calendar+'<h3>'+esc(my.month)+' '+esc(my.year)+'</h3></div><div class="cal-week">'+weekHtml+'</div></div>'+
+      '<div class="card section"><div class="card-head">'+ICONS.clock+'<h3>ساعت بیدارباش</h3></div>'+
+        '<button type="button" class="wake-picker-display" data-action="open-wake-picker" data-wake="'+esc(wake)+'" aria-label="انتخاب ساعت بیدارباش">'+
+          '<span><span class="hint">'+(wake?'ساعت ثبت‌شده':'هنوز تعیین نشده')+'</span><br><strong class="t-sm">برای انتخاب، چرخونه را باز کن</strong></span>'+
+          '<span class="value">'+(wake?kyWakeText(Number(wake.slice(0,2)),Number(wake.slice(3,5))):'—:—')+'</span>'+
+        '</button>'+
+      '</div>'+
+      '<div class="card section"><div class="card-head">'+ICONS.plan+'<h3>چک‌لیست امروز</h3><span class="badge brand">'+fmtPct(prog)+'</span></div>'+
+        '<div class="progress'+(prog>=100?' ok':'')+'"><i style="width:'+prog.toFixed(1)+'%"></i></div>'+
+        '<p class="t-xs muted mt-2">'+faNum(done)+' از '+faNum(items.length)+'</p><div class="mt-3">'+listHtml+'</div>'+
+        '<form data-form="plan-add" class="modal-form mt-3"><div class="field"><input class="input" name="text" placeholder="مثال: مرور فصل ۳ زیست" required dir="auto" maxlength="140"></div><button type="submit" class="btn">'+ICONS.plus+'<span>افزودن</span></button></form>'+
+      '</div>'+
+      '<div class="card section"><div class="card-head">'+ICONS.graduation+'<h3>پیشرفت درسی امروز</h3><span class="hint">برای AI</span></div>'+
+        '<p class="t-sm muted mb-3" style="line-height:2">آخرین پیشرفتت در هر درس را ثبت کن. AI از این‌ها برای پیشنهاد برنامه استفاده می‌کند.</p>'+
+        '<form data-form="progress" class="modal-form mb-3"><div class="form-grid c2"><div class="field"><label class="label">درس</label><select class="select" name="subject" id="pgSubject" required>'+subjectOptionsHtml('bio')+'</select></div><div class="field"><label class="label">فصل</label><select class="select" name="chapter" id="pgChapter"><option value="">— انتخاب فصل —</option>'+chapterOptionsHtml('bio')+'</select></div></div><div class="field"><label class="label">یادداشت پیشرفت</label><input class="input" name="note" dir="auto" maxlength="200" placeholder="مثال: مسائل مربوط به حرکت دایره‌ای را حل کردم"></div><button type="submit" class="btn btn-primary btn-sm">'+ICONS.plus+'<span>ثبت پیشرفت</span></button></form>'+
+        progressFinal+'<button class="btn btn-sm mt-3" data-action="ai-suggest-plan">'+ICONS.spark+'<span>پیشنهاد AI برای امروز</span></button>'+
+      '</div>'+
+      '<div class="card section"><div class="card-head">'+ICONS.doc+'<h3>یادداشت‌ها</h3></div><form data-form="note" class="modal-form mb-3"><div class="field"><input class="input" name="text" placeholder="یادداشت سریع…" required dir="auto" maxlength="200"></div><button type="submit" class="btn btn-sm">'+ICONS.plus+'<span>ثبت</span></button></form>'+buildNotesHtml(tKey)+'</div>'+
+      '<div class="card section"><div class="card-head">'+ICONS.stats+'<h3>گزارش‌کار امروز</h3></div><div class="t-sm" style="line-height:2.4"><div class="flex justify-between"><span class="muted">مجموع مطالعه</span><b class="mono">'+fmtHMfa(dayAgg.minutes)+'</b></div><div class="flex justify-between"><span class="muted">مجموع تست</span><b class="mono">'+faNum(dayAgg.total)+'</b></div><div class="flex justify-between"><span class="muted">درصد تسلط</span><b class="mono">'+fmtPct(dayAgg.percent)+'</b></div></div></div>';
+
+    const subjSel=$('#pgSubject'), chapSel=$('#pgChapter');
+    if(subjSel&&chapSel) subjSel.addEventListener('change',()=>{ chapSel.innerHTML='<option value="">— انتخاب فصل —</option>'+chapterOptionsHtml(subjSel.value); });
+    kyNormalizeDigits(root);
+  };
+
+  /* =======================================================================
+   * 5) Supabase sync: missing tables become optional, network errors deduped
+   * ======================================================================= */
+  syncState.missingTables = syncState.missingTables || new Set();
+  syncState.lastNetworkErrorAt = syncState.lastNetworkErrorAt || 0;
+
+  function kyMissingTable(err){
+    const msg=String(err && (err.message||err.details||err.hint)||err||'').toLowerCase();
+    return !!(err && (err.code==='PGRST205' || err.code==='42P01' || msg.includes('schema cache') || msg.includes('could not find the table') || msg.includes('relation') && msg.includes('does not exist')));
+  }
+  function kyNetworkError(err){
+    const msg=String(err && (err.message||err.name)||err||'').toLowerCase();
+    return msg.includes('failed to fetch') || msg.includes('networkerror') || msg.includes('load failed') || msg.includes('aborterror');
+  }
+
+  window.pullChanges = async function(){
+    if(!sb || !currentUser) return {pulled:0,missingTables:[],networkError:false};
+    const startedAt=Date.now()-60000;
+    let totalPulled=0;
+    let networkError=false;
+    const missingTables=[];
+    const tables=['sessions','exams','mistakes','plans','notes','progress'];
+
+    for(const tableName of tables){
+      if(syncState.missingTables.has(tableName)){ missingTables.push(tableName); continue; }
+      let cursor=lastPullTs;
+      let tableOK=true;
+      for(let page=0;page<40;page++){
+        const {data,error}=await sb.from(tableName).select('*')
+          .eq('user_id',currentUser.id)
+          .gte('updated_at',new Date(cursor).toISOString())
+          .order('updated_at',{ascending:true})
+          .limit(500);
+        if(error){
+          if(kyMissingTable(error)){
+            syncState.missingTables.add(tableName);
+            missingTables.push(tableName);
+          }else if(kyNetworkError(error)){
+            networkError=true;
+          }else{
+            logError('pull '+tableName+': '+error.message);
+          }
+          tableOK=false;
+          break;
+        }
+        if(!data || !data.length) break;
+        let maxTs=cursor;
+        for(const raw of data){
+          const remote=fromRemoteRow(raw);
+          const local=await idbGet(tableName,remote.id);
+          if(!local || remote.updated_at>(local.updated_at||0)){ await idbPut(tableName,remote); totalPulled++; }
+          if(remote.updated_at>maxTs) maxTs=remote.updated_at;
+        }
+        if(data.length<500 || maxTs===cursor) break;
+        cursor=maxTs;
+      }
+      if(!tableOK && networkError) continue;
+    }
+    if(!networkError) {
+      lastPullTs=startedAt;
+      await saveMeta('lastPullTs',lastPullTs);
+    }
+    return {pulled:totalPulled,missingTables:[...new Set(missingTables)],networkError};
+  };
+
+  window.pushOutbox = async function(){
+    if(!sb || !currentUser) return {pushed:0,failed:0,networkError:false,missingTables:[]};
+    const pending=(await idbGetAll('outbox')).filter(o=>o.status==='pending'||o.status==='retry').sort((a,b)=>a.ts-b.ts);
+    if(!pending.length) return {pushed:0,failed:0,networkError:false,missingTables:[]};
+    let pushed=0,failed=0,networkError=false;
+    const missingTables=[];
+    const allowed=['sessions','exams','mistakes','plans','notes','progress'];
+    for(const op of pending){
+      const table=op.store;
+      if(!allowed.includes(table)){ await idbDelete('outbox',op.id); continue; }
+      if(syncState.missingTables.has(table)){ missingTables.push(table); continue; }
+      try{
+        const payload=op.payload?toRemoteRow(op.payload,currentUser.id):null;
+        const res=await sb.from(table).upsert(payload,{onConflict:'id'});
+        if(res.error) throw res.error;
+        op.status='done'; op.tries=(op.tries||0)+1; op.last_error=null;
+        await idbPut('outbox',op); pushed++;
+      }catch(err){
+        if(kyMissingTable(err)){
+          syncState.missingTables.add(table); missingTables.push(table);
+          op.status='retry'; op.last_error='جدول '+table+' در Supabase وجود ندارد';
+          await idbPut('outbox',op);
+          continue;
+        }
+        if(kyNetworkError(err)){
+          networkError=true;
+          op.tries=(op.tries||0)+1; op.last_error='ارتباط با Supabase برقرار نشد'; op.status=op.tries>=5?'failed':'retry';
+          await idbPut('outbox',op);
+          break;
+        }
+        failed++; op.tries=(op.tries||0)+1; op.last_error=String(err.message||err).slice(0,300); op.status=op.tries>=5?'failed':'retry';
+        await idbPut('outbox',op); logError('push '+table+': '+op.last_error);
+      }
+    }
+    return {pushed,failed,networkError,missingTables:[...new Set(missingTables)]};
+  };
+
+  window.updateSyncPill = function(){
+    const pill=$('#syncPill'),label=$('#syncLabel');
+    if(!pill||!label) return;
+    pill.className='sync-pill';
+    if(!navigator.onLine){ pill.classList.add('network-error'); label.textContent='آفلاین'; return; }
+    if(syncState.running){ label.textContent='همگام‌سازی…'; return; }
+    if(syncState.lastError){ pill.classList.add('network-error'); label.textContent='اتصال ناموفق'; return; }
+    if(syncState.missingTables && syncState.missingTables.size){ pill.classList.add('missing-table'); label.textContent='همگام‌سازی ناقص'; return; }
+    if(currentUser){ label.textContent='همگام'; return; }
+    label.textContent='محلی';
+  };
+
+  window.syncNow = async function(force){
+    if(!sb||!currentUser||!navigator.onLine) return;
+    if(syncState.running && !force) return;
+    syncState.running=true; updateSyncPill();
+    try{
+      if(force) await retryFailedOps();
+      const pr=await pushOutbox();
+      const pu=await pullChanges();
+      await refreshSharedStatsForToday();
+      const hasNetworkError=!!(pr.networkError||pu.networkError);
+      syncState.lastError=hasNetworkError?'ارتباط با Supabase برقرار نشد':null;
+      syncState.backoff=hasNetworkError?Math.min(300000,Math.max(10000,syncState.backoff*2)):5000;
+      if(hasNetworkError && Date.now()-syncState.lastNetworkErrorAt>30000){
+        syncState.lastNetworkErrorAt=Date.now();
+        logError('sync network: ارتباط با Supabase برقرار نشد');
+      }
+    }catch(err){
+      syncState.lastError=String(err.message||err);
+      if(Date.now()-syncState.lastNetworkErrorAt>30000){ syncState.lastNetworkErrorAt=Date.now(); logError('sync: '+syncState.lastError); }
+      syncState.backoff=Math.min(300000,Math.max(10000,syncState.backoff*2));
+    }finally{
+      syncState.running=false; syncState.lastAttempt=Date.now();
+      await refreshCache(); updateSyncPill(); updateAccountBtn();
+      kyNormalizeDigits(document.body);
+    }
+  };
+
+  /* =======================================================================
+   * 6) Couple-specific live Presence (YPT-style live state)
+   * ======================================================================= */
+  function kyPairChannelName(){
+    if(!currentUser || !currentProfile || !currentProfile.partner_id) return null;
+    const ids=[String(currentUser.id),String(currentProfile.partner_id)].sort();
+    return 'couple:' + ids.join(':');
+  }
+
+  function kyTodayStudySeconds(){
+    const today=todayKey();
+    let total=0;
+    for(const session of (CACHE.sessions||[])){
+      if(session.day===today && !session.deleted_at) total += Math.max(0,toInt(session.seconds,0));
+    }
+    if(Timer.state && Timer.state.day===today) total += Math.max(0,Timer.elapsedSeconds());
+    return total;
+  }
+
+  window.stopPresence = async function(){
+    if(presenceChannel){
+      try{ await presenceChannel.untrack(); }catch(e){}
+      try{ await sb.removeChannel(presenceChannel); }catch(e){}
+      presenceChannel=null;
+    }
+    partnerPresence=null;
+  };
+
+  window.startPresence = async function(){
+    if(!sb||!currentUser||!currentProfile||!currentProfile.partner_id){ await stopPresence(); return; }
+    try{ await stopPresence(); }catch(e){}
+    const name=kyPairChannelName();
+    if(!name) return;
+    presenceChannel=sb.channel(name,{config:{presence:{key:String(currentUser.id)}}});
+    const applyState=()=>{
+      const state=presenceChannel.presenceState();
+      const pid=String(currentProfile.partner_id);
+      const list=state[pid]||[];
+      if(list.length && list[0]){
+        const p=list[list.length-1];
+        partnerPresence={
+          user_id:pid,
+          online:true,
+          subject:p.subject||null,
+          started_at:p.started_at||null,
+          today_seconds:toInt(p.today_seconds,0),
+          session_elapsed_seconds:toInt(p.session_elapsed_seconds,0),
+          updated_at:toInt(p.updated_at,Date.now())
+        };
+      }else partnerPresence=null;
+      renderPartnerCard();
+    };
+    presenceChannel.on('presence',{event:'sync'},applyState);
+    presenceChannel.on('presence',{event:'join'},applyState);
+    presenceChannel.on('presence',{event:'leave'},applyState);
+    await presenceChannel.subscribe(async status=>{ if(status==='SUBSCRIBED') await trackPresence(); });
+  };
+
+  window.trackPresence = async function(){
+    if(!presenceChannel||!currentUser) return;
+    const running=!!(Timer.state && Timer.state.status==='running');
+    const elapsed=running?Timer.elapsedSeconds():0;
+    const payload={
+      user_id:String(currentUser.id),
+      online:true,
+      subject:running?Timer.state.subject:null,
+      started_at:running?Timer.state.started_at:null,
+      session_elapsed_seconds:elapsed,
+      today_seconds:kyTodayStudySeconds(),
+      updated_at:Date.now()
+    };
+    try{ await presenceChannel.track(payload); }catch(e){
+      if(Date.now()-syncState.lastNetworkErrorAt>30000){ syncState.lastNetworkErrorAt=Date.now(); logError('presence: '+(e.message||e)); }
+    }
+  };
+
+  window.partnerCardHtml = function(){
+    if(!currentUser) return '';
+    if(!currentProfile||!currentProfile.partner_id){
+      return '<div class="card section"><div class="card-head">'+ICONS.info+'<h3>شریک مطالعه</h3></div><p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده و ساعت مطالعه، حساب همسرت را لینک کن.</p><button class="btn btn-sm btn-primary" data-action="open-link-partner">'+ICONS.plus+'<span>لینک شریک</span></button></div>';
+    }
+    if(!partnerPresence){
+      return '<div class="card section"><div class="card-head">'+ICONS.info+'<h3>وضعیت زنده همسر</h3><span class="badge">آفلاین</span></div><p class="t-sm muted">وقتی اپ همسرت باز باشد، وضعیت آنلاین و ساعت مطالعه‌اش اینجا زنده نمایش داده می‌شود.</p></div>';
+    }
+    const total=toInt(partnerPresence.today_seconds,0);
+    const session=toInt(partnerPresence.session_elapsed_seconds,0);
+    let live='آنلاین است ولی مشغول مطالعه نیست.';
+    if(partnerPresence.subject){
+      const sj=subj(partnerPresence.subject);
+      const current=partnerPresence.started_at?Math.max(session,Math.floor((Date.now()-partnerPresence.started_at)/1000)):session;
+      live='<div class="flex items-center gap-3"><span style="width:12px;height:12px;border-radius:50%;background:'+sj.color+';flex:none"></span><div style="flex:1;min-width:0"><b class="t-sm">در حال مطالعه '+esc(sj.name)+'</b><div class="mono" style="font-size:22px;font-weight:800" id="partnerTimer">'+faNum(fmtClock(current))+'</div></div></div>';
+    }
+    return '<div class="card section" data-partner-card-live="1"><div class="card-head">'+ICONS.flame+'<h3>وضعیت زنده همسر</h3><span class="badge ok"><span class="dot"></span>آنلاین</span></div>'+live+'<div class="partner-live-grid"><div class="partner-live-metric"><div class="v" id="partnerTodayTotal">'+faNum(fmtClock(total))+'</div><div class="l">مطالعه امروز</div></div><div class="partner-live-metric"><div class="v">'+(partnerPresence.subject? 'فعال':'—')+'</div><div class="l">وضعیت فعلی</div></div></div></div>';
+  };
+
+  const oldRenderPartnerCard=window.renderPartnerCard;
+  window.renderPartnerCard=function(){
+    try{
+      const host=document.querySelector('#homeRoot');
+      if(!host) return;
+      const el=host.querySelector('[data-partner-card]');
+      if(el) el.innerHTML=partnerCardHtml();
+      kyNormalizeDigits(host);
+    }catch(e){ if(oldRenderPartnerCard) oldRenderPartnerCard(); }
+  };
+
+  setInterval(()=>{
+    const el=document.getElementById('partnerTimer');
+    if(el && partnerPresence && partnerPresence.started_at){
+      const s=Math.max(toInt(partnerPresence.session_elapsed_seconds,0),Math.floor((Date.now()-partnerPresence.started_at)/1000));
+      el.textContent=faNum(fmtClock(s));
+    }
+    const total=document.getElementById('partnerTodayTotal');
+    if(total && partnerPresence){
+      const extra=partnerPresence.started_at
+        ? Math.max(0,Math.floor((Date.now()-partnerPresence.started_at)/1000)-toInt(partnerPresence.session_elapsed_seconds,0))
+        : 0;
+      total.textContent=faNum(fmtClock(toInt(partnerPresence.today_seconds,0)+extra));
+    }
+  },1000);
+
+  const oldLinkPartner=window.linkPartner;
+  window.linkPartner=async function(email){
+    const result=await oldLinkPartner(email);
+    try{ await fetchMyProfile(); await startPresence(); }catch(e){}
+    return result;
+  };
+
+  /* =======================================================================
+   * 7) Current Gemini model set + robust exam-builder diagnostics
+   * ======================================================================= */
+  const kyGeminiModels=[
+    {id:'gemini-3.8-flash',label:'Gemini 3.8 Flash — پیشنهادی'},
+    {id:'gemini-3.7-flash',label:'Gemini 3.7 Flash'},
+    {id:'gemini-3.6-flash',label:'Gemini 3.6 Flash'},
+    {id:'gemini-3.5-flash',label:'Gemini 3.5 Flash'},
+    {id:'gemini-3.5-flash-lite',label:'Gemini 3.5 Flash-Lite'}
+  ];
+  const kyGeminiIds=new Set(kyGeminiModels.map(x=>x.id));
+  try{ GEMINI_MODELS.splice(0,GEMINI_MODELS.length,...kyGeminiModels); }catch(e){}
+  if(S.settings.ai && !kyGeminiIds.has(S.settings.ai.geminiModel)){ S.settings.ai.geminiModel='gemini-3.8-flash'; saveSettings().catch(()=>{}); }
+
+  const oldCallGeminiDirect=window.callGeminiDirect;
+  window.callGeminiDirect=async function(feature,payload){
+    try{
+      const cfg=S.settings.ai||{};
+      const model=kyGeminiIds.has(cfg.geminiModel)?cfg.geminiModel:'gemini-3.8-flash';
+      const key=String(cfg.geminiKey||'').trim();
+      if(!key) throw new Error('کلید Gemini تنظیم نشده');
+      const system=getSystemPromptFor(feature);
+      const userPrompt=buildUserPromptLocal(feature,payload);
+      const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent';
+      const controller=new AbortController();
+      const timeoutId=setTimeout(()=>controller.abort(),50000);
+      let res;
+      try{
+        res=await fetch(url,{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{role:'user',parts:[{text:system+'\n\n'+userPrompt}]}],generationConfig:{temperature:.4,maxOutputTokens:2500,responseMimeType:'application/json'}})});
+      }catch(err){
+        if(err.name==='AbortError') throw new Error('Gemini پاسخ نداد؛ زمان تمام شد');
+        throw new Error('ارتباط مستقیم با Gemini برقرار نشد؛ VPN یا فایروال را بررسی کن');
+      }finally{clearTimeout(timeoutId);}
+      if(!res.ok){
+        const text=await res.text().catch(()=> '');
+        let msg='HTTP '+res.status;
+        try{ const j=JSON.parse(text); if(j?.error?.message) msg=j.error.message; }catch(e){}
+        if(res.status===400 && /api key/i.test(msg)) msg='کلید Gemini نامعتبر است';
+        if(res.status===401||res.status===403) msg='کلید یا دسترسی Gemini معتبر نیست';
+        if(res.status===404) msg='مدل Gemini در دسترس نیست: '+model;
+        if(res.status===429) msg='سهم درخواست Gemini تمام شده یا موقتاً محدود شده است';
+        throw new Error(msg);
+      }
+      const data=await res.json();
+      const text=(data?.candidates?.[0]?.content?.parts||[]).map(x=>x.text||'').join('');
+      if(!text.trim()) throw new Error('Gemini پاسخ خالی برگرداند');
+      const parsed=extractJSONLocal(text);
+      const validated=validateShapeLocal(feature,parsed);
+      return {ok:true,data:validated,provider:'gemini'};
+    }catch(err){
+      if(oldCallGeminiDirect && String(err.message||'').includes('undefined')) return oldCallGeminiDirect(feature,payload);
+      throw err;
+    }
+  };
+
+  window.aiCall=async function(feature,payload){
+    const cfg=S.settings.ai||{};
+    const primary=cfg.primaryProvider||'gemini';
+    const fallback=cfg.fallbackEnabled!==false;
+    const errors=[];
+    const run=async provider=>provider==='gemini'?window.callGeminiDirect(feature,payload):callOpenRouterDirect(feature,payload);
+    try{ return await run(primary); }catch(e){ errors.push((primary==='gemini'?'Gemini':'OpenRouter')+': '+(e.message||e)); }
+    if(!fallback) throw new Error(errors.join('\n'));
+    const secondary=primary==='gemini'?'openrouter':'gemini';
+    try{ const r=await run(secondary); r.fallbackFrom=primary; return r; }catch(e){ errors.push((secondary==='gemini'?'Gemini':'OpenRouter')+': '+(e.message||e)); }
+    throw new Error('هر دو AI ناموفق بودند:\n'+errors.map(x=>'• '+x).join('\n')+'\n\nبرای Gemini: VPN/کلید/مدل؛ برای OpenRouter: کلید و سهم مدل رایگان را بررسی کن.');
+  };
+
+  /* =======================================================================
+   * 8) Normalize after every render/route without changing input fields
+   * ======================================================================= */
+  const originalNavigate=window.navigate;
+  if(originalNavigate){
+    window.navigate=function(v){
+      const r=originalNavigate(v);
+      requestAnimationFrame(()=>kyNormalizeDigits(document.body));
+      return r;
+    };
+  }
+  const originalRenderCurrent=window.renderCurrent;
+  if(originalRenderCurrent){
+    window.renderCurrent=function(){
+      const r=originalRenderCurrent.apply(this,arguments);
+      requestAnimationFrame(()=>kyNormalizeDigits(document.body));
+      return r;
+    };
+  }
+
+  window.addEventListener('load',()=>{
+    setTimeout(()=>kyNormalizeDigits(document.body),50);
+    setTimeout(()=>kyNormalizeDigits(document.body),350);
+    try{ updateSyncPill(); }catch(e){}
+  });
+  setTimeout(()=>kyNormalizeDigits(document.body),0);
+  setTimeout(()=>kyNormalizeDigits(document.body),700);
+})();
+</script>
 </body>
 </html>
