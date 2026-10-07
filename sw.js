@@ -1,76 +1,106 @@
-/* ============================================================================
-   KONKOOR YAR — SERVICE WORKER v1.0.1
-   ============================================================================ */
+const CACHE_NAME = 'konkoor-yar-shell-v20261007';
 
-const VERSION = 'ky-v1.0.1';
-const ASSETS = [
+const SHELL = [
   './',
-  './index.html',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png',
-  './vendor/supabase.min.js'
+  './icon-512.png'
 ];
 
-/* Install — همه فایل‌ها را کش کن، حتی اگر یکی 404 بود ادامه بده */
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(VERSION)
-      .then(c => Promise.allSettled(ASSETS.map(a => c.add(a))))
-      .then(() => self.skipWaiting())
-  );
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+
+    try {
+      await cache.addAll(SHELL);
+    } catch (_) {
+      // اگر یکی از فایل‌ها در دسترس نبود، نصب Service Worker متوقف نشود.
+    }
+
+    await self.skipWaiting();
+  })());
 });
 
-/* Activate — کش‌های قدیمی را پاک کن */
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys =>
-        Promise.all(
-          keys.filter(k => k !== VERSION).map(k => caches.delete(k))
-        )
-      )
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+
+    await Promise.all(
+      keys
+        .filter(key => key !== CACHE_NAME)
+        .map(key => caches.delete(key))
+    );
+
+    await self.clients.claim();
+  })());
 });
 
-/* Fetch */
-self.addEventListener('fetch', (e) => {
-  const req = e.request;
-
-  /* فقط GET */
-  if (req.method !== 'GET') return;
-
+self.addEventListener('fetch', event => {
+  const req = event.request;
   const url = new URL(req.url);
 
-  /* درخواست‌های خارج از دامنه (Supabase، API) را دست نزن */
-  if (url.origin !== location.origin) return;
-
-  /* ناوبری: HTML اول از شبکه، اگر نشد از کش */
-  if (req.mode === 'navigate') {
-    e.respondWith(
-      fetch(req)
-        .then(r => {
-          const c = r.clone();
-          caches.open(VERSION).then(x => x.put('./index.html', c));
-          return r;
-        })
-        .catch(() => caches.match('./index.html'))
-    );
+  // فقط درخواست‌های همان دامنه را مدیریت کن.
+  if (url.origin !== self.location.origin) {
     return;
   }
 
-  /* بقیه: cache-first با به‌روزرسانی پس‌زمینه */
-  e.respondWith(
-    caches.match(req).then(hit => {
-      if (hit) return hit;
-      return fetch(req).then(r => {
-        if (r.ok) {
-          const c = r.clone();
-          caches.open(VERSION).then(x => x.put(req, c));
-        }
-        return r;
-      });
-    })
-  );
+  // درخواست‌های صفحه را Network First اجرا می‌کنیم.
+  // در صورت قطع اینترنت، نسخه کش‌شده نمایش داده می‌شود.
+  if (req.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const net = await fetch(req);
+
+        const copy = net.clone();
+        const cache = await caches.open(CACHE_NAME);
+
+        cache.put('./', copy).catch(() => {});
+
+        return net;
+      } catch (_) {
+        return (
+          (await caches.match(req)) ||
+          (await caches.match('./')) ||
+          new Response(
+            'آفلاین هستی.',
+            {
+              status: 503,
+              headers: {
+                'Content-Type': 'text/plain; charset=utf-8'
+              }
+            }
+          )
+        );
+      }
+    })());
+
+    return;
+  }
+
+  // فایل‌های استاتیک را Cache First اجرا می‌کنیم.
+  if (
+    ['style', 'script', 'font', 'image', 'manifest']
+      .includes(req.destination)
+  ) {
+    event.respondWith((async () => {
+      const cached = await caches.match(req);
+
+      if (cached) {
+        return cached;
+      }
+
+      try {
+        const net = await fetch(req);
+
+        const copy = net.clone();
+        const cache = await caches.open(CACHE_NAME);
+
+        cache.put(req, copy).catch(() => {});
+
+        return net;
+      } catch (_) {
+        return cached || Response.error();
+      }
+    })());
+  }
 });
