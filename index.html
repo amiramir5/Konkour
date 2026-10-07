@@ -4451,2437 +4451,7 @@ function runCmdItem(id) {
   }
 }
 </script>
-<body>
 
-<!-- =========================================================================
-     APP SHELL
-     ========================================================================= -->
-<div class="app" id="appRoot">
-
-  <aside class="sidebar" aria-label="ناوبری اصلی">
-    <div class="sidebar-head">
-      <div class="logo">KY</div>
-      <div class="title">
-        <b>کنکوریار</b>
-        <span>دستیار مطالعه</span>
-      </div>
-    </div>
-    <nav class="sidebar-nav" id="sideNav" aria-label="فهرست اصلی"></nav>
-    <div class="sidebar-foot">
-      <button class="btn btn-block" data-action="open-cmd">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="m15.5 8.5-2 5-5 2 2-5z"/>
-        </svg>
-        <span>پالت فرمان</span>
-        <kbd class="mono t-xs" style="background:var(--surface-3);padding:1px 6px;border-radius:5px;margin-inline-start:auto">Ctrl+K</kbd>
-      </button>
-      <button class="btn btn-block" data-action="toggle-theme">
-        <span id="themeIcon"></span>
-        <span id="themeLabel">حالت شب</span>
-      </button>
-    </div>
-  </aside>
-
-  <div class="content">
-
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">KY</div>
-        <div class="brand-txt">
-          <b id="topTitle">خانه</b>
-          <span class="sub" id="topDate">—</span>
-        </div>
-      </div>
-      <div class="top-actions">
-        <span class="sync-pill" id="syncPill" title="وضعیت همگام‌سازی">
-          <span class="dot"></span>
-          <span id="syncLabel">محلی</span>
-        </span>
-        <button class="icon-btn account-btn" data-action="open-account" id="accountBtn" aria-label="حساب کاربری">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="19" height="19">
-            <circle cx="12" cy="8" r="3.5"/>
-            <path d="M5 20c1-3.5 3.5-5 7-5s6 1.5 7 5"/>
-          </svg>
-          <span class="account-dot"></span>
-        </button>
-        <button class="icon-btn" data-action="toggle-theme" id="themeBtn" aria-label="تغییر پوسته"></button>
-      </div>
-    </header>
-
-    <main class="main" id="main">
-
-      <section id="view-home" class="view active" aria-label="خانه">
-        <div id="homeRoot"></div>
-      </section>
-
-      <section id="view-timer" class="view" aria-label="اتاق تمرکز">
-        <div id="timerRoot"></div>
-      </section>
-
-      <section id="view-exams" class="view" aria-label="آزمون‌ها">
-        <div id="examsRoot"></div>
-      </section>
-
-      <section id="view-mistakes" class="view" aria-label="دفترچه غلط">
-        <div id="mistakesRoot"></div>
-      </section>
-
-      <section id="view-sim" class="view" aria-label="آزمون شبیه‌سازی">
-        <div id="simRoot"></div>
-      </section>
-
-      <section id="view-plan" class="view" aria-label="برنامه روزانه">
-        <div id="planRoot"></div>
-      </section>
-
-      <section id="view-stats" class="view" aria-label="آمار هفته">
-        <div id="statsRoot"></div>
-      </section>
-
-      <section id="view-monthly" class="view" aria-label="گزارش ماهانه">
-        <div id="monthlyRoot"></div>
-      </section>
-
-      <section id="view-ai" class="view" aria-label="دستیار هوشمند">
-        <div id="aiRoot"></div>
-      </section>
-
-      <section id="view-settings" class="view" aria-label="تنظیمات">
-        <div id="settingsRoot"></div>
-      </section>
-
-      <section id="view-diag" class="view" aria-label="عیب‌یابی">
-        <div id="diagRoot"></div>
-      </section>
-
-    </main>
-  </div>
-
-  <nav class="bottomnav" id="bottomNav" aria-label="ناوبری پایین"></nav>
-</div>
-
-<button class="fab hidden" id="fab" data-action="fab-main" aria-label="اقدام سریع"></button>
-
-<!-- Zen mode exit button — always visible -->
-<button class="zen-exit-btn" data-action="zen-exit" aria-label="خروج از حالت تمرکز" id="zenExit">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-    <path d="M6 6l12 12M18 6 6 18"/>
-  </svg>
-</button>
-
-<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
-<div class="modal-root" id="modalRoot"></div>
-
-<div class="cmd-root" id="cmdRoot" role="dialog" aria-modal="true" aria-label="پالت فرمان" style="display:none;position:fixed;inset:0;z-index:300;padding-top:10vh;align-items:flex-start;justify-content:center">
-  <div class="cmd-bg" data-action="close-cmd" style="position:absolute;inset:0;background:rgba(9,13,22,.62);backdrop-filter:blur(8px)"></div>
-  <div class="cmd-box" style="position:relative;width:min(560px,92vw);max-height:70dvh;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--sh-5);display:flex;flex-direction:column">
-    <input class="cmd-input" id="cmdInput" type="text" placeholder="جست‌وجو یا فرمان…" autocomplete="off" spellcheck="false" style="padding:18px 20px;border:0;background:transparent;color:var(--ink);font-size:16px;font-family:inherit;outline:none;border-bottom:1px solid var(--border)">
-    <div class="cmd-list" id="cmdList" style="overflow-y:auto;padding:8px"></div>
-  </div>
-</div>
-
-<input type="file" id="importFile" accept=".json,application/json" hidden>
-<input type="file" id="imgFile" accept="image/*" hidden>
-
-<script>
-  (function(){
-    var loaded = false;
-    window.__loadSupabaseCdn = function(){
-      if (loaded) return;
-      loaded = true;
-      var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
-      s.onerror = function(){ console.warn('Supabase SDK load failed'); };
-      document.head.appendChild(s);
-    };
-  })();
-</script>
-<script src="./vendor/supabase.min.js" onerror="window.__loadSupabaseCdn()"></script>
-
-<script>
-{
-
-"use strict";
-/* ============================================================================
- * KONKOOR YAR 2.0 — APPLICATION LOGIC
- * ========================================================================= */
-
-/* ============================================================================
- * SECTION 1 — UTILITIES
- * ========================================================================= */
-
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-
-const uid = () => {
-  if (window.crypto && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-  return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
-};
-
-const pad2 = n => String(n).padStart(2, '0');
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-
-/* Persian & Arabic digit maps */
-const FA_DIGIT_MAP = {
-  '۰': 0, '۱': 1, '۲': 2, '۳': 3, '۴': 4,
-  '۵': 5, '۶': 6, '۷': 7, '۸': 8, '۹': 9
-};
-const AR_DIGIT_MAP = {
-  '٠': 0, '١': 1, '٢': 2, '٣': 3, '٤': 4,
-  '٥': 5, '٦': 6, '٧': 7, '٨': 8, '٩': 9
-};
-
-function toAsciiDigits(s) {
-  return String(s ?? '')
-    .replace(/[۰-۹]/g, d => String(FA_DIGIT_MAP[d] ?? ''))
-    .replace(/[٠-٩]/g, d => String(AR_DIGIT_MAP[d] ?? ''));
-}
-
-function toInt(v, fallback = 0) {
-  const cleaned = toAsciiDigits(v).replace(/[^\d\-+]/g, '');
-  const n = parseInt(cleaned, 10);
-  return Number.isFinite(n) ? n : fallback;
-}
-
-function toNum(v, fallback = 0) {
-  const cleaned = toAsciiDigits(v).replace(/[^\d\-+.]/g, '');
-  const n = parseFloat(cleaned);
-  return Number.isFinite(n) ? n : fallback;
-}
-
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  }[c]));
-}
-
-/* Persian digits for display */
-const FA_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-function faNum(v) {
-  if (v === null || v === undefined) return '—';
-  return String(v).replace(/[0-9]/g, d => FA_DIGITS[+d]);
-}
-
-function faNumFloat(v, decimals = 1) {
-  if (!Number.isFinite(v)) return '—';
-  return faNum(v.toFixed(decimals));
-}
-
-/* Time formatters */
-function fmtClock(totalSeconds) {
-  const s = Math.max(0, Math.floor(totalSeconds));
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const sec = s % 60;
-  return pad2(h) + ':' + pad2(m) + ':' + pad2(sec);
-}
-
-function fmtHM(minutes) {
-  const m = Math.max(0, Math.round(minutes));
-  const h = Math.floor(m / 60);
-  const min = m % 60;
-  return pad2(h) + ':' + pad2(min);
-}
-
-function fmtHMfa(minutes) {
-  return faNum(fmtHM(minutes));
-}
-
-function fmtPct(n) {
-  if (!Number.isFinite(n)) return '—';
-  return faNumFloat(n, 1) + '٪';
-}
-
-function fmtDuration(seconds) {
-  const s = Math.max(0, Math.floor(seconds));
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  if (h > 0) return faNum(h) + ' ساعت و ' + faNum(m) + ' دقیقه';
-  return faNum(m) + ' دقیقه';
-}
-
-/* Date helpers */
-const DAY_MS = 86400000;
-
-function isoDay(d = new Date()) {
-  const dt = d instanceof Date ? d : new Date(d);
-  if (isNaN(dt.getTime())) return '';
-  return dt.getFullYear() + '-' + pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate());
-}
-
-function parseDay(s) {
-  const p = String(s || '').split('-').map(Number);
-  if (p.length !== 3 || p.some(n => !Number.isFinite(n))) return new Date(NaN);
-  const d = new Date(p[0], p[1] - 1, p[2]);
-  return isNaN(d.getTime()) ? new Date(NaN) : d;
-}
-
-function todayKey() {
-  return isoDay(new Date());
-}
-
-function addDays(key, n) {
-  const d = parseDay(key);
-  if (isNaN(d)) return key;
-  d.setDate(d.getDate() + n);
-  return isoDay(d);
-}
-
-function diffDays(fromKey, toKey) {
-  const a = parseDay(fromKey);
-  const b = parseDay(toKey);
-  if (isNaN(a) || isNaN(b)) return 0;
-  return Math.round((b.getTime() - a.getTime()) / DAY_MS);
-}
-
-/* Persian date formatting — DAY MONTH YEAR order */
-function faDate(v, style) {
-  const d = v instanceof Date ? v : parseDay(v);
-  if (isNaN(d.getTime())) return '—';
-  let opts;
-  if (style === 'short') {
-    opts = { day: 'numeric', month: 'numeric', year: '2-digit' };
-  } else if (style === 'long') {
-    opts = { day: 'numeric', month: 'long', year: 'numeric' };
-  } else if (style === 'weekday') {
-    opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-  } else {
-    opts = { day: 'numeric', month: 'long', year: 'numeric' };
-  }
-  try {
-    return new Intl.DateTimeFormat('fa-IR-u-ca-persian', opts).format(d);
-  } catch (e) {
-    try {
-      return new Intl.DateTimeFormat('fa-IR', opts).format(d);
-    } catch (e2) {
-      return faNum(d.toLocaleDateString('en-GB'));
-    }
-  }
-}
-
-function faWeekdayShort(d) {
-  const date = d instanceof Date ? d : parseDay(d);
-  if (isNaN(date)) return '';
-  const names = ['ی', 'د', 'س', 'چ', 'پ', 'ج', 'ش'];
-  return names[date.getDay()];
-}
-
-function faWeekdayFull(d) {
-  const date = d instanceof Date ? d : parseDay(d);
-  if (isNaN(date)) return '';
-  const names = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
-  return names[date.getDay()];
-}
-
-function faTime(ts) {
-  if (!ts) return '—';
-  const d = new Date(ts);
-  if (isNaN(d)) return '—';
-  try {
-    return new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(d);
-  } catch (e) { return '—'; }
-}
-
-function relativeDay(key) {
-  const diff = diffDays(key, todayKey());
-  if (diff === 0) return 'امروز';
-  if (diff === 1) return 'دیروز';
-  if (diff === -1) return 'فردا';
-  if (diff > 1) return faNum(diff) + ' روز پیش';
-  return faNum(-diff) + ' روز بعد';
-}
-
-/* Week helpers — Persian week starts Saturday */
-function weekDaysFrom(key) {
-  const d = parseDay(key);
-  if (isNaN(d)) return [];
-  const jsDow = d.getDay();
-  const faDow = (jsDow + 1) % 7;
-  const start = new Date(d);
-  start.setDate(start.getDate() - faDow);
-  const out = [];
-  for (let i = 0; i < 7; i++) {
-    const x = new Date(start);
-    x.setDate(x.getDate() + i);
-    out.push(x);
-  }
-  return out;
-}
-
-function jalaliMonthKey(v) {
-  const d = v instanceof Date ? v : parseDay(v);
-  if (isNaN(d.getTime())) return '';
-  try {
-    const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
-      year: 'numeric',
-      month: 'numeric'
-    }).formatToParts(d);
-    let y = '', m = '';
-    parts.forEach(p => {
-      if (p.type === 'year') y = p.value;
-      if (p.type === 'month') m = p.value;
-    });
-    return toAsciiDigits(y) + '-' + String(toAsciiDigits(m)).padStart(2, '0');
-  } catch (e) {
-    return d.getFullYear() + '-' + pad2(d.getMonth() + 1);
-  }
-}
-
-function jalaliLabelFromDay(day) {
-  try {
-    const d = parseDay(day);
-    if (isNaN(d)) return '';
-    return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
-      year: 'numeric',
-      month: 'long'
-    }).format(d);
-  } catch (e) { return ''; }
-}
-
-function jalaliMonthYearFromDay(day) {
-  try {
-    const d = parseDay(day);
-    if (isNaN(d)) return { month: '', year: '' };
-    const parts = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
-      year: 'numeric',
-      month: 'long'
-    }).formatToParts(d);
-    let month = '', year = '';
-    parts.forEach(p => {
-      if (p.type === 'month') month = p.value;
-      if (p.type === 'year') year = p.value;
-    });
-    return { month, year };
-  } catch (e) { return { month: '', year: '' }; }
-}
-
-function deepClone(o) {
-  try { return JSON.parse(JSON.stringify(o)); }
-  catch (e) { return o; }
-}
-
-/* ============================================================================
- * SECTION 2 — INDEXEDDB
- * ========================================================================= */
-
-const DB_NAME = 'konkoorYar';
-const DB_VERSION = 3;
-let dbInstance = null;
-
-function openDB() {
-  return new Promise((resolve, reject) => {
-    if (dbInstance) return resolve(dbInstance);
-    if (!window.indexedDB) {
-      return reject(new Error('IndexedDB پشتیبانی نمی‌شود'));
-    }
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-
-    req.onupgradeneeded = (e) => {
-      const d = e.target.result;
-      const ensure = (name, indexes) => {
-        if (d.objectStoreNames.contains(name)) return;
-        const s = d.createObjectStore(name, { keyPath: 'id' });
-        (indexes || []).forEach(idx => {
-          try { s.createIndex(idx, idx, { unique: false }); } catch (e) {}
-        });
-      };
-      ensure('sessions', ['day', 'subject', 'updated_at']);
-      ensure('exams', ['day', 'subject', 'updated_at']);
-      ensure('mistakes', ['subject', 'next_review', 'updated_at']);
-      ensure('plans', ['day', 'updated_at']);
-      ensure('notes', ['day', 'updated_at']);
-      ensure('progress', ['day', 'subject', 'updated_at']);
-      ensure('outbox', ['ts', 'status']);
-      ensure('logs', ['ts']);
-      if (!d.objectStoreNames.contains('settings')) {
-        d.createObjectStore('settings', { keyPath: 'key' });
-      }
-      if (!d.objectStoreNames.contains('timer')) {
-        d.createObjectStore('timer', { keyPath: 'key' });
-      }
-      if (!d.objectStoreNames.contains('meta')) {
-        d.createObjectStore('meta', { keyPath: 'key' });
-      }
-    };
-
-    req.onsuccess = () => {
-      dbInstance = req.result;
-      resolve(dbInstance);
-    };
-    req.onerror = () => reject(req.error);
-    req.onblocked = () => reject(new Error('اتصال دیتابیس مسدود شد'));
-  });
-}
-
-async function idbPut(store, obj) {
-  const d = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = d.transaction(store, 'readwrite');
-    tx.objectStore(store).put(obj);
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error || new Error('aborted'));
-  });
-}
-
-async function idbGet(store, id) {
-  const d = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = d.transaction(store, 'readonly');
-    const req = tx.objectStore(store).get(id);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function idbGetAll(store) {
-  const d = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = d.transaction(store, 'readonly');
-    const req = tx.objectStore(store).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function idbDelete(store, id) {
-  const d = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = d.transaction(store, 'readwrite');
-    tx.objectStore(store).delete(id);
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error || new Error('aborted'));
-  });
-}
-
-async function idbClear(store) {
-  const d = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = d.transaction(store, 'readwrite');
-    tx.objectStore(store).clear();
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error || new Error('aborted'));
-  });
-}
-
-/* ============================================================================
- * SECTION 3 — CONSTANTS
- * ========================================================================= */
-
-const STORE_KEY = 'app';
-
-const SUPABASE_URL = 'https://fsyfdwgtteeyxtoumltz.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OAtQRxO5sP6unCn_5BnxMA_Wm0Z7LEN';
-
-const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6K_Jy6HhacA0g8MdJp47S3rM4UeFCqdgi0oaYMKytL27w';
-const OPENROUTER_API_KEY_DEFAULT = '';
-
-/* Subjects — تجربی کامل */
-const SUBJECTS = [
-  { id: 'bio',     name: 'زیست‌شناسی',       short: 'زیست',   color: '#14b8a6', c1: '#4dd4c1', c2: '#0d9488' },
-  { id: 'chem',    name: 'شیمی',              short: 'شیمی',   color: '#3b82f6', c1: '#7cb3ff', c2: '#2563eb' },
-  { id: 'phy',     name: 'فیزیک',             short: 'فیزیک',  color: '#f97316', c1: '#fdba74', c2: '#ea580c' },
-  { id: 'math',    name: 'ریاضی',             short: 'ریاضی',  color: '#8b5cf6', c1: '#c4b5fd', c2: '#7c3aed' },
-  { id: 'lit',     name: 'ادبیات',            short: 'ادبیات', color: '#ec4899', c1: '#f9a8d4', c2: '#db2777' },
-  { id: 'ar',      name: 'عربی',              short: 'عربی',   color: '#ef4444', c1: '#fca5a5', c2: '#dc2626' },
-  { id: 'din',     name: 'دین و زندگی',       short: 'دین',    color: '#06b6d4', c1: '#67e8f9', c2: '#0891b2' },
-  { id: 'eng',     name: 'زبان انگلیسی',      short: 'زبان',   color: '#10b981', c1: '#6ee7b7', c2: '#059669' },
-  { id: 'geo',     name: 'زمین‌شناسی',        short: 'زمین',   color: '#a16207', c1: '#fde047', c2: '#a16207' },
-  { id: 'social',  name: 'هویت اجتماعی',      short: 'هویت',   color: '#0891b2', c1: '#67e8f9', c2: '#0e7490' },
-  { id: 'health',  name: 'سلامت و بهداشت',    short: 'سلامت',  color: '#16a34a', c1: '#86efac', c2: '#15803d' }
-];
-
-const SUBJ_MAP = Object.fromEntries(SUBJECTS.map(s => [s.id, s]));
-
-function subj(id) {
-  return SUBJ_MAP[id] || {
-    id: id || 'unknown',
-    name: 'نامشخص',
-    short: '—',
-    color: '#64748b',
-    c1: '#cbd5e1',
-    c2: '#475569'
-  };
-}
-
-/* Leitner intervals */
-const LEITNER_DAYS = [1, 3, 7, 14, 30];
-
-const SESSION_TYPES = ['آموزش', 'تست آموزشی', 'تست سنجشی', 'مرور', 'جمع‌بندی'];
-const MISTAKE_CAUSES = ['مفهوم', 'حفظ', 'محاسبه', 'زمان', 'بی‌دقتی', 'خواندن اشتباه سؤال'];
-
-/* فصول دروس تجربی — برای انتخاب در فرم‌ها */
-const SUBJECT_CHAPTERS = {
-  bio: [
-    'دهم: دنیای زنده', 'دهم: گوارش و جذب مواد', 'دهم: تبادلات گازی',
-    'دهم: گردش مواد در بدن', 'دهم: تنظیم اسمزی و دفع مواد زائد',
-    'دهم: از یاخته تا گیاه', 'دهم: جذب و انتقال مواد در گیاهان',
-    'یازدهم: تنظیم عصبی', 'یازدهم: حواس', 'یازدهم: دستگاه حرکتی',
-    'یازدهم: تنظیم شیمیایی', 'یازدهم: تقسیم یاخته', 'یازدهم: تولید مثل',
-    'یازدهم: تولید مثل نهان‌دانگان', 'یازدهم: پاسخ گیاهان',
-    'دوازدهم: مولکول‌های اطلاعاتی', 'دوازدهم: جریان اطلاعات در یاخته',
-    'دوازدهم: انتقال اطلاعات در نسل‌ها', 'دوازدهم: تغییر در اطلاعات وراثتی',
-    'دوازدهم: از ماده به انرژی', 'دوازدهم: از انرژی به ماده',
-    'دوازدهم: فناوری‌های نوین زیستی', 'دوازدهم: رفتارهای جانوران'
-  ],
-  chem: [
-    'دهم: کیهان زادگاه الفبای هستی', 'دهم: ردپای گازها در زندگی',
-    'دهم: آب آهنگ زندگی',
-    'یازدهم: قدر هدایای زمینی را بدانیم', 'یازدهم: در پی غذای سالم',
-    'یازدهم: پوشاک نیازی پایان‌ناپذیر',
-    'دوازدهم: مولکول‌ها در بستر زندگی', 'دوازدهم: آسایش و رفاه در سایه شیمی',
-    'دوازدهم: شیمی جلو‌ه‌ای از هنر و صنعت', 'دوازدهم: شیمی راهی به سوی آینده روشن'
-  ],
-  phy: [
-    'دهم: فیزیک و اندازه‌گیری', 'دهم: کار، انرژی و توان',
-    'دهم: ویژگی‌های فیزیکی مواد', 'دهم: دما و گرما',
-    'یازدهم: الکتریسیته ساکن', 'یازدهم: جریان الکتریکی و مدارها',
-    'یازدهم: مغناطیس', 'یازدهم: القای الکترومغناطیسی',
-    'دوازدهم: حرکت بر خط راست', 'دوازدهم: دینامیک و حرکت دایره‌ای',
-    'دوازدهم: نوسان و موج', 'دوازدهم: برهم‌کنش موج',
-    'دوازدهم: آشنایی با فیزیک اتمی و هسته‌ای'
-  ],
-  math: [
-    'دهم: مجموعه، الگو و دنباله', 'دهم: مثلثات', 'دهم: توان‌های رسیدن',
-    'دهم: عبارت‌های جبری', 'دهم: معادله‌ها و نامعادله‌ها',
-    'دهم: تابع', 'دهم: شمارش بدون شمردن', 'دهم: آمار و احتمال',
-    'یازدهم: هندسه تحلیلی و جبر', 'یازدهم: تابع', 'یازدهم: توابع نمایی و لگاریتمی',
-    'یازدهم: مثلثات', 'یازدهم: حد و پیوستگی', 'یازدهم: مشتق', 'یازدهم: کاربرد مشتق',
-    'یازدهم: هندسه', 'یازدهم: آمار و احتمال',
-    'دوازدهم: تابع', 'دوازدهم: مثلثات', 'دوازدهم: حد و پیوستگی',
-    'دوازدهم: مشتق', 'دوازدهم: کاربرد مشتق', 'دوازدهم: هندسه',
-    'دوازدهم: احتمال', 'دوازدهم: آمار'
-  ],
-  lit: [
-    'دهم: ادبیات تعلیمی', 'دهم: ادبیات پایداری', 'دهم: ادبیات غنایی',
-    'دهم: ادبیات انقلاب', 'دهم: ادبیات جهان',
-    'یازدهم: ادبیات تعلیمی', 'یازدهم: ادبیات پایداری', 'یازدهم: ادبیات غنایی',
-    'یازدهم: ادبیات انقلاب', 'یازدهم: ادبیات جهان',
-    'دوازدهم: ادبیات تعلیمی', 'دوازدهم: ادبیات پایداری', 'دوازدهم: ادبیات غنایی',
-    'دوازدهم: ادبیات انقلاب', 'دوازدهم: ادبیات جهان',
-    'دستور زبان', 'آرایه‌های ادبی', 'لغت و املا', 'تاریخ ادبیات'
-  ],
-  ar: [
-    'دهم: درس ۱ تا ۴', 'دهم: درس ۵ تا ۸',
-    'یازدهم: درس ۱ تا ۴', 'یازدهم: درس ۵ تا ۷',
-    'دوازدهم: درس ۱ تا ۴', 'دوازدهم: درس ۵ تا ۷',
-    'قواعد: معرفه و نکره', 'قواعد: انواع فعل', 'قواعد: اعلال',
-    'قواعد: ترکیب وصفی و اضافی', 'ترجمه', 'اعراب‌گذاری'
-  ],
-  din: [
-    'دهم: درس ۱ تا ۵', 'دهم: درس ۶ تا ۱۰', 'دهم: درس ۱۱ تا ۱۲',
-    'یازدهم: درس ۱ تا ۵', 'یازدهم: درس ۶ تا ۱۰', 'یازدهم: درس ۱۱ تا ۱۲',
-    'دوازدهم: درس ۱ تا ۵', 'دوازدهم: درس ۶ تا ۱۰',
-    'آیات و مفاهیم', 'احکام'
-  ],
-  eng: [
-    'دهم: Lesson 1', 'دهم: Lesson 2', 'دهم: Lesson 3', 'دهم: Lesson 4',
-    'یازدهم: Lesson 1', 'یازدهم: Lesson 2', 'یازدهم: Lesson 3',
-    'دوازدهم: Lesson 1', 'دوازدهم: Lesson 2', 'دوازدهم: Lesson 3',
-    'Vocabulary', 'Grammar', 'Reading', 'Cloze Test'
-  ],
-  geo: [
-    'یازدهم: آفرینش کیهان و تکوین زمین', 'یازدهم: منابع معدنی و ذخایر انرژی',
-    'یازدهم: منابع آب و خاک', 'یازدهم: زمین‌شناسی و سازه‌های مهندسی',
-    'یازدهم: زمین‌شناسی و سلامت', 'یازدهم: پویایی زمین',
-    'یازدهم: زمین‌شناسی ایران', 'یازدهم: زمین‌شناسی و سازه‌های مهندسی'
-  ],
-  social: [
-    'دهم: هویت', 'دهم: هویت فردی', 'دهم: هویت اجتماعی',
-    'یازدهم: جهان اجتماعی', 'یازدهم: فرهنگ', 'یازدهم: نظام اجتماعی',
-    'دوازدهم: هویت', 'دوازدهم: تحولات هویتی', 'دوازدهم: جهان‌های اجتماعی'
-  ],
-  health: [
-    'سلامت و بهداشت: درس ۱ تا ۴', 'سلامت و بهداشت: درس ۵ تا ۸',
-    'سلامت و بهداشت: درس ۹ تا ۱۲', 'سلامت و بهداشت: درس ۱۳ تا ۱۴',
-    'تغذیه سالم', 'بهداشت فردی', 'بهداشت روان'
-  ]
-};
-
-/* AI Models */
-const GEMINI_MODELS = [
-  { id: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash (سریع، رایگان)' },
-  { id: 'gemini-3.5-pro',   label: 'Gemini 3.5 Pro (دقیق‌تر، رایگان با محدودیت)' },
-  { id: 'gemini-3.0-flash', label: 'Gemini 3.0 Flash' },
-  { id: 'gemini-3.0-pro',   label: 'Gemini 3.0 Pro' }
-];
-
-const OPENROUTER_MODELS = [
-  { id: 'qwen/qwen3.6-plus:free',           label: 'Qwen 3.6 Plus (رایگان، فارسی خوب)' },
-  { id: 'google/gemma-3-27b-it:free',       label: 'Gemma 3 27B (رایگان، گوگل)' },
-  { id: 'meta-llama/llama-3.1-8b-instruct:free', label: 'Llama 3.1 8B (رایگان، سریع)' },
-  { id: 'mistralai/mistral-7b-instruct:free',    label: 'Mistral 7B (رایگان)' },
-  { id: 'openai/gpt-4o-mini',               label: 'GPT-4o mini (پرداختی)' }
-];
-
-/* ============================================================================
- * SECTION 4 — STATE
- * ========================================================================= */
-
-function defaultState() {
-  return {
-    version: 2,
-    settings: {
-      theme: 'light',
-      examDate: '2027-07-01',
-      examTitle: 'کنکور سراسری ۱۴۰۶ — تجربی',
-      dailyGoalMinutes: 600,
-      dailyGoalTests: 80,
-      soundEnabled: true,
-      vibrationEnabled: true,
-      deviceId: uid(),
-      supabase: {
-        url: SUPABASE_URL,
-        anonKey: SUPABASE_PUBLISHABLE_KEY
-      },
-      ai: {
-        primaryProvider: 'gemini',
-        fallbackEnabled: true,
-        geminiKey: GEMINI_API_KEY_DEFAULT,
-        geminiModel: 'gemini-3.8-flash',
-        openrouterKey: OPENROUTER_API_KEY_DEFAULT,
-        openrouterModel: 'openrouter/free'
-      }
-    }
-  };
-}
-
-let S = defaultState();
-S.activeView = 'home';
-S.simConfig = { subject: 'bio', count: 30, minutes: 35 };
-
-let CACHE = {
-  sessions: [],
-  exams: [],
-  mistakes: [],
-  plans: [],
-  notes: [],
-  progress: [],
-  outbox: [],
-  logs: []
-};
-
-let lastSaveErrorAt = 0;
-
-async function loadSettings() {
-  const s = await idbGet('settings', STORE_KEY);
-  if (s) {
-    Object.assign(S.settings, s.settings || s);
-    if (!S.settings.supabase || !S.settings.supabase.url) {
-      S.settings.supabase = { url: SUPABASE_URL, anonKey: SUPABASE_PUBLISHABLE_KEY };
-    }
-    if (!S.settings.supabase.anonKey) {
-      S.settings.supabase.anonKey = SUPABASE_PUBLISHABLE_KEY;
-    }
-    if (!S.settings.ai) {
-      S.settings.ai = {};
-    }
-    /* Migration from 1.x */
-    if (!S.settings.ai.primaryProvider) {
-      S.settings.ai.primaryProvider = S.settings.ai.provider || 'gemini';
-    }
-    if (typeof S.settings.ai.fallbackEnabled !== 'boolean') {
-      S.settings.ai.fallbackEnabled = true;
-    }
-    if (!S.settings.ai.geminiKey) S.settings.ai.geminiKey = GEMINI_API_KEY_DEFAULT;
-    if (!S.settings.ai.geminiModel) S.settings.ai.geminiModel = 'gemini-3.5-flash';
-    if (!S.settings.ai.openrouterKey) S.settings.ai.openrouterKey = OPENROUTER_API_KEY_DEFAULT;
-    if (!S.settings.ai.openrouterModel) S.settings.ai.openrouterModel = 'qwen/qwen3.6-plus:free';
-    /* Update default goal */
-    if (S.settings.dailyGoalMinutes === 240) S.settings.dailyGoalMinutes = 600;
-  } else {
-    await saveSettings();
-  }
-}
-
-async function saveSettings() {
-  try {
-    await idbPut('settings', { key: STORE_KEY, ...S.settings });
-    return true;
-  } catch (err) {
-    const now = Date.now();
-    if (now - lastSaveErrorAt > 30000) {
-      lastSaveErrorAt = now;
-      toast('ذخیره‌سازی محلی ناموفق بود.', 'error', 4500);
-    }
-    return false;
-  }
-}
-
-async function saveMeta(key, value) {
-  await idbPut('meta', { key, value });
-}
-
-async function getMeta(key) {
-  const r = await idbGet('meta', key);
-  return r ? r.value : null;
-}
-
-async function refreshCache() {
-  const [sessions, exams, mistakes, plans, notes, progress, outbox, logs] = await Promise.all([
-    idbGetAll('sessions'),
-    idbGetAll('exams'),
-    idbGetAll('mistakes'),
-    idbGetAll('plans'),
-    idbGetAll('notes'),
-    idbGetAll('progress'),
-    idbGetAll('outbox'),
-    idbGetAll('logs')
-  ]);
-  CACHE = { sessions, exams, mistakes, plans, notes, progress, outbox, logs };
-  updateSyncPill();
-}
-
-/* ============================================================================
- * SECTION 5 — OUTBOX & LOGS
- * ========================================================================= */
-
-async function queueOp(op, store, id, payload) {
-  const entry = {
-    id: uid(),
-    ts: Date.now(),
-    op,
-    store,
-    target_id: id,
-    payload: payload ? deepClone(payload) : null,
-    status: 'pending',
-    tries: 0,
-    last_error: null
-  };
-  try {
-    await idbPut('outbox', entry);
-    updateSyncPill();
-  } catch (e) {
-    logError('queueOp: ' + e.message);
-  }
-}
-
-async function logError(msg, ctx) {
-  try {
-    const entry = {
-      id: uid(),
-      ts: Date.now(),
-      msg: String(msg).slice(0, 400),
-      ctx: ctx ? String(JSON.stringify(ctx)).slice(0, 500) : ''
-    };
-    await idbPut('logs', entry);
-    const all = await idbGetAll('logs');
-    if (all.length > 100) {
-      all.sort((a, b) => a.ts - b.ts);
-      for (const l of all.slice(0, all.length - 100)) await idbDelete('logs', l.id);
-    }
-  } catch (e) {}
-}
-
-/* ============================================================================
- * SECTION 6 — DOMAIN
- * ========================================================================= */
-
-function calcPercent(correct, wrong, blank) {
-  const total = correct + wrong + blank;
-  if (total <= 0) return 0;
-  return ((3 * correct) - wrong) / (3 * total) * 100;
-}
-
-function aggregate(list) {
-  let minutes = 0, correct = 0, wrong = 0, blank = 0;
-  list.forEach(s => {
-    minutes += Math.round(toInt(s.seconds) / 60);
-    correct += toInt(s.correct);
-    wrong += toInt(s.wrong);
-    blank += toInt(s.blank);
-  });
-  const total = correct + wrong + blank;
-  return {
-    minutes, correct, wrong, blank, total,
-    percent: calcPercent(correct, wrong, blank),
-    rawPercent: total > 0 ? (correct / total) * 100 : 0
-  };
-}
-
-function computeStreak(sessions) {
-  const days = new Set(
-    sessions.filter(s => !s.deleted_at).map(s => s.day).filter(Boolean)
-  );
-  if (!days.size) return 0;
-  let cursor = new Date();
-  if (!days.has(isoDay(cursor))) cursor.setDate(cursor.getDate() - 1);
-  let count = 0;
-  while (days.has(isoDay(cursor))) {
-    count++;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return count;
-}
-
-function daysToExam() {
-  const left = diffDays(todayKey(), S.settings.examDate);
-  return Number.isFinite(left) ? Math.max(0, left) : 0;
-}
-
-function subjectMinutesMap(sessions) {
-  const map = {};
-  SUBJECTS.forEach(s => map[s.id] = 0);
-  sessions.filter(s => !s.deleted_at).forEach(s => {
-    if (map[s.subject] === undefined) map[s.subject] = 0;
-    map[s.subject] += Math.round((s.seconds || 0) / 60);
-  });
-  return map;
-}
-
-/* Heatmap level from minutes */
-function heatLevelFromMinutes(minutes) {
-  if (minutes <= 0) return 0;
-  if (minutes < 240) return 1;      /* < 4h */
-  if (minutes < 360) return 2;      /* 4-6h */
-  if (minutes < 480) return 3;      /* 6-8h */
-  if (minutes < 600) return 4;      /* 8-10h */
-  return 5;                          /* 10h+ */
-}
-
-/* ============================================================================
- * SECTION 7 — TIMER (fixed, no duplicate icons)
- * ========================================================================= */
-
-const Timer = {
-  state: null,
-  tickHandle: null,
-  pendingSubject: 'bio',
-
-  async load() {
-    try {
-      const s = await idbGet('timer', 'state');
-      if (s) this.state = s;
-    } catch (e) { logError('Timer.load: ' + e.message); }
-  },
-
-  async save() {
-    if (!this.state) return;
-    try {
-      await idbPut('timer', this.state);
-      if (typeof trackPresence === 'function' && currentUser) {
-        try { trackPresence(); } catch (e) {}
-      }
-    } catch (e) { logError('Timer.save: ' + e.message); }
-  },
-
-  async clear() {
-    try { await idbDelete('timer', 'state'); } catch (e) {}
-    this.state = null;
-    if (typeof trackPresence === 'function' && currentUser) {
-      try { trackPresence(); } catch (e) {}
-    }
-  },
-
-  start(subject) {
-    if (!SUBJ_MAP[subject]) return;
-    const now = Date.now();
-    this.state = {
-      key: 'state',
-      subject,
-      status: 'running',
-      started_at: now,
-      accumulated_ms: 0,
-      day: todayKey(),
-      created_at: now
-    };
-    this.save();
-    this.loop();
-    this.render();
-    if (S.settings.vibrationEnabled && navigator.vibrate) {
-      try { navigator.vibrate(30); } catch (e) {}
-    }
-  },
-
-  pause() {
-    if (!this.state || this.state.status !== 'running') return;
-    this.state.accumulated_ms += Math.max(0, Date.now() - this.state.started_at);
-    this.state.started_at = null;
-    this.state.status = 'paused';
-    this.save();
-    this.stopLoop();
-    this.render();
-    if (S.settings.vibrationEnabled && navigator.vibrate) {
-      try { navigator.vibrate([20, 40, 20]); } catch (e) {}
-    }
-  },
-
-  resume() {
-    if (!this.state || this.state.status === 'running') return;
-    this.state.status = 'running';
-    this.state.started_at = Date.now();
-    this.save();
-    this.loop();
-    this.render();
-  },
-
-  async reset() {
-    this.stopLoop();
-    await this.clear();
-    this.render();
-  },
-
-  elapsedMs() {
-    if (!this.state) return 0;
-    if (this.state.status === 'running' && this.state.started_at) {
-      const delta = Math.max(0, Date.now() - this.state.started_at);
-      return this.state.accumulated_ms + delta;
-    }
-    return this.state.accumulated_ms;
-  },
-
-  elapsedSeconds() {
-    return Math.floor(this.elapsedMs() / 1000);
-  },
-
-  loop() {
-    this.stopLoop();
-    this.tickHandle = setInterval(() => this.render(), 1000);
-  },
-
-  stopLoop() {
-    if (this.tickHandle) {
-      clearInterval(this.tickHandle);
-      this.tickHandle = null;
-    }
-  },
-
-  async finish() {
-    if (!this.state) return null;
-    const seconds = this.elapsedSeconds();
-    if (seconds < 60) return null;
-    const session = {
-      id: uid(),
-      created_at: Date.now(),
-      updated_at: Date.now(),
-      deleted_at: null,
-      device_id: S.settings.deviceId,
-      subject: this.state.subject,
-      seconds,
-      correct: 0,
-      wrong: 0,
-      blank: 0,
-      note: '',
-      day: this.state.day || todayKey(),
-      type: 'آموزش',
-      chapter: ''
-    };
-    await idbPut('sessions', session);
-    await queueOp('upsert', 'sessions', session.id, session);
-    await this.clear();
-    await refreshCache();
-    return session;
-  },
-
-  render() {
-    const timeEl = $('#ringTime');
-    const subEl = $('#ringSub');
-    const ringEl = $('#ringFg');
-    if (!timeEl || !subEl) return;
-    const ms = this.elapsedMs();
-    timeEl.textContent = faNum(fmtClock(ms / 1000));
-    if (this.state) {
-      const n = subj(this.state.subject).name;
-      subEl.textContent = this.state.status === 'running'
-        ? 'در حال مطالعه — ' + n
-        : 'متوقف — ' + n;
-    } else {
-      subEl.textContent = 'آماده برای شروع';
-    }
-    if (ringEl) {
-      const pct = clamp(ms / 3600000, 0, 1);
-      const C = 2 * Math.PI * 88;
-      ringEl.style.strokeDasharray = C.toFixed(2);
-      ringEl.style.strokeDashoffset = (C * (1 - pct)).toFixed(2);
-    }
-  }
-};
-
-/* ============================================================================
- * SECTION 8 — ICONS
- * ========================================================================= */
-
-const SVG_BASE = 'width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"';
-
-const ICONS = {
-  home: '<svg ' + SVG_BASE + '><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>',
-  timer: '<svg ' + SVG_BASE + '><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.8l2.5 1.6"/><path d="M9.5 2.5h5"/><path d="M12 2.5V6"/></svg>',
-  exams: '<svg ' + SVG_BASE + '><rect x="4.5" y="3.5" width="15" height="17" rx="2.5"/><path d="M9 3.5V6h6V3.5"/><path d="M9.5 12.5h.01"/><path d="M12.5 12.5h.01"/><path d="M9.5 16h.01"/><path d="M12.5 16h4"/></svg>',
-  mistakes: '<svg ' + SVG_BASE + '><path d="M12 3.5 21 19.5H3z"/><path d="M12 10v4.2"/><path d="M12 17.2h.01"/></svg>',
-  sim: '<svg ' + SVG_BASE + '><path d="M4.5 4.5v15M19.5 4.5v15M8 9h8M8 15h8"/></svg>',
-  plan: '<svg ' + SVG_BASE + '><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/><path d="M8.5 15l2 2 4-4"/></svg>',
-  stats: '<svg ' + SVG_BASE + '><path d="M4.5 20V11"/><path d="M10 20V4.5"/><path d="M15.5 20v-6.5"/><path d="M21 20V8"/></svg>',
-  settings: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
-  diag: '<svg ' + SVG_BASE + '><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/></svg>',
-  spark: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.8L12 18.3l-1.8-5.7L4.5 10.8 10.2 9z"/></svg>',
-  sparkles: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M9 2 10.5 6l4.5 1.5L10.5 9 9 13 7.5 9 3 7.5 7.5 6z"/><path d="M18 12l1 3 3 1-3 1-1 3-1-3-3-1 3-1z"/></svg>',
-  sun: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
-  moon: '<svg ' + SVG_BASE + '><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>',
-  play: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l10.5-6.5a1 1 0 0 0 0-1.74L9.5 4.63A1 1 0 0 0 8 5.5z"/></svg>',
-  pause: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6.5" y="5" width="4" height="14" rx="1.2"/><rect x="13.5" y="5" width="4" height="14" rx="1.2"/></svg>',
-  stop: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>',
-  save: '<svg ' + SVG_BASE + '><path d="M5 3.5h11l3.5 3.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M8 3.5v6h7v-6"/><path d="M8 15h8v5H8z"/></svg>',
-  trash: '<svg ' + SVG_BASE + '><path d="M4 7h16"/><path d="M9.5 7V4.5h5V7"/><path d="M6.5 7l1 13h9l1-13"/></svg>',
-  plus: '<svg ' + SVG_BASE + ' stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>',
-  minus: '<svg ' + SVG_BASE + ' stroke-width="2.2"><path d="M5 12h14"/></svg>',
-  close: '<svg ' + SVG_BASE + ' stroke-width="2.2"><path d="M6 6l12 12M18 6 6 18"/></svg>',
-  check: '<svg ' + SVG_BASE + ' stroke-width="2.6"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></svg>',
-  download: '<svg ' + SVG_BASE + '><path d="M12 3.5v11"/><path d="M7.5 10 12 14.5 16.5 10"/><path d="M4.5 19.5h15"/></svg>',
-  upload: '<svg ' + SVG_BASE + '><path d="M12 20V9"/><path d="M7.5 13.5 12 9l4.5 4.5"/><path d="M4.5 4.5h15"/></svg>',
-  clock: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>',
-  target: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>',
-  percent: '<svg ' + SVG_BASE + '><path d="M19 5 5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>',
-  flame: '<svg ' + SVG_BASE + '><path d="M12 22c3.9 0 6.5-2.5 6.5-6 0-4.5-4.5-6-4.5-10 0 0-1 1.5-1 3.5C13 6 10.5 4 10.5 4S11 8 8 10.5 5.5 13.5 5.5 16c0 3.5 2.6 6 6.5 6z"/></svg>',
-  warning: '<svg ' + SVG_BASE + '><path d="M12 3.5 21 19.5H3z"/><path d="M12 10v4.2"/><path d="M12 17.2h.01"/></svg>',
-  info: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>',
-  copy: '<svg ' + SVG_BASE + '><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
-  doc: '<svg ' + SVG_BASE + '><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>',
-  eye: '<svg ' + SVG_BASE + '><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
-  eyeOff: '<svg ' + SVG_BASE + '><path d="M3 3l18 18"/><path d="M10.6 6.1A9 9 0 0 1 12 6c6.5 0 10 6 10 6a13 13 0 0 1-3 3.5"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3.5 6 10 6a9 9 0 0 0 3.4-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
-  refresh: '<svg ' + SVG_BASE + ' stroke-width="2"><path d="M3.5 12a8.5 8.5 0 0 1 14.7-5.8L21 9"/><path d="M20.5 12a8.5 8.5 0 0 1-14.7 5.8L3 15"/><path d="M21 4v5h-5"/><path d="M3 20v-5h5"/></svg>',
-  expand: '<svg ' + SVG_BASE + '><path d="M4 9V4.5h5"/><path d="M20 9V4.5h-5"/><path d="M4 15v4.5h5"/><path d="M20 15v4.5h-5"/></svg>',
-  image: '<svg ' + SVG_BASE + '><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17.5 4.5-4 3.5 3 3-2.5 4 3.5"/></svg>',
-  send: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M4.5 11.5 20 4.5l-4.8 15.5-3.6-6.1z"/></svg>',
-  key: '<svg ' + SVG_BASE + '><path d="m21 2-2 2m-7.6 7.6a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8zm0 0L15 8m0 0 3 3 5-5-3-3z"/></svg>',
-  cpu: '<svg ' + SVG_BASE + '><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>',
-  power: '<svg ' + SVG_BASE + '><path d="M12 3v9"/><path d="M6.5 6.5a8.5 8.5 0 1 0 11 0"/></svg>',
-  compass: '<svg ' + SVG_BASE + '><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
-  book: '<svg ' + SVG_BASE + '><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 18.5V21"/></svg>',
-  chart: '<svg ' + SVG_BASE + '><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>',
-  robot: '<svg ' + SVG_BASE + '><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><path d="M12 7V3"/><circle cx="12" cy="2.5" r="1"/></svg>',
-  star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="m12 2 3 6.5 7 .9-5 4.8 1.2 7L12 17.8 5.8 21.2 7 14.2l-5-4.8 7-.9z"/></svg>',
-  layers: '<svg ' + SVG_BASE + '><path d="m12 2 9 5-9 5-9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>',
-  presentation: '<svg ' + SVG_BASE + '><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v5"/><path d="m9 21 3-3 3 3"/></svg>',
-  graduation: '<svg ' + SVG_BASE + '><path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>',
-  lightbulb: '<svg ' + SVG_BASE + '><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v1.3h6v-1.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg>'
-};
-
-/* ============================================================================
- * SECTION 9 — TOASTS
- * ========================================================================= */
-
-function toast(message, type = 'info', ms = 3200) {
-  const host = $('#toasts');
-  if (!host) return;
-  const el = document.createElement('div');
-  el.className = 'toast ' + type;
-  el.setAttribute('role', type === 'error' ? 'alert' : 'status');
-  el.innerHTML = '<span class="tdot"></span><span dir="auto">' + esc(message) + '</span>';
-  host.appendChild(el);
-  requestAnimationFrame(() => el.classList.add('in'));
-  setTimeout(() => {
-    el.classList.remove('in');
-    setTimeout(() => el.remove(), 400);
-  }, ms);
-}
-
-/* ============================================================================
- * SECTION 10 — MODAL
- * ========================================================================= */
-
-let modalPreviousFocus = null;
-
-function openModal(html, opts) {
-  opts = opts || {};
-  const root = $('#modalRoot');
-  if (!root) return;
-  modalPreviousFocus = document.activeElement;
-  const wasOpen = root.classList.contains('open');
-  root.innerHTML =
-    '<div class="overlay" data-action="close-modal"></div>' +
-    '<div class="modal' + (opts.wide ? ' wide' : '') + '" role="dialog" aria-modal="true" tabindex="-1">' +
-      html +
-    '</div>';
-  root.classList.add('open');
-  document.body.classList.add('modal-open');
-  const modal = root.querySelector('.modal');
-  if (modal && !wasOpen) {
-    const focusable = modal.querySelector(
-      'input:not([type=hidden]), select, textarea, button:not(.overlay)'
-    );
-    setTimeout(() => {
-      try { (focusable || modal).focus(); } catch (e) {}
-    }, 80);
-  }
-}
-
-function closeModal() {
-  const root = $('#modalRoot');
-  if (!root) return;
-  root.classList.remove('open');
-  root.innerHTML = '';
-  document.body.classList.remove('modal-open');
-  if (modalPreviousFocus && typeof modalPreviousFocus.focus === 'function') {
-    try { modalPreviousFocus.focus(); } catch (e) {}
-  }
-  modalPreviousFocus = null;
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Tab') return;
-  const modal = document.querySelector('#modalRoot.open .modal');
-  if (!modal) return;
-  const focusables = modal.querySelectorAll(
-    'a[href], button:not([disabled]), input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-  );
-  if (!focusables.length) return;
-  const first = focusables[0];
-  const last = focusables[focusables.length - 1];
-  if (e.shiftKey && document.activeElement === first) {
-    e.preventDefault();
-    last.focus();
-  } else if (!e.shiftKey && document.activeElement === last) {
-    e.preventDefault();
-    first.focus();
-  }
-});
-
-function confirmModal(opts) {
-  opts = opts || {};
-  return new Promise(resolve => {
-    openModal(
-      '<div class="modal-head"><h3>' + esc(opts.title || 'تأیید') + '</h3></div>' +
-      '<p class="t-sm muted" style="margin-bottom:16px;line-height:2">' + esc(opts.message || '') + '</p>' +
-      '<div class="modal-actions">' +
-        '<button type="button" class="btn" data-confirm-cancel>انصراف</button>' +
-        '<button type="button" class="btn ' + (opts.danger ? 'btn-danger' : 'btn-primary') + '" data-confirm-accept>' +
-          esc(opts.confirmLabel || 'تأیید') +
-        '</button>' +
-      '</div>'
-    );
-    const root = $('#modalRoot');
-    const cancelBtn = root.querySelector('[data-confirm-cancel]');
-    const acceptBtn = root.querySelector('[data-confirm-accept]');
-    const overlay = root.querySelector('.overlay');
-    let settled = false;
-    const finish = (result) => {
-      if (settled) return;
-      settled = true;
-      closeModal();
-      resolve(result);
-    };
-    if (cancelBtn) cancelBtn.addEventListener('click', () => finish(false));
-    if (acceptBtn) acceptBtn.addEventListener('click', () => finish(true));
-    if (overlay) overlay.addEventListener('click', () => finish(false));
-  });
-}
-
-/* ============================================================================
- * SECTION 11 — RENDER HELPERS
- * ========================================================================= */
-
-function statCard({ icon, label, value, sub, tint, accent }) {
-  return '<div class="stat">' +
-    '<div class="stat-top">' +
-      '<span class="icon-wrap">' + (ICONS[icon] || '') + '</span>' +
-      '<span class="lbl">' + esc(label) + '</span>' +
-    '</div>' +
-    '<div class="val">' + value + '</div>' +
-    '<div class="sub">' + esc(sub || '') + '</div>' +
-  '</div>';
-}
-
-function subjectOptionsHtml(selected) {
-  return SUBJECTS.map(s =>
-    '<option value="' + s.id + '"' + (selected === s.id ? ' selected' : '') + '>' + esc(s.name) + '</option>'
-  ).join('');
-}
-
-function chapterOptionsHtml(subjectId, selected) {
-  const chapters = SUBJECT_CHAPTERS[subjectId] || [];
-  return chapters.map(c =>
-    '<option value="' + esc(c) + '"' + (selected === c ? ' selected' : '') + '>' + esc(c) + '</option>'
-  ).join('');
-}
-
-function causeOptionsHtml(selected) {
-  return MISTAKE_CAUSES.map(c =>
-    '<option value="' + esc(c) + '"' + (selected === c ? ' selected' : '') + '>' + esc(c) + '</option>'
-  ).join('');
-}
-
-function buildDonutHtml(total, map) {
-  if (total <= 0) {
-    return '<div class="empty" style="padding:22px 12px">' +
-      '<b style="font-size:14px">داده‌ای برای نمایش نیست</b>' +
-      '<p style="font-size:12.5px">هنوز در این بازه چیزی ثبت نشده است.</p>' +
-    '</div>';
-  }
-  let grad = 'var(--surface-3) 0% 100%';
-  let acc = 0;
-  const stops = [];
-  SUBJECTS.forEach(s => {
-    const m = map[s.id] || 0;
-    if (m <= 0) return;
-    const pct = (m / total) * 100;
-    stops.push(s.color + ' ' + acc.toFixed(3) + '% ' + (acc + pct).toFixed(3) + '%');
-    acc += pct;
-  });
-  if (stops.length) grad = 'conic-gradient(' + stops.join(', ') + ')';
-  const legend = SUBJECTS
-    .map(s => ({ s, m: map[s.id] || 0 }))
-    .filter(x => x.m > 0)
-    .sort((a, b) => b.m - a.m)
-    .map(x =>
-      '<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;padding:4px 0">' +
-        '<span style="width:11px;height:11px;border-radius:50%;background:' + x.s.color + ';flex:none"></span>' +
-        '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(x.s.name) + '</span>' +
-        '<span class="mono" style="font-size:11.5px;color:var(--ink-2)">' + fmtHMfa(x.m) + ' · ' + fmtPct((x.m / total) * 100) + '</span>' +
-      '</div>'
-    ).join('');
-  return '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center">' +
-    '<div style="width:150px;height:150px;border-radius:50%;position:relative;flex:none;background:' + grad + ';box-shadow:var(--sh-3)">' +
-      '<div style="position:absolute;inset:26px;border-radius:50%;background:var(--surface);"></div>' +
-      '<div style="position:absolute;inset:0;display:grid;place-items:center;z-index:2;text-align:center;font-family:var(--font-num)">' +
-        '<div><div style="font-size:20px;font-weight:800">' + faNum(Math.floor(total / 60)) + '</div>' +
-        '<div style="font-size:11px;color:var(--ink-3)">ساعت</div></div>' +
-      '</div>' +
-    '</div>' +
-    '<div style="flex:1;min-width:170px">' + legend + '</div>' +
-  '</div>';
-}
-
-function compressImage(file, maxW = 800, maxBytes = 200000) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, maxW / img.width);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        let q = 0.85;
-        let out = canvas.toDataURL('image/jpeg', q);
-        while (out.length * 0.75 > maxBytes && q > 0.3) {
-          q -= 0.1;
-          out = canvas.toDataURL('image/jpeg', q);
-        }
-        resolve(out);
-      };
-      img.onerror = () => reject(new Error('تصویر نامعتبر'));
-      img.src = reader.result;
-    };
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-async function copyToClipboard(text) {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch (e) {}
-  try {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    const ok = document.execCommand('copy');
-    ta.remove();
-    return ok;
-  } catch (e) {
-    return false;
-  }
-}
-}
-</script>
-
-<script>
-{
-
-/* ============================================================================
- * SECTION 12 — SUPABASE CLIENT
- * ========================================================================= */
-
-let sb = null;
-let currentUser = null;
-let currentProfile = null;
-let partnerPresence = null;
-let presenceChannel = null;
-let lastPullTs = 0;
-
-const syncState = {
-  running: false,
-  lastAttempt: 0,
-  backoff: 5000,
-  lastError: null
-};
-
-function initSupabaseSDK() {
-  const cfg = S.settings.supabase || {};
-  if (!cfg.url || !cfg.anonKey) return false;
-  if (typeof window.supabase === 'undefined' || !window.supabase.createClient) return false;
-  if (sb) return true;
-
-  try {
-    sb = window.supabase.createClient(cfg.url, cfg.anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: false,
-        storageKey: 'ky.auth'
-      },
-      realtime: { params: { eventsPerSecond: 5 } },
-      global: {
-        fetch: (url, opts = {}) => {
-          const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 20000);
-          return fetch(url, { ...opts, signal: opts.signal || ctrl.signal })
-            .finally(() => clearTimeout(t));
-        }
-      }
-    });
-    return true;
-  } catch (err) {
-    logError('SB init: ' + (err.message || err));
-    return false;
-  }
-}
-
-function faAuthError(msg) {
-  const m = String(msg || '').toLowerCase();
-  if (m.includes('invalid login')) return 'ایمیل یا رمز اشتباه است';
-  if (m.includes('already registered')) return 'این ایمیل قبلاً ثبت شده';
-  if (m.includes('password') && m.includes('6')) return 'رمز باید حداقل ۶ کاراکتر باشد';
-  if (m.includes('registration not allowed')) return 'این ایمیل مجاز نیست';
-  if (m.includes('database error saving new user')) return 'این ایمیل در لیست مجاز نیست';
-  if (m.includes('email not confirmed')) return 'ایمیل هنوز تأیید نشده';
-  if (m.includes('rate limit')) return 'تعداد تلاش زیاد است';
-  if (m.includes('abort') || m.includes('failed to fetch')) return 'ارتباط با سرور برقرار نشد';
-  return msg || 'خطای احراز هویت';
-}
-
-async function authSignIn(email, password) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { data, error } = await sb.auth.signInWithPassword({
-    email: String(email).trim().toLowerCase(),
-    password
-  });
-  if (error) throw new Error(faAuthError(error.message));
-  return data.user;
-}
-
-async function authSignUp(email, password) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { data, error } = await sb.auth.signUp({
-    email: String(email).trim().toLowerCase(),
-    password,
-    options: { emailRedirectTo: location.origin + location.pathname }
-  });
-  if (error) throw new Error(faAuthError(error.message));
-  return data.user;
-}
-
-async function authSignOut() {
-  try { await stopPresence(); } catch (e) {}
-  if (sb) {
-    try { await sb.auth.signOut(); } catch (e) {}
-  }
-  currentUser = null;
-  currentProfile = null;
-  partnerPresence = null;
-  updateAccountBtn();
-}
-
-async function fetchMyProfile() {
-  if (!sb || !currentUser) return null;
-  const { data, error } = await sb.from('profiles').select('*')
-    .eq('user_id', currentUser.id).maybeSingle();
-  if (error) {
-    logError('profile fetch: ' + error.message);
-    return null;
-  }
-  currentProfile = data;
-  return data;
-}
-
-async function fetchPartnerProfile() {
-  if (!sb || !currentProfile || !currentProfile.partner_id) return null;
-  const { data } = await sb.from('profiles').select('*')
-    .eq('user_id', currentProfile.partner_id).maybeSingle();
-  return data;
-}
-
-async function linkPartner(email) {
-  if (!sb) throw new Error('Supabase پیکربندی نشده');
-  const { error } = await sb.rpc('link_partner', {
-    partner_email: String(email).trim().toLowerCase()
-  });
-  if (error) throw new Error(error.message || 'خطا در لینک شریک');
-  await fetchMyProfile();
-}
-
-/* ============================================================================
- * SECTION 13 — SYNC ENGINE
- * ========================================================================= */
-
-const TS_FIELDS = ['created_at', 'updated_at', 'deleted_at'];
-
-function toRemoteRow(row, userId) {
-  const r = deepClone(row);
-  TS_FIELDS.forEach(k => {
-    const v = r[k];
-    r[k] = (v === null || v === undefined || v === '')
-      ? null
-      : (typeof v === 'number' ? new Date(v).toISOString() : v);
-  });
-  r.user_id = userId;
-  return r;
-}
-
-function fromRemoteRow(row) {
-  const r = { ...row };
-  TS_FIELDS.forEach(k => {
-    r[k] = r[k] == null
-      ? null
-      : (typeof r[k] === 'number' ? r[k] : new Date(r[k]).getTime());
-  });
-  return r;
-}
-
-async function retryFailedOps() {
-  const all = await idbGetAll('outbox');
-  for (const o of all) {
-    if (o.status === 'failed') {
-      o.status = 'pending';
-      o.tries = 0;
-      o.last_error = null;
-      await idbPut('outbox', o);
-    }
-  }
-}
-
-async function pushOutbox() {
-  if (!sb || !currentUser) return { pushed: 0, failed: 0 };
-  const pending = (await idbGetAll('outbox'))
-    .filter(o => o.status === 'pending' || o.status === 'retry');
-  pending.sort((a, b) => a.ts - b.ts);
-  if (!pending.length) return { pushed: 0, failed: 0 };
-
-  let pushed = 0;
-  let failed = 0;
-
-  for (const op of pending) {
-    try {
-      const table = op.store;
-      if (!['sessions', 'exams', 'mistakes', 'plans', 'notes', 'progress'].includes(table)) {
-        await idbDelete('outbox', op.id);
-        continue;
-      }
-      const payload = op.payload ? toRemoteRow(op.payload, currentUser.id) : null;
-      const res = await sb.from(table).upsert(payload, { onConflict: 'id' });
-      if (res.error) throw new Error(res.error.message);
-      op.status = 'done';
-      op.tries = (op.tries || 0) + 1;
-      op.last_error = null;
-      await idbPut('outbox', op);
-      pushed++;
-    } catch (err) {
-      failed++;
-      op.tries = (op.tries || 0) + 1;
-      op.last_error = String(err.message || err).slice(0, 300);
-      op.status = op.tries >= 5 ? 'failed' : 'retry';
-      await idbPut('outbox', op);
-      logError('push ' + op.store + ': ' + op.last_error);
-    }
-  }
-
-  const cutoff = Date.now() - 24 * 3600 * 1000;
-  const all = await idbGetAll('outbox');
-  for (const o of all) {
-    if (o.status === 'done' && o.ts < cutoff) await idbDelete('outbox', o.id);
-  }
-
-  return { pushed, failed };
-}
-
-async function pullChanges() {
-  if (!sb || !currentUser) return { pulled: 0 };
-  const startedAt = Date.now() - 60000;
-  let totalPulled = 0;
-  let ok = true;
-  const tables = ['sessions', 'exams', 'mistakes', 'plans', 'notes', 'progress'];
-
-  for (const t of tables) {
-    let cursor = lastPullTs;
-    for (let page = 0; page < 40; page++) {
-      const { data, error } = await sb.from(t).select('*')
-        .eq('user_id', currentUser.id)
-        .gte('updated_at', new Date(cursor).toISOString())
-        .order('updated_at', { ascending: true })
-        .limit(500);
-      if (error) {
-        ok = false;
-        logError('pull ' + t + ': ' + error.message);
-        break;
-      }
-      if (!data || !data.length) break;
-      let maxTs = cursor;
-      for (const raw of data) {
-        const remote = fromRemoteRow(raw);
-        const local = await idbGet(t, remote.id);
-        if (!local || remote.updated_at > (local.updated_at || 0)) {
-          await idbPut(t, remote);
-          totalPulled++;
-        }
-        if (remote.updated_at > maxTs) maxTs = remote.updated_at;
-      }
-      if (data.length < 500 || maxTs === cursor) break;
-      cursor = maxTs;
-    }
-  }
-  if (ok) {
-    lastPullTs = startedAt;
-    await saveMeta('lastPullTs', lastPullTs);
-  }
-  return { pulled: totalPulled };
-}
-
-async function syncNow(force) {
-  if (!sb || !currentUser) return;
-  if (syncState.running && !force) return;
-  if (!navigator.onLine) return;
-
-  syncState.running = true;
-  updateSyncPill();
-
-  try {
-    if (force) await retryFailedOps();
-    const pr = await pushOutbox();
-    await pullChanges();
-    await refreshSharedStatsForToday();
-    syncState.backoff = pr.failed > 0
-      ? Math.min(300000, syncState.backoff * 2)
-      : 5000;
-    syncState.lastError = null;
-  } catch (err) {
-    syncState.lastError = err.message || String(err);
-    logError('sync: ' + syncState.lastError);
-    syncState.backoff = Math.min(300000, syncState.backoff * 2);
-  } finally {
-    syncState.running = false;
-    syncState.lastAttempt = Date.now();
-    await refreshCache();
-    updateSyncPill();
-    updateAccountBtn();
-  }
-}
-
-let syncLoopHandle = null;
-
-function startSyncLoop() {
-  if (syncLoopHandle) clearInterval(syncLoopHandle);
-  syncLoopHandle = setInterval(() => {
-    if (!navigator.onLine || !sb || !currentUser || syncState.running) return;
-    if (Date.now() - syncState.lastAttempt < Math.max(syncState.backoff, 30000)) return;
-    syncNow();
-  }, 8000);
-}
-
-async function refreshSharedStatsForToday() {
-  if (!sb || !currentUser) return;
-  const streak = computeStreak(CACHE.sessions.filter(s => !s.deleted_at));
-  try {
-    await sb.rpc('refresh_shared_stats', {
-      day_date: todayKey(),
-      streak_days: streak
-    });
-  } catch (err) {
-    logError('refresh_shared_stats: ' + (err.message || err));
-  }
-}
-
-/* ============================================================================
- * SECTION 14 — PRESENCE
- * ========================================================================= */
-
-async function startPresence() {
-  if (!sb || !currentUser) return;
-  try { await stopPresence(); } catch (e) {}
-  presenceChannel = sb.channel('partners', {
-    config: { presence: { key: currentUser.id } }
-  });
-  presenceChannel.on('presence', { event: 'sync' }, () => {
-    const state = presenceChannel.presenceState();
-    const others = Object.keys(state).filter(k => k !== currentUser.id);
-    if (!others.length) { partnerPresence = null; renderPartnerCard(); return; }
-    const list = state[others[0]] || [];
-    if (list[0]) {
-      partnerPresence = {
-        subject: list[0].subject,
-        started_at: list[0].started_at,
-        online: true
-      };
-    } else {
-      partnerPresence = null;
-    }
-    renderPartnerCard();
-  });
-  presenceChannel.on('presence', { event: 'leave' }, (e) => {
-    const leaving = e.key || (e.leftPresences && e.leftPresences[0] && e.leftPresences[0].key);
-    if (leaving && leaving !== currentUser.id) {
-      partnerPresence = null;
-      renderPartnerCard();
-    }
-  });
-  await presenceChannel.subscribe(async (status) => {
-    if (status === 'SUBSCRIBED') await trackPresence();
-  });
-}
-
-async function trackPresence() {
-  if (!presenceChannel || !currentUser) return;
-  const running = Timer.state && Timer.state.status === 'running';
-  const payload = {
-    online: true,
-    subject: running ? Timer.state.subject : null,
-    started_at: running ? Timer.state.started_at : null,
-    updated_at: Date.now()
-  };
-  try { await presenceChannel.track(payload); } catch (e) {}
-}
-
-async function stopPresence() {
-  if (presenceChannel) {
-    try { await presenceChannel.untrack(); } catch (e) {}
-    try { await sb.removeChannel(presenceChannel); } catch (e) {}
-    presenceChannel = null;
-  }
-  partnerPresence = null;
-}
-
-function partnerCardHtml() {
-  if (!currentUser) return '';
-  if (!currentProfile || !currentProfile.partner_id) {
-    return '<div class="card section">' +
-      '<div class="card-head">' + ICONS.info + '<h3>شریک مطالعه</h3></div>' +
-      '<p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده و رقابت، حساب شریک را لینک کن.</p>' +
-      '<button class="btn btn-sm btn-primary" data-action="open-link-partner">' +
-        ICONS.plus + '<span>لینک شریک</span>' +
-      '</button>' +
-    '</div>';
-  }
-  if (!partnerPresence) {
-    return '<div class="card section">' +
-      '<div class="card-head">' + ICONS.info + '<h3>وضعیت شریک</h3><span class="badge">آفلاین</span></div>' +
-      '<p class="t-sm muted">شریک آنلاین نیست.</p>' +
-    '</div>';
-  }
-  if (partnerPresence.subject) {
-    const sj = subj(partnerPresence.subject);
-    const started = partnerPresence.started_at
-      ? Math.floor((Date.now() - partnerPresence.started_at) / 1000)
-      : 0;
-    return '<div class="card section">' +
-      '<div class="card-head">' + ICONS.flame +
-        '<h3>وضعیت زنده شریک</h3>' +
-        '<span class="badge ok"><span class="dot"></span>آنلاین</span>' +
-      '</div>' +
-      '<div class="flex items-center gap-3">' +
-        '<span style="width:12px;height:12px;border-radius:50%;background:' + sj.color + ';flex:none"></span>' +
-        '<div style="flex:1;min-width:0">' +
-          '<b class="t-sm">در حال مطالعه ' + esc(sj.name) + '</b>' +
-          '<div class="mono" style="font-size:22px;font-weight:800;letter-spacing:0" id="partnerTimer">' +
-            faNum(fmtClock(started)) +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }
-  return '<div class="card section">' +
-    '<div class="card-head">' + ICONS.info +
-      '<h3>وضعیت شریک</h3>' +
-      '<span class="badge ok"><span class="dot"></span>آنلاین</span>' +
-    '</div>' +
-    '<p class="t-sm muted">آنلاین است ولی مشغول مطالعه نیست.</p>' +
-  '</div>';
-}
-
-function renderPartnerCard() {
-  const host = document.querySelector('#homeRoot');
-  if (!host) return;
-  const el = host.querySelector('[data-partner-card]');
-  if (!el) return;
-  el.innerHTML = partnerCardHtml();
-}
-
-setInterval(() => {
-  const el = document.getElementById('partnerTimer');
-  if (!el || !partnerPresence || !partnerPresence.started_at) return;
-  const s = Math.floor((Date.now() - partnerPresence.started_at) / 1000);
-  el.textContent = faNum(fmtClock(s));
-}, 1000);
-
-/* ============================================================================
- * SECTION 15 — AI CLIENT (Gemini → OpenRouter fallback)
- * ---------------------------------------------------------------------------
- * AI call strategy:
- * 1. Try primary provider (default: Gemini)
- * 2. If fails and fallback enabled, try OpenRouter
- * 3. If both fail, throw a clear error message
- * ========================================================================= */
-
-async function aiCall(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const primary = aiCfg.primaryProvider || 'gemini';
-  const fallback = aiCfg.fallbackEnabled !== false;
-
-  const errors = [];
-
-  /* Try primary */
-  if (primary === 'gemini') {
-    try {
-      const res = await callGeminiDirect(feature, payload);
-      return res;
-    } catch (err) {
-      errors.push('Gemini: ' + err.message);
-      if (!fallback) throw new Error('Gemini: ' + err.message);
-    }
-    /* Fallback to OpenRouter */
-    try {
-      const res = await callOpenRouterDirect(feature, payload);
-      res.fallbackFrom = 'gemini';
-      return res;
-    } catch (err) {
-      errors.push('OpenRouter: ' + err.message);
-    }
-  } else {
-    /* OpenRouter primary */
-    try {
-      const res = await callOpenRouterDirect(feature, payload);
-      return res;
-    } catch (err) {
-      errors.push('OpenRouter: ' + err.message);
-      if (!fallback) throw new Error('OpenRouter: ' + err.message);
-    }
-    /* Fallback to Gemini */
-    try {
-      const res = await callGeminiDirect(feature, payload);
-      res.fallbackFrom = 'openrouter';
-      return res;
-    } catch (err) {
-      errors.push('Gemini: ' + err.message);
-    }
-  }
-
-  /* Both failed */
-  throw new Error(
-    'اتصال به هر دو سرویس ناموفق بود:\n' +
-    errors.map(e => '• ' + e).join('\n') +
-    '\n\nبررسی کن: اتصال اینترنت، VPN (برای Gemini)، یا سهم روزانه OpenRouter.'
-  );
-}
-
-/* ---------- Gemini direct ---------- */
-async function callGeminiDirect(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const apiKey = String(aiCfg.geminiKey || '').trim();
-  const model = aiCfg.geminiModel || 'gemini-3.5-flash';
-
-  if (!apiKey) throw new Error('کلید Gemini تنظیم نشده');
-
-  const system = getSystemPromptFor(feature);
-  const userPrompt = buildUserPromptLocal(feature, payload);
-
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
-    encodeURIComponent(model) + ':generateContent';
-
-  const body = {
-    contents: [{
-      role: 'user',
-      parts: [{ text: system + '\n\n' + userPrompt }]
-    }],
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: 2500,
-      responseMimeType: 'application/json'
-    }
-  };
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 50000);
-
-  let res;
-  try {
-    res = await fetch(url, {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify(body)
-    });
-  } catch (netErr) {
-    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی تمام شد');
-    throw new Error('اتصال برقرار نشد. VPN خود را بررسی کن.');
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    let msg = 'HTTP ' + res.status;
-    try {
-      const errJson = JSON.parse(errText);
-      if (errJson && errJson.error && errJson.error.message) {
-        msg = errJson.error.message;
-      }
-    } catch (e) {
-      if (errText) msg += ': ' + errText.slice(0, 150);
-    }
-    if (res.status === 400 && /api key/i.test(msg)) msg = 'کلید نامعتبر';
-    if (res.status === 403) msg = 'دسترسی مجاز نیست';
-    if (res.status === 404) msg = 'مدل در دسترس نیست';
-    if (res.status === 429) msg = 'سهم تمام شد';
-    throw new Error(msg);
-  }
-
-  const data = await res.json();
-  const cand = data && data.candidates && data.candidates[0];
-  const text = (cand && cand.content && Array.isArray(cand.content.parts))
-    ? cand.content.parts.map(p => p.text || '').join('')
-    : '';
-
-  if (!text.trim()) {
-    const fr = cand && cand.finishReason;
-    if (fr === 'SAFETY') throw new Error('فیلتر ایمنی');
-    if (fr === 'MAX_TOKENS') throw new Error('پاسخ ناقص');
-    if (fr === 'RECITATION') throw new Error('شباهت به منابع');
-    throw new Error('پاسخ خالی');
-  }
-
-  const parsed = extractJSONLocal(text);
-  const validated = validateShapeLocal(feature, parsed);
-  return { ok: true, data: validated, provider: 'gemini' };
-}
-
-/* ---------- OpenRouter direct ---------- */
-async function callOpenRouterDirect(feature, payload) {
-  const aiCfg = S.settings.ai || {};
-  const apiKey = String(aiCfg.openrouterKey || '').trim();
-  const model = aiCfg.openrouterModel || 'qwen/qwen3.6-plus:free';
-
-  if (!apiKey) throw new Error('کلید OpenRouter تنظیم نشده');
-
-  const system = getSystemPromptFor(feature);
-  const userPrompt = buildUserPromptLocal(feature, payload);
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 50000);
-
-  let res;
-  try {
-    res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Authorization': 'Bearer ' + apiKey,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': location.origin,
-        'X-Title': 'KonkoorYar'
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 2500,
-        temperature: 0.4,
-        response_format: { type: 'json_object' }
-      })
-    });
-  } catch (netErr) {
-    if (netErr.name === 'AbortError') throw new Error('زمان پاسخ‌دهی تمام شد');
-    throw new Error('اتصال برقرار نشد');
-  } finally {
-    clearTimeout(timeoutId);
-  }
-
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    let msg = 'HTTP ' + res.status;
-    try {
-      const errJson = JSON.parse(errText);
-      if (errJson && errJson.error && errJson.error.message) msg = errJson.error.message;
-    } catch (e) {
-      if (errText) msg += ': ' + errText.slice(0, 150);
-    }
-    if (res.status === 401) msg = 'کلید نامعتبر';
-    if (res.status === 402) msg = 'اعتبار کافی نیست';
-    if (res.status === 429) msg = 'سهم تمام شد';
-    throw new Error(msg);
-  }
-
-  const data = await res.json();
-  const text = (data && data.choices && data.choices[0] && data.choices[0].message)
-    ? String(data.choices[0].message.content || '')
-    : '';
-
-  if (!text.trim()) {
-    const fr = data && data.choices && data.choices[0] && data.choices[0].finish_reason;
-    if (fr === 'content_filter') throw new Error('فیلتر محتوا');
-    if (fr === 'length') throw new Error('پاسخ ناقص');
-    throw new Error('پاسخ خالی');
-  }
-
-  const parsed = extractJSONLocal(text);
-  const validated = validateShapeLocal(feature, parsed);
-  return { ok: true, data: validated, provider: 'openrouter' };
-}
-
-/* ---------- System prompt ---------- */
-function getSystemPromptFor() {
-  return 'تو یک دستیار فارسی زبان و متخصص کنکور ایران (گروه تجربی) هستی. ' +
-    'قواعد قطعی:\n' +
-    '1. فقط فارسی جواب بده.\n' +
-    '2. کوتاه، عملی، بدون شعار و تعارف.\n' +
-    '3. هرگز آمار، رتبه، تاریخ یا ضریب کنکور از خودت نساز. اگر داده نداری، صریح بگو.\n' +
-    '4. فقط در چارچوب کتاب‌های درسی کنکور ایران. خارج از کتاب چیزی اضافه نکن.\n' +
-    '5. خروجی همیشه JSON معتبر باشد. بدون بلوک کد، بدون توضیح اضافه.';
-}
-
-/* ---------- Prompt builders ---------- */
-function buildUserPromptLocal(feature, payload) {
-  const limit = (s, n) => String(s || '').slice(0, n);
-
-  if (feature === 'mistake-analysis') {
-    const items = Array.isArray(payload?.items) ? payload.items.slice(0, 15) : [];
-    const compact = items.map((it, i) => ({
-      n: i + 1,
-      subject: limit(it?.subject, 40),
-      cause: limit(it?.cause, 20),
-      question: limit(it?.question, 400)
-    }));
-    return 'این ' + compact.length + ' مورد از دفترچه اشتباه من است.\n' +
-      'تحلیل کن و JSON بده با این ساختار دقیق:\n' +
-      '{"categories":["دسته‌های تکرارشونده"],"patterns":["الگوهای پنهان"],"actions":["توصیه ۱","توصیه ۲","توصیه ۳"],"honest":"یک جمله صادقانه درباره محدودیت این تحلیل"}\n' +
-      'داده:\n' + JSON.stringify(compact);
-  }
-
-  if (feature === 'explain-topic') {
-    const topic = limit(payload?.topic, 150);
-    const subject = limit(payload?.subject, 50);
-    return 'موضوع: ' + topic + '\n' +
-      'درس: ' + subject + '\n' +
-      'این مبحث را در چارچوب کتاب درسی کنکور تجربی برای من توضیح بده.\n' +
-      'خروجی JSON با این ساختار:\n' +
-      '{"title":"عنوان مبحث",' +
-      '"intro":"یک پاراگراف مقدمه (۲-۳ خط)",' +
-      '"key_points":[{"heading":"تیتر نکته","explanation":"توضیح دقیق"}],' +
-      '"formulas":["فرمول یا قاعده کلیدی"],' +
-      '"pitfalls":["دام تستی که در کنکور می‌آید"],' +
-      '"study_tip":"یک توصیه عملی برای مطالعه این مبحث"}';
-  }
-
-  if (feature === 'make-slides') {
-    const topic = limit(payload?.topic, 150);
-    const subject = limit(payload?.subject, 50);
-    const slideCount = Math.min(Math.max(parseInt(payload?.count) || 7, 3), 15);
-    return 'موضوع: ' + topic + '\n' +
-      'درس: ' + subject + '\n' +
-      'برای این مبحث یک ارائه (' + slideCount + ' اسلاید) بساز.\n' +
-      'خروجی JSON:\n' +
-      '{"deck_title":"عنوان ارائه",' +
-      '"slides":[{"title":"عنوان اسلاید","bullets":["نکته ۱","نکته ۲"],"image_prompt":"توضیح تصویری که باید در این اسلاید باشد"}]}';
-  }
-
-  if (feature === 'quiz-from-topic') {
-    const topic = limit(payload?.topic, 150);
-    const subject = limit(payload?.subject, 50);
-    const level = limit(payload?.level, 20);
-    const count = Math.min(Math.max(parseInt(payload?.count) || 5, 3), 20);
-    return 'موضوع: ' + topic + '\n' +
-      'درس: ' + subject + '\n' +
-      'سطح: ' + level + '\n' +
-      'تعداد سؤال: ' + count + '\n' +
-      'از این مبحث، ' + count + ' سؤال چهارگزینه‌ای در حد کنکور سراسری طراحی کن.\n' +
-      'خروجی JSON:\n' +
-      '{"questions":[{"stem":"متن سؤال",' +
-      '"options":["گزینه ۱","گزینه ۲","گزینه ۳","گزینه ۴"],' +
-      '"correct_index":0,' +
-      '"explanation":"توضیح کوتاه چرا این گزینه درست است",' +
-      '"source":"فصل کتاب",' +
-      '"needs_review":false}]}';
-  }
-
-  if (feature === 'suggest-plan') {
-    const goal = limit(payload?.goal, 100);
-    const progress = payload?.progress || [];
-    return 'هدف: ' + goal + '\n' +
-      'وضعیت فعلی من (خلاصه پیشرفت):\n' + JSON.stringify(progress) + '\n' +
-      'خروجی JSON:\n' +
-      '{"summary":"خلاصه یک جمله‌ای",' +
-      '"priorities":["درس اولویت‌دار ۱","درس اولویت‌دار ۲"],' +
-      '"suggestions":[{"subject":"نام درس","chapter":"فصل پیشنهادی","minutes":60,"reason":"چرا این"}],' +
-      '"tip":"یک توصیه کلی"}';
-  }
-
-  throw new Error('feature ناشناخته: ' + feature);
-}
-
-function extractJSONLocal(text) {
-  if (!text || !text.trim()) throw new Error('پاسخ خالی');
-  let t = String(text).trim();
-  t = t.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
-  const s = t.indexOf('{');
-  const e = t.lastIndexOf('}');
-  if (s < 0 || e <= s) throw new Error('JSON یافت نشد');
-  return JSON.parse(t.slice(s, e + 1));
-}
-
-function validateShapeLocal(feature, obj) {
-  if (!obj || typeof obj !== 'object') throw new Error('ساختار نامعتبر');
-
-  if (feature === 'mistake-analysis') {
-    return {
-      categories: Array.isArray(obj.categories) ? obj.categories.slice(0, 8).map(String) : [],
-      patterns: Array.isArray(obj.patterns) ? obj.patterns.slice(0, 8).map(String) : [],
-      actions: Array.isArray(obj.actions) ? obj.actions.slice(0, 5).map(String) : ['داده کافی نیست.'],
-      honest: String(obj.honest || 'این تحلیل قطعی نیست.').slice(0, 300)
-    };
-  }
-
-  if (feature === 'explain-topic') {
-    return {
-      title: String(obj.title || 'مبحث').slice(0, 200),
-      intro: String(obj.intro || '').slice(0, 600),
-      key_points: Array.isArray(obj.key_points) ? obj.key_points.slice(0, 12).map(k => ({
-        heading: String(k?.heading || '').slice(0, 150),
-        explanation: String(k?.explanation || '').slice(0, 800)
-      })) : [],
-      formulas: Array.isArray(obj.formulas) ? obj.formulas.slice(0, 10).map(String) : [],
-      pitfalls: Array.isArray(obj.pitfalls) ? obj.pitfalls.slice(0, 10).map(String) : [],
-      study_tip: String(obj.study_tip || '').slice(0, 500)
-    };
-  }
-
-  if (feature === 'make-slides') {
-    return {
-      deck_title: String(obj.deck_title || 'ارائه').slice(0, 200),
-      slides: Array.isArray(obj.slides) ? obj.slides.slice(0, 15).map(s => ({
-        title: String(s?.title || '').slice(0, 150),
-        bullets: Array.isArray(s?.bullets) ? s.bullets.slice(0, 8).map(b => String(b).slice(0, 400)) : [],
-        image_prompt: String(s?.image_prompt || '').slice(0, 300)
-      })) : []
-    };
-  }
-
-  if (feature === 'quiz-from-topic') {
-    return {
-      questions: Array.isArray(obj.questions) ? obj.questions.slice(0, 20).map(q => {
-        const opts = Array.isArray(q?.options) ? q.options.slice(0, 4).map(x => String(x).slice(0, 400)) : [];
-        while (opts.length < 4) opts.push('—');
-        return {
-          stem: String(q?.stem || '').slice(0, 800),
-          options: opts,
-          correct_index: Math.min(Math.max(parseInt(q?.correct_index) || 0, 0), 3),
-          explanation: String(q?.explanation || '').slice(0, 500),
-          source: String(q?.source || '').slice(0, 200),
-          needs_review: !!q?.needs_review
-        };
-      }) : []
-    };
-  }
-
-  if (feature === 'suggest-plan') {
-    return {
-      summary: String(obj.summary || '').slice(0, 300),
-      priorities: Array.isArray(obj.priorities) ? obj.priorities.slice(0, 5).map(String) : [],
-      suggestions: Array.isArray(obj.suggestions) ? obj.suggestions.slice(0, 10).map(s => ({
-        subject: String(s?.subject || '').slice(0, 50),
-        chapter: String(s?.chapter || '').slice(0, 150),
-        minutes: Math.min(Math.max(parseInt(s?.minutes) || 60, 15), 300),
-        reason: String(s?.reason || '').slice(0, 300)
-      })) : [],
-      tip: String(obj.tip || '').slice(0, 300)
-    };
-  }
-
-  throw new Error('feature ناشناخته');
-}
-
-/* ---------- AI test helper ---------- */
-async function testAIConnection() {
-  const results = [];
-  const aiCfg = S.settings.ai || {};
-
-  /* Test Gemini */
-  if (aiCfg.geminiKey) {
-    try {
-      const res = await callGeminiDirect('explain-topic', {
-        topic: 'تست اتصال',
-        subject: 'عمومی'
-      });
-      results.push({ provider: 'Gemini', ok: true, message: 'اتصال موفق' });
-    } catch (err) {
-      results.push({ provider: 'Gemini', ok: false, message: err.message });
-    }
-  }
-
-  /* Test OpenRouter */
-  if (aiCfg.openrouterKey) {
-    try {
-      const res = await callOpenRouterDirect('explain-topic', {
-        topic: 'تست اتصال',
-        subject: 'عمومی'
-      });
-      results.push({ provider: 'OpenRouter', ok: true, message: 'اتصال موفق' });
-    } catch (err) {
-      results.push({ provider: 'OpenRouter', ok: false, message: err.message });
-    }
-  }
-
-  return results;
-}
-
-/* ============================================================================
- * SECTION 16 — UI HELPERS
- * ========================================================================= */
-
-function updateSyncPill() {
-  const pill = $('#syncPill');
-  const label = $('#syncLabel');
-  if (!pill || !label) return;
-  const pending = (CACHE.outbox || []).filter(o => o.status === 'pending' || o.status === 'retry').length;
-  const failed = (CACHE.outbox || []).filter(o => o.status === 'failed').length;
-  pill.className = 'sync-pill';
-  if (!navigator.onLine) {
-    pill.classList.add('offline');
-    label.textContent = 'آفلاین';
-    return;
-  }
-  if (!currentUser) {
-    label.textContent = 'محلی';
-    return;
-  }
-  if (failed > 0) {
-    pill.classList.add('offline');
-    label.textContent = 'خطا';
-    return;
-  }
-  if (syncState.running) {
-    pill.classList.add('queue');
-    label.textContent = 'sync…';
-    return;
-  }
-  if (pending > 0) {
-    pill.classList.add('queue');
-    label.textContent = 'صف: ' + faNum(pending);
-    return;
-  }
-  label.textContent = 'همگام';
-}
-
-function updateAccountBtn() {
-  const btn = $('#accountBtn');
-  if (btn) btn.classList.toggle('on', !!currentUser);
-}
-
-function updateThemeButtons() {
-  const dark = S.settings.theme === 'dark';
-  const lbl = $('#themeLabel');
-  if (lbl) lbl.textContent = dark ? 'حالت روشن' : 'حالت شب';
-  const ti = $('#themeIcon');
-  if (ti) ti.innerHTML = dark ? ICONS.sun : ICONS.moon;
-  const tt = $('#themeBtn');
-  if (tt) tt.innerHTML = dark ? ICONS.sun : ICONS.moon;
-}
-
-function applyTheme() {
-  const t = S.settings.theme === 'dark' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', t);
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', t === 'dark' ? '#080d18' : '#f0f4fa');
-  updateThemeButtons();
-}
-
-/* ============================================================================
- * SECTION 17 — NAVIGATION
- * ========================================================================= */
-
-const NAV_ITEMS = [
-  { id: 'home', label: 'خانه', icon: 'home' },
-  { id: 'timer', label: 'اتاق تمرکز', icon: 'timer' },
-  { id: 'exams', label: 'آزمون‌ها', icon: 'exams' },
-  { id: 'mistakes', label: 'دفترچه غلط', icon: 'mistakes' },
-  { id: 'sim', label: 'آزمون شبیه‌ساز', icon: 'sim' },
-  { id: 'plan', label: 'برنامه روزانه', icon: 'plan' },
-  { id: 'stats', label: 'آمار هفته', icon: 'stats' },
-  { id: 'monthly', label: 'گزارش ماهانه', icon: 'stats' },
-  { id: 'ai', label: 'دستیار AI', icon: 'spark' },
-  { id: 'settings', label: 'تنظیمات', icon: 'settings' },
-  { id: 'diag', label: 'عیب‌یابی', icon: 'diag' }
-];
-
-const BOTTOM_NAV = ['home', 'timer', 'exams', 'mistakes', 'stats'];
-const VIEW_TITLES = Object.fromEntries(NAV_ITEMS.map(n => [n.id, n.label]));
-
-function buildNav() {
-  const side = $('#sideNav');
-  if (side) {
-    side.innerHTML = NAV_ITEMS.map(n =>
-      '<button type="button" data-nav="' + n.id + '" class="' +
-        (S.activeView === n.id ? 'active' : '') + '">' +
-        (ICONS[n.icon] || '') +
-        '<span>' + esc(n.label) + '</span>' +
-      '</button>'
-    ).join('');
-  }
-  const bottom = $('#bottomNav');
-  if (bottom) {
-    bottom.innerHTML = BOTTOM_NAV.map(id => {
-      const n = NAV_ITEMS.find(x => x.id === id);
-      if (!n) return '';
-      return '<button type="button" data-nav="' + n.id + '" class="' +
-        (S.activeView === n.id ? 'active' : '') + '">' +
-        (ICONS[n.icon] || '') +
-        '<span>' + esc(n.label) + '</span>' +
-      '</button>';
-    }).join('');
-  }
-}
-
-function navigate(view) {
-  if (!VIEW_TITLES[view]) view = 'home';
-  S.activeView = view;
-  $$('.view').forEach(v => {
-    v.classList.toggle('active', v.id === 'view-' + view);
-  });
-  const bottomTarget = BOTTOM_NAV.includes(view) ? view : 'home';
-  $$('#bottomNav button').forEach(b => {
-    b.classList.toggle('active', b.dataset.nav === bottomTarget);
-  });
-  $$('#sideNav button').forEach(b => {
-    b.classList.toggle('active', b.dataset.nav === view);
-  });
-  const titleEl = $('#topTitle');
-  if (titleEl) titleEl.textContent = VIEW_TITLES[view] || '';
-  const dateEl = $('#topDate');
-  if (dateEl) dateEl.textContent = faDate(todayKey(), 'weekday');
-  if (window.RENDER && window.RENDER[view]) {
-    try { window.RENDER[view](); }
-    catch (e) { logError('render ' + view + ': ' + e.message); }
-  }
-  updateFab();
-  try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  catch (e) { window.scrollTo(0, 0); }
-}
-
-function updateFab() {
-  const fab = $('#fab');
-  if (!fab) return;
-  const v = S.activeView;
-  if (['home', 'plan', 'mistakes', 'exams'].includes(v)) {
-    fab.classList.remove('hidden');
-    fab.dataset.view = v;
-    fab.innerHTML = ICONS.plus;
-    fab.setAttribute('aria-label',
-      v === 'plan' ? 'افزودن هدف' :
-      v === 'mistakes' ? 'ثبت خطا' :
-      v === 'exams' ? 'ثبت آزمون' : 'شروع تایمر'
-    );
-  } else {
-    fab.classList.add('hidden');
-  }
-}
-
-/* ============================================================================
- * SECTION 18 — COMMAND PALETTE
- * ========================================================================= */
-
-const CMD_ITEMS = [
-  { id: 'go-home', label: 'خانه', icon: 'home', nav: 'home' },
-  { id: 'go-timer', label: 'اتاق تمرکز', icon: 'timer', nav: 'timer' },
-  { id: 'go-exams', label: 'آزمون‌ها', icon: 'exams', nav: 'exams' },
-  { id: 'go-mistakes', label: 'دفترچه', icon: 'mistakes', nav: 'mistakes' },
-  { id: 'go-sim', label: 'آزمون شبیه‌ساز', icon: 'sim', nav: 'sim' },
-  { id: 'go-plan', label: 'برنامه روزانه', icon: 'plan', nav: 'plan' },
-  { id: 'go-stats', label: 'آمار هفته', icon: 'stats', nav: 'stats' },
-  { id: 'go-monthly', label: 'گزارش ماهانه', icon: 'stats', nav: 'monthly' },
-  { id: 'go-ai', label: 'دستیار AI', icon: 'spark', nav: 'ai' },
-  { id: 'go-settings', label: 'تنظیمات', icon: 'settings', nav: 'settings' },
-  { id: 'go-diag', label: 'عیب‌یابی', icon: 'diag', nav: 'diag' },
-  { id: 'act-theme', label: 'تغییر پوسته', icon: 'moon', action: 'toggle-theme' },
-  { id: 'act-account', label: 'حساب کاربری', icon: 'key', action: 'open-account' },
-  { id: 'act-export', label: 'خروجی JSON', icon: 'download', action: 'export' },
-  { id: 'act-sync', label: 'همگام‌سازی', icon: 'refresh', action: 'sync-now' }
-];
-
-function openCmd() {
-  const root = $('#cmdRoot');
-  if (!root) return;
-  root.style.display = 'flex';
-  const input = $('#cmdInput');
-  if (input) { input.value = ''; input.focus(); }
-  renderCmdList('');
-}
-
-function closeCmd() {
-  const root = $('#cmdRoot');
-  if (root) root.style.display = 'none';
-}
-
-function renderCmdList(query) {
-  const list = $('#cmdList');
-  if (!list) return;
-  const q = String(query || '').toLowerCase().trim();
-  const items = CMD_ITEMS.filter(it =>
-    !q || it.label.toLowerCase().includes(q) || it.id.includes(q)
-  );
-  if (!items.length) {
-    list.innerHTML = '<p class="t-sm muted center" style="padding:20px">چیزی یافت نشد.</p>';
-    return;
-  }
-  list.innerHTML = items.map((it, i) =>
-    '<button type="button" class="cmd-item' + (i === 0 ? ' active' : '') + '" ' +
-      'data-cmd-id="' + it.id + '" ' +
-      'style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;color:var(--ink);border:0;background:none;width:100%;text-align:start;font-family:inherit' +
-      (i === 0 ? ';background:var(--brand-soft);color:var(--brand)' : '') + '">' +
-      (ICONS[it.icon] || '') +
-      '<span>' + esc(it.label) + '</span>' +
-    '</button>'
-  ).join('');
-}
-
-function runCmdItem(id) {
-  const it = CMD_ITEMS.find(x => x.id === id);
-  if (!it) return;
-  closeCmd();
-  if (it.nav) {
-    navigate(it.nav);
-  } else if (it.action === 'toggle-theme') {
-    S.settings.theme = S.settings.theme === 'dark' ? 'light' : 'dark';
-    applyTheme();
-    saveSettings();
-  } else if (it.action === 'open-account') {
-    openAccount();
-  } else if (it.action === 'export') {
-    exportData();
-  } else if (it.action === 'sync-now') {
-    syncNow(true);
-  }
-}
-}
-</script>
 <script>
 /* ============================================================================
  * KONKOOR YAR 2.0 — RENDERERS (Part A)
@@ -14381,5 +11951,1026 @@ window.openCoupleCompetition=function(){kyFinalEnsureCoupleView();navigate('coup
 })();
 
 </script>
+
+<!-- ============================================================================
+ * KONKOOR YAR — FINAL INTEGRITY / LIVE COUPLE / TIMER FIX — 2026-10-07
+ *
+ * This layer intentionally keeps the existing application modules and UI.
+ * It only:
+ *   1) removes the duplicated runtime that existed above;
+ *   2) makes the 05:00 -> 05:00 study day rule authoritative;
+ *   3) makes partner-link persistence robust across reloads;
+ *   4) uses Supabase Realtime Presence for couple-live state, with a safe public
+ *      fallback when private Realtime authorization is unavailable;
+ *   5) keeps Home study totals live while the timer is running;
+ *   6) makes the screen-wake toggle unambiguous and keeps the zen timer inside
+ *      the laptop viewport;
+ *   7) gives the blue heatmap every explicit time range.
+ *
+ * No API keys are rotated, removed, masked, or replaced here.
+ * ============================================================================ -->
+<style id="ky-final-integrity-style">
+/* --------------------------------------------------------------------------
+ * Zen timer: laptop-safe geometry
+ * -------------------------------------------------------------------------- */
+body.zen-mode .timer-stage{
+  min-height:100dvh!important;
+  min-height:100vh!important;
+  height:100dvh!important;
+  height:100vh!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  justify-content:center!important;
+  align-content:center!important;
+  overflow:hidden!important;
+  padding:14px 18px calc(18px + env(safe-area-inset-bottom))!important;
+  gap:18px!important;
+}
+body.zen-mode .ring-wrap{
+  width:min(340px,46dvh,72vw)!important;
+  max-width:72vw!important;
+  max-height:46dvh!important;
+  flex:0 1 auto!important;
+}
+body.zen-mode .ring-time{
+  font-size:clamp(36px,5.5vw,72px)!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+body.zen-mode .ring-sub{font-size:11px!important;margin-top:6px!important;}
+body.zen-mode .timer-ctrl{gap:10px!important;flex:none!important;}
+body.zen-mode .ctrl-fab{width:54px!important;height:54px!important;}
+body.zen-mode .ctrl-fab.ghost{width:42px!important;height:42px!important;}
+body.zen-mode .card{width:100%!important;max-width:100%!important;}
+
+/* Small anti-burn-in movement for OLED displays. */
+@keyframes kyFinalBurnInShift{
+  0%,86%,100%{transform:translate3d(0,0,0)}
+  90%{transform:translate3d(2px,-1px,0)}
+  94%{transform:translate3d(-2px,1px,0)}
+}
+body.zen-mode .ring-time{animation:kyFinalBurnInShift 11s linear infinite;}
+
+/* --------------------------------------------------------------------------
+ * Wake-lock control: unmistakable ON/OFF state
+ * -------------------------------------------------------------------------- */
+body.zen-mode .ky-wakelock-btn{
+  min-height:46px!important;
+  padding:9px 15px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(255,255,255,.26)!important;
+  background:rgba(15,23,42,.88)!important;
+  color:#fff!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  font-size:11.5px!important;
+  z-index:10002!important;
+}
+body.zen-mode .ky-wakelock-btn.on{
+  border-color:rgba(52,211,153,.88)!important;
+  background:rgba(6,78,59,.94)!important;
+  box-shadow:0 0 0 2px rgba(52,211,153,.2),0 12px 34px rgba(0,0,0,.35)!important;
+}
+body.zen-mode .ky-wakelock-btn.on::after{
+  content:'✓'!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  width:18px!important;
+  height:18px!important;
+  margin-inline-start:2px!important;
+  border-radius:50%!important;
+  background:#34d399!important;
+  color:#062e24!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+body.zen-mode .ky-wake-icon{
+  width:22px!important;
+  height:22px!important;
+}
+
+/* --------------------------------------------------------------------------
+ * Exact heatmap legend
+ * -------------------------------------------------------------------------- */
+.ky-final-heat-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+}
+.ky-final-heat-item{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:28px;
+  padding:4px 8px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--surface-2);
+  color:var(--ink-2);
+  font-size:10px;
+  white-space:nowrap;
+}
+.ky-final-heat-swatch{
+  width:14px;
+  height:14px;
+  border-radius:4px;
+  border:1px solid rgba(15,23,42,.10);
+  flex:none;
+}
+
+/* --------------------------------------------------------------------------
+ * Couple card stability
+ * -------------------------------------------------------------------------- */
+.ky-final-couple-card .ky-live-person b{font-size:17px!important;}
+.ky-final-couple-card .ky-partner-now{min-height:54px;}
+.ky-final-status{display:flex;align-items:center;gap:7px;min-width:0;}
+.ky-final-status .ky-final-status-dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px var(--ok-soft);flex:none;}
+.ky-final-status.off .ky-final-status-dot{background:var(--ink-3);box-shadow:0 0 0 5px var(--surface-3);}
+.ky-final-status b{font-size:11px;}
+.ky-final-status span{display:block;font-size:9.5px;color:var(--ink-3);margin-top:1px;}
+
+@media(max-width:700px){
+  body.zen-mode .timer-stage{padding-inline:10px!important;gap:12px!important;}
+  body.zen-mode .ring-wrap{width:min(320px,50dvh,84vw)!important;max-width:84vw!important;max-height:50dvh!important;}
+  body.zen-mode .ring-time{font-size:clamp(34px,11vw,64px)!important;}
+  .ky-final-heat-item{font-size:9.5px;padding-inline:7px;}
+}
+
+@media(min-width:1100px){
+  body.zen-mode .ring-wrap{width:min(340px,44dvh,28vw)!important;max-height:44dvh!important;}
+}
+</style>
+
+<script id="ky-final-integrity-script">
+(function(){
+  'use strict';
+
+  const K = window.KY_FINAL_INTEGRITY = window.KY_FINAL_INTEGRITY || {};
+  K.version = '2026.10.07.3';
+  K.partnerBackupPrefix = 'ky.partner.link.v3.';
+  K.presence = K.presence || null;
+  K.partnerLive = K.partnerLive || null;
+  K.partnerBooting = false;
+  K.wakeLock = K.wakeLock || null;
+  K.wakeWanted = !!K.wakeWanted;
+  K.homeTicker = K.homeTicker || null;
+  K.partnerTicker = K.partnerTicker || null;
+
+  /* ========================================================================
+   * 1) Date model — 05:00 is the authoritative study-day boundary.
+   * ====================================================================== */
+  function civilDayKey(value){
+    const d = value instanceof Date ? new Date(value.getTime()) : new Date(value || Date.now());
+    if(Number.isNaN(d.getTime())) return '';
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function studyDayKey(value){
+    const d = value instanceof Date ? new Date(value.getTime()) : new Date(value || Date.now());
+    if(Number.isNaN(d.getTime())) return '';
+    if(d.getHours() < 5) d.setDate(d.getDate() - 1);
+    return civilDayKey(d);
+  }
+
+  window.kyStudyDayKey = studyDayKey;
+  window.kyCivilDayKey = civilDayKey;
+  try{ todayKey = studyDayKey; }catch(_){ }
+  try{ window.todayKey = studyDayKey; }catch(_){ }
+
+  /* The streak must use the same boundary as the timer/statistics. */
+  function fixedStreak(sessions){
+    const days = new Set((sessions || []).filter(x => !x.deleted_at && x.day).map(x => x.day));
+    if(!days.size) return 0;
+    let cursor = studyDayKey(new Date());
+    let count = 0;
+    for(let guard=0;guard<3700;guard++){
+      if(!days.has(cursor)) break;
+      count++;
+      cursor = addDays(cursor,-1);
+    }
+    return count;
+  }
+  try{ computeStreak = fixedStreak; }catch(_){ }
+  try{ window.computeStreak = fixedStreak; }catch(_){ }
+
+  /* ========================================================================
+   * 2) Partner-link persistence — server first, local recovery second.
+   * ====================================================================== */
+  function partnerBackupKey(userId){
+    return K.partnerBackupPrefix + String(userId || '');
+  }
+
+  function readPartnerBackup(){
+    if(!currentUser) return null;
+    try{
+      const raw = localStorage.getItem(partnerBackupKey(currentUser.id));
+      if(raw){
+        const x = JSON.parse(raw);
+        if(x && x.partner_id && x.partner_id !== currentUser.id) return x;
+      }
+    }catch(_){ }
+    return null;
+  }
+
+  function writePartnerBackup(partnerId, email){
+    if(!currentUser || !partnerId) return;
+    const value = {
+      partner_id: String(partnerId),
+      partner_email: String(email || ''),
+      saved_at: Date.now()
+    };
+    try{ localStorage.setItem(partnerBackupKey(currentUser.id), JSON.stringify(value)); }catch(_){ }
+    try{
+      S.settings.partnerLinkBackup = value;
+      saveSettings().catch(()=>{});
+    }catch(_){ }
+  }
+
+  async function verifyPartnerAfterLink(partnerId){
+    let verified = false;
+    try{
+      const profile = await fetchMyProfile();
+      verified = !!(profile && String(profile.partner_id || '') === String(partnerId));
+    }catch(_){ }
+    return verified;
+  }
+
+  async function forcePersistPartner(partnerId){
+    if(!sb || !currentUser || !partnerId) return false;
+    try{
+      const { data, error } = await sb.from('profiles')
+        .update({ partner_id: partnerId })
+        .eq('user_id', currentUser.id)
+        .select('*')
+        .maybeSingle();
+      if(error) throw error;
+      if(data) currentProfile = data;
+      return true;
+    }catch(_){ return false; }
+  }
+
+  function extractPartnerId(data){
+    if(!data) return '';
+    if(typeof data === 'string') return data;
+    if(Array.isArray(data)) return extractPartnerId(data[0]);
+    return String(data.partner_id || data.partnerId || data.id || '');
+  }
+
+  function extractPartnerEmail(data){
+    if(!data) return '';
+    if(Array.isArray(data)) return extractPartnerEmail(data[0]);
+    return String(data.partner_email || data.email || '');
+  }
+
+  const originalLinkPartnerFinal = window.linkPartner;
+  if(typeof originalLinkPartnerFinal === 'function'){
+    window.linkPartner = async function(email){
+      const normalized = String(email || '').trim().toLowerCase();
+      if(!normalized) throw new Error('ایمیل شریک را وارد کن');
+      if(!sb || !currentUser) throw new Error('اول وارد حساب شو');
+
+      /* Keep the existing RPC contract intact. */
+      const { data, error } = await sb.rpc('link_partner', { partner_email: normalized });
+      if(error) throw new Error(error.message || 'خطا در لینک شریک');
+
+      let partnerId = extractPartnerId(data);
+      let partnerEmail = extractPartnerEmail(data) || normalized;
+
+      /* Some SQL functions return only an acknowledgement. In that case, read
+         the profile immediately instead of inventing an id. */
+      if(!partnerId){
+        try{
+          const profile = await fetchMyProfile();
+          partnerId = String(profile?.partner_id || '');
+        }catch(_){ }
+      }
+
+      if(!partnerId) throw new Error('سرور لینک را تأیید نکرد');
+      if(partnerId === currentUser.id) throw new Error('نمی‌توانی حساب خودت را به‌عنوان شریک لینک کنی');
+
+      currentProfile = currentProfile || { user_id: currentUser.id };
+      currentProfile.partner_id = partnerId;
+      currentProfile.email = currentProfile.email || currentUser.email;
+
+      /* The RPC remains the preferred server-side write. This direct update is
+         a compatibility fallback for profiles tables whose RPC only returns
+         the target user. */
+      await forcePersistPartner(partnerId);
+      writePartnerBackup(partnerId, partnerEmail);
+
+      try{
+        const partner = await fetchPartnerProfile();
+        if(partner){
+          K.linkedPartner = partner;
+          partnerEmail = partner.email || partnerEmail;
+          writePartnerBackup(partnerId, partnerEmail);
+        }
+      }catch(_){ }
+
+      const verified = await verifyPartnerAfterLink(partnerId);
+      if(!verified){
+        /* Do not pretend that persistence was confirmed. The local backup keeps
+           this browser usable, but the profile should still be checked server-side
+           whenever the next session is opened. */
+        try{ logError('partner link verification: server profile did not confirm partner_id'); }catch(_){ }
+      }
+
+      try{ await startPresence(); }catch(_){ }
+      try{ await loadCoupleDashboard(); }catch(_){ }
+      try{ renderPartnerCard(); }catch(_){ }
+      try{ if(S.activeView === 'home') await renderHome(); }catch(_){ }
+      try{ if(S.activeView === 'settings') renderSettings(); }catch(_){ }
+      return data;
+    };
+    try{ linkPartner = window.linkPartner; }catch(_){ }
+  }
+
+  async function restorePartnerLink(){
+    if(!currentUser || !sb) return false;
+
+    let profile = null;
+    try{ profile = await fetchMyProfile(); }catch(_){ }
+    if(profile?.partner_id && String(profile.partner_id) !== String(currentUser.id)){
+      try{
+        const pp = await fetchPartnerProfile();
+        if(pp) K.linkedPartner = pp;
+      }catch(_){ }
+      const pe = K.linkedPartner?.email || '';
+      writePartnerBackup(profile.partner_id, pe);
+      return true;
+    }
+
+    const backup = readPartnerBackup();
+    if(!backup?.partner_id) return false;
+
+    currentProfile = currentProfile || { user_id: currentUser.id };
+    currentProfile.partner_id = backup.partner_id;
+    currentProfile.email = currentProfile.email || currentUser.email;
+    K.linkedPartner = { user_id: backup.partner_id, email: backup.partner_email || '' };
+
+    /* Attempt to repair the server profile; keep local recovery even if RLS blocks it. */
+    await forcePersistPartner(backup.partner_id);
+    try{
+      const confirmed = await fetchMyProfile();
+      if(confirmed?.partner_id) currentProfile = confirmed;
+    }catch(_){ }
+    return true;
+  }
+
+  /* ========================================================================
+   * 3) Live couple transport — Realtime Presence.
+   * ====================================================================== */
+  function pairTopic(){
+    if(!currentUser || !currentProfile?.partner_id) return '';
+    const a = String(currentUser.id || '');
+    const b = String(currentProfile.partner_id || '');
+    if(!a || !b || a === b) return '';
+    return 'ky-couple-' + [a,b].sort().join('-');
+  }
+
+  function timerElapsed(){
+    try{
+      if(Timer?.state && typeof Timer.elapsedSeconds === 'function') return Math.max(0, Number(Timer.elapsedSeconds()) || 0);
+    }catch(_){ }
+    return 0;
+  }
+
+  function completedTodaySeconds(){
+    const day = studyDayKey(new Date());
+    return (CACHE.sessions || [])
+      .filter(x => !x.deleted_at && x.day === day)
+      .reduce((sum,x) => sum + Math.max(0, Number(x.seconds) || 0), 0);
+  }
+
+  function ownTodaySeconds(){
+    return completedTodaySeconds() + timerElapsed();
+  }
+  window.kyOwnTodaySeconds = ownTodaySeconds;
+
+  function buildPresencePayload(){
+    const running = !!(Timer?.state && Timer.state.status === 'running');
+    const paused = !!(Timer?.state && Timer.state.status === 'paused');
+    const elapsed = timerElapsed();
+    return {
+      user_id: currentUser?.id || null,
+      online: true,
+      status: running ? 'studying' : (paused ? 'resting' : 'online'),
+      is_studying: running,
+      subject: running ? Timer.state.subject : null,
+      started_at: running ? Number(Timer.state.started_at || Date.now()) : null,
+      session_elapsed_seconds: elapsed,
+      today_seconds: completedTodaySeconds(),
+      study_day: studyDayKey(new Date()),
+      updated_at: Date.now()
+    };
+  }
+
+  function getPartnerPresenceFromChannel(channel){
+    if(!channel || !currentUser || !currentProfile?.partner_id) return null;
+    const exactKey = String(currentProfile.partner_id);
+    let state = {};
+    try{ state = channel.presenceState() || {}; }catch(_){ }
+    const list = state[exactKey];
+    if(Array.isArray(list) && list.length) return list[list.length - 1];
+    return null;
+  }
+
+  function normalizePartnerLive(raw){
+    if(!raw) return null;
+    const updated = Number(raw.updated_at || Date.now());
+    const running = raw.is_studying === true || raw.status === 'studying' || raw.status === 'running';
+    const paused = raw.status === 'resting' || raw.status === 'paused';
+    const base = Math.max(0, Number(raw.today_seconds) || 0);
+    const session = Math.max(0, Number(raw.session_elapsed_seconds) || 0);
+    const drift = running ? Math.max(0, Math.floor((Date.now() - updated) / 1000)) : 0;
+    return {
+      ...raw,
+      online: raw.online !== false,
+      is_studying: running,
+      is_paused: paused,
+      status: running ? 'studying' : (paused ? 'resting' : 'online'),
+      today_seconds: base,
+      session_elapsed_seconds: session,
+      live_session_seconds: session + drift,
+      projected_today_seconds: base + session + drift,
+      updated_at: updated
+    };
+  }
+
+  function setPartnerLive(raw){
+    K.partnerLive = normalizePartnerLive(raw);
+    partnerPresence = K.partnerLive;
+    try{ window.KY = window.KY || {}; window.KY.partnerLive = K.partnerLive; }catch(_){ }
+    try{ renderPartnerCard(); }catch(_){ }
+    try{ updateHomePartnerCard(); }catch(_){ }
+  }
+
+  function clearPartnerLive(){
+    K.partnerLive = null;
+    partnerPresence = null;
+    try{ if(window.KY) window.KY.partnerLive = null; }catch(_){ }
+    try{ renderPartnerCard(); }catch(_){ }
+    try{ updateHomePartnerCard(); }catch(_){ }
+  }
+
+  async function createPresenceChannel(){
+    if(!sb || !currentUser || !currentProfile?.partner_id) return null;
+    const topic = pairTopic();
+    if(!topic) return null;
+
+    const tryChannel = async (options) => {
+      const channel = sb.channel(topic, options || {});
+      let resolveSubscribed;
+      const subscribedPromise = new Promise(resolve => { resolveSubscribed = resolve; });
+      channel.on('presence', { event: 'sync' }, () => {
+        const raw = getPartnerPresenceFromChannel(channel);
+        if(raw) setPartnerLive(raw); else clearPartnerLive();
+      });
+      channel.on('presence', { event: 'join' }, () => {
+        const raw = getPartnerPresenceFromChannel(channel);
+        if(raw) setPartnerLive(raw);
+      });
+      channel.on('presence', { event: 'leave' }, (event) => {
+        if(event?.key && String(event.key) === String(currentProfile?.partner_id)) clearPartnerLive();
+        else if(!getPartnerPresenceFromChannel(channel)) clearPartnerLive();
+      });
+
+      const statusResult = await channel.subscribe((status, error) => {
+        if(status === 'SUBSCRIBED') resolveSubscribed({ok:true,channel});
+        else if(status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED'){
+          resolveSubscribed({ok:false,error,status,channel});
+        }
+      });
+      /* Some client versions resolve subscribe() before the callback. Do not
+         treat a non-error return as a successful Presence subscription until
+         the callback has positively confirmed SUBSCRIBED. */
+      void statusResult;
+      return subscribedPromise;
+    };
+
+    const privateResult = await Promise.race([
+      tryChannel({private:true, presence:{key:String(currentUser.id)}}),
+      new Promise(resolve => setTimeout(() => resolve({ok:false,status:'TIMEOUT'}), 7000))
+    ]);
+
+    if(privateResult?.ok) return privateResult.channel;
+    try{ if(privateResult?.channel) await sb.removeChannel(privateResult.channel); }catch(_){ }
+
+    const publicResult = await Promise.race([
+      tryChannel({presence:{key:String(currentUser.id)}}),
+      new Promise(resolve => setTimeout(() => resolve({ok:false,status:'TIMEOUT'}), 7000))
+    ]);
+    if(publicResult?.ok) return publicResult.channel;
+    try{ if(publicResult?.channel) await sb.removeChannel(publicResult.channel); }catch(_){ }
+    return null;
+  }
+
+  async function startPresenceFinal(){
+    if(K.partnerBooting) return;
+    if(!sb || !currentUser) return;
+    if(!currentProfile?.partner_id){ clearPartnerLive(); return; }
+    K.partnerBooting = true;
+    try{
+      if(K.presence){
+        try{ await K.presence.untrack(); }catch(_){ }
+        try{ await sb.removeChannel(K.presence); }catch(_){ }
+        K.presence = null;
+      }
+      const channel = await createPresenceChannel();
+      if(!channel){
+        clearPartnerLive();
+        try{ logError('couple presence: channel subscription failed'); }catch(_){ }
+        return;
+      }
+      K.presence = channel;
+      presenceChannel = channel;
+      await trackPresenceFinal();
+    }finally{
+      K.partnerBooting = false;
+    }
+  }
+
+  async function trackPresenceFinal(){
+    const channel = K.presence;
+    if(!channel || !currentUser) return;
+    try{ await channel.track(buildPresencePayload()); }catch(err){
+      try{ logError('couple presence track: ' + (err.message || err)); }catch(_){ }
+    }
+  }
+
+  async function stopPresenceFinal(){
+    const channel = K.presence || presenceChannel;
+    K.presence = null;
+    presenceChannel = null;
+    clearPartnerLive();
+    if(!channel) return;
+    try{ await channel.untrack(); }catch(_){ }
+    try{ await sb?.removeChannel(channel); }catch(_){ }
+  }
+
+  try{ window.startPresence = startPresenceFinal; startPresence = startPresenceFinal; }catch(_){ }
+  try{ window.trackPresence = trackPresenceFinal; trackPresence = trackPresenceFinal; }catch(_){ }
+  try{ window.stopPresence = stopPresenceFinal; stopPresence = stopPresenceFinal; }catch(_){ }
+
+  /* Older additive patches in this file also call these aliases directly.
+     Point every couple-live entry point at the same final implementation so
+     two different Realtime transports cannot fight over the UI. */
+  try{ window.kyStartPresence = startPresenceFinal; kyStartPresence = startPresenceFinal; }catch(_){ }
+  try{ window.kyTrackPresence = trackPresenceFinal; kyTrackPresence = trackPresenceFinal; }catch(_){ }
+  try{ window.kyStopPresence = stopPresenceFinal; kyStopPresence = stopPresenceFinal; }catch(_){ }
+  try{ window.kyStartPresenceFinal = startPresenceFinal; kyStartPresenceFinal = startPresenceFinal; }catch(_){ }
+  try{ window.kyTrackPresenceFinal = trackPresenceFinal; kyTrackPresenceFinal = trackPresenceFinal; }catch(_){ }
+  try{ window.kyStopPresenceFinal = stopPresenceFinal; kyStopPresenceFinal = stopPresenceFinal; }catch(_){ }
+
+  /* ========================================================================
+   * 4) Existing couple dashboard RPC — best-effort historical stats.
+   * ====================================================================== */
+  async function loadCoupleDashboardFinal(){
+    if(!sb || !currentUser || !currentProfile?.partner_id) return null;
+    try{
+      const {data,error} = await sb.rpc('get_couple_dashboard', { day_date: studyDayKey(new Date()) });
+      if(error) throw error;
+      const d = data || {};
+      window.KY = window.KY || {};
+      window.KY.coupleDashboard = d;
+      K.coupleDashboard = d;
+      return d;
+    }catch(err){
+      try{ logError('couple dashboard: ' + (err.message || err)); }catch(_){ }
+      return null;
+    }
+  }
+  window.loadCoupleDashboard = loadCoupleDashboardFinal;
+  try{ loadCoupleDashboard = loadCoupleDashboardFinal; }catch(_){ }
+  try{ window.kyLoadCoupleDashboard = loadCoupleDashboardFinal; }catch(_){ }
+  try{ kyLoadCoupleDashboard = loadCoupleDashboardFinal; }catch(_){ }
+
+  /* Live data comes from Presence now. The older database-row loader is kept
+     available through loadCoupleDashboardFinal for historical comparison, but
+     it must not overwrite a healthy live Presence payload. */
+  try{ window.kyLoadPartnerLive = async function(){ return K.partnerLive || null; }; kyLoadPartnerLive = window.kyLoadPartnerLive; }catch(_){ }
+  try{ window.myLiveTodaySeconds = ownTodaySeconds; myLiveTodaySeconds = ownTodaySeconds; }catch(_){ }
+  try{ window.kyMyTodaySeconds = ownTodaySeconds; kyMyTodaySeconds = ownTodaySeconds; }catch(_){ }
+
+  /* ========================================================================
+   * 5) Partner/Home UI — no one-second full-card rebuild.
+   * ====================================================================== */
+  function fmtSecondsSafe(sec){
+    sec = Math.max(0, Math.floor(Number(sec) || 0));
+    if(typeof fmtSeconds === 'function') return fmtSeconds(sec);
+    const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+    const raw = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    return typeof faNum === 'function' ? faNum(raw) : raw;
+  }
+
+  function partnerLabel(){
+    return K.linkedPartner?.display_name || K.linkedPartner?.username || K.linkedPartner?.email || 'همسرت';
+  }
+
+  function renderPartnerCardFinal(){
+    if(!currentUser) return '';
+    if(!currentProfile?.partner_id){
+      return '<div class="card section ky-final-couple-card">' +
+        '<div class="card-head">' + (ICONS.info || '') + '<h3>شریک مطالعه</h3></div>' +
+        '<p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده و مقایسه، حساب همسرت را لینک کن.</p>' +
+        '<button class="btn btn-sm btn-primary" data-action="open-link-partner">' +
+        (ICONS.plus || '') + '<span>لینک شریک</span></button>' +
+      '</div>';
+    }
+
+    const live = normalizePartnerLive(K.partnerLive || partnerPresence);
+    if(live) K.partnerLive = live;
+    const partnerNow = live ? Number(live.projected_today_seconds || 0) : 0;
+    const running = !!live?.is_studying;
+    const resting = !!live?.is_paused;
+    const subjectObj = running && typeof subj === 'function' ? subj(live.subject) : null;
+    const statusText = running ? ('در حال مطالعه' + (subjectObj?.name ? ' · ' + esc(subjectObj.name) : '')) : (resting ? 'در استراحت' : 'آنلاین');
+    const statusClass = running ? '' : 'off';
+    const clock = running ? fmtSecondsSafe(live.live_session_seconds) : fmtSecondsSafe(0);
+
+    return '<div class="card section ky-final-couple-card" data-couple-live-host>' +
+      '<div class="ky-couple-top">' +
+        '<div><span class="ky-review-kicker">دونفره</span><h3>رقابت مطالعه</h3><p>وضعیت همسرت و مجموع امروز، زنده</p></div>' +
+        '<span class="badge ' + (running ? 'ok' : '') + '"><span class="dot"></span>' + (running ? 'زنده' : 'آنلاین') + '</span>' +
+      '</div>' +
+      '<div class="ky-live-grid">' +
+        '<div class="ky-live-person me"><div class="ky-live-avatar">تو</div><div><b id="kyFinalOwnToday">' + fmtSecondsSafe(ownTodaySeconds()) + '</b><span>مطالعه امروز</span></div></div>' +
+        '<div class="ky-vs">VS</div>' +
+        '<div class="ky-live-person partner"><div class="ky-live-avatar">♥</div><div><b id="kyFinalPartnerToday">' + fmtSecondsSafe(partnerNow) + '</b><span>مطالعه امروز</span></div></div>' +
+      '</div>' +
+      '<div class="ky-partner-now">' +
+        '<span class="live-pulse ' + statusClass + '" id="kyFinalPartnerPulse"></span>' +
+        '<div style="flex:1;min-width:0"><b id="kyFinalPartnerStatus">' + esc(statusText) + '</b>' +
+        '<span id="kyFinalPartnerClock">' + clock + '</span></div>' +
+      '</div>' +
+      '<div class="ky-compare-tabs">' +
+        '<div><span>امروز تو</span><b id="kyFinalOwnTodaySmall">' + fmtSecondsSafe(ownTodaySeconds()) + '</b><em>زمان خالص</em></div>' +
+        '<div><span>امروز ' + esc(partnerLabel()) + '</span><b id="kyFinalPartnerTodaySmall">' + fmtSecondsSafe(partnerNow) + '</b><em>' + (running ? 'در حال مطالعه' : 'وضعیت فعلی') + '</em></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function updateHomePartnerCard(){
+    const host = document.querySelector('#homeRoot [data-couple-live-host]');
+    if(!host) return;
+    const live = normalizePartnerLive(K.partnerLive || partnerPresence);
+    if(live) K.partnerLive = live;
+    const own = ownTodaySeconds();
+    const partner = live ? Number(live.projected_today_seconds || 0) : 0;
+    const running = !!live?.is_studying;
+    const resting = !!live?.is_paused;
+    const subjectObj = running && typeof subj === 'function' ? subj(live.subject) : null;
+    const statusText = running ? ('در حال مطالعه' + (subjectObj?.name ? ' · ' + subjectObj.name : '')) : (resting ? 'در استراحت' : 'آنلاین');
+    const ownEls = [
+      document.getElementById('kyFinalOwnToday'),
+      document.getElementById('kyFinalOwnTodaySmall')
+    ];
+    ownEls.forEach(el=>{if(el)el.textContent=fmtSecondsSafe(own);});
+    const pEls = [
+      document.getElementById('kyFinalPartnerToday'),
+      document.getElementById('kyFinalPartnerTodaySmall')
+    ];
+    pEls.forEach(el=>{if(el)el.textContent=fmtSecondsSafe(partner);});
+    const clock = document.getElementById('kyFinalPartnerClock');
+    if(clock) clock.textContent=fmtSecondsSafe(running ? live.live_session_seconds : 0);
+    const status = document.getElementById('kyFinalPartnerStatus');
+    if(status) status.textContent=statusText;
+    const pulse = document.getElementById('kyFinalPartnerPulse');
+    if(pulse) pulse.classList.toggle('off',!running);
+  }
+
+  const originalRenderPartnerCardFinal = window.renderPartnerCard;
+  try{ window.renderPartnerCard = function(){
+    try{
+      const result = renderPartnerCardFinal();
+      const targets = document.querySelectorAll('[data-partner-card="1"]');
+      targets.forEach(t=>{t.innerHTML=result;});
+      const direct = document.querySelectorAll('[data-couple-live-host]');
+      direct.forEach(t=>{if(t.closest('#homeRoot')) return;});
+      return result;
+    }catch(_){
+      return typeof originalRenderPartnerCardFinal === 'function' ? originalRenderPartnerCardFinal() : '';
+    }
+  }; }catch(_){ }
+  try{ renderPartnerCard = window.renderPartnerCard; }catch(_){ }
+
+  /* ========================================================================
+   * 6) Home live totals + weekly chart/heatmap without full rerender.
+   * ====================================================================== */
+  function updateHomeStudyStat(){
+    const root = document.getElementById('homeRoot');
+    if(!root) return;
+    const stats = root.querySelectorAll('.stat');
+    for(const card of stats){
+      const label = card.querySelector('.lbl');
+      if(!label || !String(label.textContent || '').includes('مطالعه امروز')) continue;
+      const value = card.querySelector('.val');
+      const targetSeconds = ownTodaySeconds();
+      if(value){
+        const mins = targetSeconds / 60;
+        value.textContent = typeof fmtHMfa === 'function' ? fmtHMfa(mins) : fmtSecondsSafe(targetSeconds);
+      }
+      break;
+    }
+  }
+
+  function updateHomeLive(){
+    updateHomeStudyStat();
+    updateHomePartnerCard();
+    try{
+      const hero = document.querySelector('#homeRoot .hero-num');
+      if(hero && S.settings?.dailyGoalMinutes != null){
+        const mins = ownTodaySeconds()/60;
+        hero.textContent = typeof faNum === 'function' ? faNum(Math.floor(mins)) : String(Math.floor(mins));
+      }
+    }catch(_){ }
+  }
+
+  const originalRenderHomeFinal = window.renderHome;
+  async function renderHomeFinal(){
+    if(typeof originalRenderHomeFinal === 'function') await originalRenderHomeFinal();
+    try{
+      /* If the original renderer produced its own partner wrapper, replace only
+         that wrapper. All other Home sections remain untouched. */
+      const wrappers = document.querySelectorAll('#homeRoot [data-partner-card="1"]');
+      wrappers.forEach(w=>{w.innerHTML=renderPartnerCardFinal();});
+    }catch(_){ }
+    updateHomeLive();
+  }
+  try{ window.renderHome = renderHomeFinal; renderHome = renderHomeFinal; }catch(_){ }
+  try{ if(window.RENDER) window.RENDER.home = renderHomeFinal; }catch(_){ }
+
+  function ensureHomeTicker(){
+    if(K.homeTicker) return;
+    K.homeTicker = setInterval(()=>{
+      if(S?.activeView === 'home') updateHomeLive();
+      const live = K.partnerLive || partnerPresence;
+      if(live) K.partnerLive = normalizePartnerLive(live);
+    },1000);
+  }
+  ensureHomeTicker();
+
+  /* ========================================================================
+   * 7) Heatmap — exact ranges, still using the app's existing thresholds.
+   * ====================================================================== */
+  const originalBuildHeatmap = window.buildHeatmapCard;
+  function buildHeatmapCardFinal(){
+    try{
+      if(typeof originalBuildHeatmap !== 'function') return '';
+      const html = originalBuildHeatmap();
+      const legend =
+        '<div class="ky-final-heat-legend" aria-label="راهنمای رنگ‌های ساعت مطالعه">' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-0)"></span>بدون مطالعه</span>' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-1)"></span>کمتر از ۴ ساعت</span>' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-2)"></span>۴ تا ۶ ساعت</span>' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-3)"></span>۶ تا ۸ ساعت</span>' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-4)"></span>۸ تا ۱۰ ساعت</span>' +
+          '<span class="ky-final-heat-item"><span class="ky-final-heat-swatch" style="background:var(--heat-5)"></span>۱۰ ساعت و بیشتر</span>' +
+        '</div>';
+      const close = html.lastIndexOf('</div>');
+      if(close < 0) return html + legend;
+      return html.slice(0,close) + legend + html.slice(close);
+    }catch(_){ return typeof originalBuildHeatmap === 'function' ? originalBuildHeatmap() : ''; }
+  }
+  try{ window.buildHeatmapCard=buildHeatmapCardFinal; buildHeatmapCard=buildHeatmapCardFinal; }catch(_){ }
+
+  /* ========================================================================
+   * 8) Timer day assignment — use the day of completion.
+   * ====================================================================== */
+  const originalTimerFinishFinal = Timer && Timer.finish;
+  if(typeof originalTimerFinishFinal === 'function' && !Timer.__kyFinalFinishWrapped){
+    Timer.__kyFinalFinishWrapped = true;
+    Timer.finish = async function(){
+      const result = await originalTimerFinishFinal.apply(this, arguments);
+      if(result && result.id){
+        try{
+          const finalDay = studyDayKey(new Date());
+          if(result.day !== finalDay){
+            result.day = finalDay;
+            result.updated_at = Date.now();
+            await idbPut('sessions', result);
+            await queueOp('upsert','sessions',result.id,result);
+            await refreshCache();
+          }
+        }catch(_){ }
+      }
+      try{ await trackPresenceFinal(); }catch(_){ }
+      updateHomeLive();
+      return result;
+    };
+  }
+
+  /* Every state change should update the remote live payload promptly. */
+  ['start','pause','resume','reset','clear'].forEach(method=>{
+    const fn = Timer && Timer[method];
+    if(typeof fn !== 'function') return;
+    const flag = '__kyFinalWrapped_' + method;
+    if(Timer[flag]) return;
+    Timer[flag] = true;
+    Timer[method] = async function(){
+      const result = await fn.apply(this, arguments);
+      try{ await trackPresenceFinal(); }catch(_){ }
+      updateHomeLive();
+      return result;
+    };
+  });
+
+  /* ========================================================================
+   * 9) Full-screen + Wake Lock.
+   * ====================================================================== */
+  function isStandalone(){
+    return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  async function requestWakeLockFinal(){
+    K.wakeWanted = true;
+    if(!('wakeLock' in navigator)){
+      try{ toast('این مرورگر روشن نگه‌داشتن صفحه را پشتیبانی نمی‌کند.','warn'); }catch(_){ }
+      updateWakeButtonFinal();
+      return false;
+    }
+    try{
+      if(K.wakeLock) await K.wakeLock.release().catch(()=>{});
+      K.wakeLock = await navigator.wakeLock.request('screen');
+      K.wakeLock.addEventListener('release',()=>{
+        K.wakeLock = null;
+        updateWakeButtonFinal();
+      });
+      updateWakeButtonFinal();
+      return true;
+    }catch(err){
+      K.wakeLock = null;
+      updateWakeButtonFinal();
+      try{ toast('مرورگر اجازه روشن ماندن صفحه را نداد.','warn'); }catch(_){ }
+      return false;
+    }
+  }
+
+  async function releaseWakeLockFinal(){
+    K.wakeWanted = false;
+    try{ if(K.wakeLock) await K.wakeLock.release(); }catch(_){ }
+    K.wakeLock = null;
+    updateWakeButtonFinal();
+  }
+
+  function updateWakeButtonFinal(){
+    document.querySelectorAll('.ky-wakelock-btn').forEach(btn=>{
+      const on = !!K.wakeLock;
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('title', on ? 'صفحه روشن است — برای خاموش کردن بزن' : 'روشن ماندن صفحه');
+      const label = btn.querySelector('[data-wake-label]');
+      if(label) label.textContent = on ? 'صفحه روشن است' : 'صفحه را روشن نگه دار';
+      const icon = btn.querySelector('.ky-wake-icon');
+      if(icon) icon.textContent = on ? '☀' : '◐';
+    });
+  }
+
+  function mountWakeButtonFinal(){
+    let btn = document.getElementById('kyWakeButton');
+    if(!btn){
+      btn = document.createElement('button');
+      btn.id = 'kyWakeButton';
+      btn.type = 'button';
+      btn.className = 'ky-wakelock-btn';
+      btn.dataset.action = 'toggle-wake-lock-final';
+      btn.setAttribute('aria-pressed','false');
+      btn.innerHTML = '<span class="ky-wake-icon">◐</span><span data-wake-label>صفحه را روشن نگه دار</span>';
+      document.body.appendChild(btn);
+    }
+    updateWakeButtonFinal();
+  }
+
+  async function enterZenFinal(){
+    document.body.classList.add('zen-mode');
+    mountWakeButtonFinal();
+    try{
+      if(!document.fullscreenElement && document.documentElement.requestFullscreen){
+        await document.documentElement.requestFullscreen({navigationUI:'hide'}).catch(()=>{});
+      }
+    }catch(_){ }
+    /* Wake Lock is user-gesture initiated here, so browser permission is valid. */
+    await requestWakeLockFinal();
+  }
+
+  async function exitZenFinal(){
+    document.body.classList.remove('zen-mode');
+    await releaseWakeLockFinal();
+    try{
+      if(document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen().catch(()=>{});
+    }catch(_){ }
+  }
+
+  document.addEventListener('click',async function(e){
+    const el = e.target.closest('[data-action]');
+    if(!el) return;
+    const action = el.dataset.action;
+    if(action === 'timer-zen'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      await enterZenFinal();
+      return;
+    }
+    if(action === 'zen-exit'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      await exitZenFinal();
+      return;
+    }
+    if(action === 'toggle-wake-lock-final'){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(K.wakeLock) await releaseWakeLockFinal(); else await requestWakeLockFinal();
+    }
+  }, true);
+
+  document.addEventListener('visibilitychange',async()=>{
+    if(document.hidden){
+      if(K.wakeLock){try{await K.wakeLock.release();}catch(_){}}
+      K.wakeLock = null;
+      updateWakeButtonFinal();
+    }else{
+      if(K.wakeWanted && document.body.classList.contains('zen-mode')){
+        await requestWakeLockFinal();
+      }
+      try{ await trackPresenceFinal(); }catch(_){ }
+    }
+  });
+
+  document.addEventListener('fullscreenchange',()=>{
+    if(document.fullscreenElement){
+      document.body.classList.add('zen-mode');
+      mountWakeButtonFinal();
+    }
+  });
+
+  mountWakeButtonFinal();
+
+  /* ========================================================================
+   * 10) Boot/auth recovery. Runs after the existing bootstrap setup is ready.
+   * ====================================================================== */
+  async function finalCoupleBoot(){
+    if(K.fixedBootDone) return;
+    if(!currentUser || !sb) return;
+    K.fixedBootDone = true;
+    try{ await restorePartnerLink(); }catch(_){ }
+    if(currentProfile?.partner_id){
+      try{ await startPresenceFinal(); }catch(_){ }
+      try{ await loadCoupleDashboardFinal(); }catch(_){ }
+      try{ if(S.activeView === 'home') await renderHomeFinal(); }catch(_){ }
+    }
+  }
+
+  /* The core bootstrap is registered on DOMContentLoaded earlier in the file;
+     these retries deliberately cover slow Auth/SDK initialization without
+     multiplying channels because startPresenceFinal is idempotent. */
+  [900,1800,3500,6500].forEach(ms=>setTimeout(()=>{K.fixedBootDone=false;finalCoupleBoot();},ms));
+  window.addEventListener('online',()=>{setTimeout(()=>{K.fixedBootDone=false;finalCoupleBoot();},600);});
+
+  /* Auth transitions may replace currentUser/currentProfile. */
+  if(sb?.auth?.onAuthStateChange){
+    try{
+      sb.auth.onAuthStateChange((event,session)=>{
+        if(session?.user){
+          currentUser = {id:session.user.id,email:session.user.email || ''};
+          K.fixedBootDone = false;
+          setTimeout(()=>{K.fixedBootDone=false;finalCoupleBoot();},700);
+        }else if(event === 'SIGNED_OUT'){
+          try{stopPresenceFinal();}catch(_){ }
+          K.fixedBootDone = false;
+        }
+      });
+    }catch(_){ }
+  }
+
+  /* ========================================================================
+   * 11) Diagnostics — make the new state visible in the existing diagnostics.
+   * ====================================================================== */
+  window.KY_FINAL_DIAGNOSTICS = function(){
+    return {
+      studyDay: studyDayKey(new Date()),
+      civilDay: civilDayKey(new Date()),
+      timerStatus: Timer?.state?.status || 'idle',
+      ownTodaySeconds: ownTodaySeconds(),
+      partnerLinked: !!currentProfile?.partner_id,
+      partnerId: currentProfile?.partner_id || null,
+      partnerLive: K.partnerLive ? {
+        status: K.partnerLive.status,
+        is_studying: !!K.partnerLive.is_studying,
+        subject: K.partnerLive.subject || null,
+        projected_today_seconds: Number(K.partnerLive.projected_today_seconds || 0)
+      } : null,
+      presenceChannel: !!K.presence,
+      wakeLock: !!K.wakeLock,
+      fullscreen: !!document.fullscreenElement
+    };
+  };
+
+})();
+</script>
+
 </body>
 </html>
