@@ -12897,5 +12897,1245 @@ window.addEventListener('unhandledrejection', (e) => {
 })();
 
 </script>
+
+
+<!-- KY ULTIMATE UX PATCH 2026-10-07 -->
+<style id="ky-ultimate-style">
+/* ========================================================================
+ * KONKOOR YAR — ULTIMATE UX STYLES — additive patch
+ * ====================================================================== */
+
+.ky-date-field{
+  cursor:pointer!important;
+  background:var(--surface-2)!important;
+  text-align:right!important;
+}
+.ky-date-field::after{content:'📅';}
+
+#kyCalendarOverlay,#kyTimeWheel,#kyImageLightbox,#kyMoreSheet{
+  position:fixed;inset:0;z-index:10000;display:none;
+}
+#kyCalendarOverlay.open,#kyTimeWheel.open,#kyImageLightbox.open,#kyMoreSheet.open{display:flex;}
+.ky-cal-backdrop,.ky-tw-bg,.ky-img-bg,.ky-sheet-bg{
+  position:absolute;inset:0;background:rgba(3,8,18,.64);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.ky-cal-dialog,.ky-tw-dialog{
+  position:relative;z-index:1;width:min(420px,94vw);max-height:90dvh;overflow:auto;margin:auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:16px;box-shadow:var(--sh-5);
+}
+.ky-cal-head,.ky-tw-head,.ky-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.ky-cal-title{font-weight:800;font-size:16px;padding:8px 14px;border-radius:12px;}
+.ky-cal-title:hover{background:var(--surface-2);}
+.ky-cal-week,.ky-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px;}
+.ky-cal-week span{text-align:center;font-size:11px;color:var(--ink-3);font-weight:700;padding:5px 0;}
+.ky-cal-empty{height:42px;}
+.ky-cal-day{height:42px;border-radius:12px;background:var(--surface-2);border:1px solid transparent;font-weight:700;color:var(--ink);}
+.ky-cal-day:hover{border-color:var(--brand);background:var(--brand-softer);}
+.ky-cal-day.today{box-shadow:inset 0 0 0 1.5px var(--brand);}
+.ky-cal-day.selected{background:linear-gradient(145deg,var(--brand-3),var(--brand-2));color:#fff;border-color:transparent;box-shadow:0 8px 20px -10px var(--brand-glow);}
+.ky-cal-foot{display:flex;justify-content:space-between;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+
+/* True vertical wheel: native scroll with snap, centered selection. */
+.ky-tw-dialog{width:min(440px,94vw);}
+.ky-tw-head > div{min-width:0;}
+.ky-tw-head span{display:block;font-size:12px;color:var(--ink-3);}
+.ky-tw-head b{display:block;font-size:16px;margin-top:2px;}
+.ky-tw-step{font-size:11px;color:var(--brand);font-weight:800;margin-top:3px;}
+.ky-tw-stage{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 8px;}
+.ky-wheel{height:240px;flex:1;max-width:150px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;padding:96px 0;position:relative;overscroll-behavior:contain;}
+.ky-wheel::-webkit-scrollbar{display:none;}
+.ky-wheel::before,.ky-wheel::after{content:'';position:absolute;left:0;right:0;height:84px;pointer-events:none;z-index:2;}
+.ky-wheel::before{top:0;background:linear-gradient(var(--surface),transparent);}
+.ky-wheel::after{bottom:0;background:linear-gradient(transparent,var(--surface));}
+.ky-wheel-item{width:100%;height:48px;scroll-snap-align:center;border-radius:14px;font:800 23px var(--font-num);color:var(--ink-3);background:transparent;transition:transform .12s,color .12s;background-color .12s;}
+.ky-wheel-item:hover{background:var(--surface-2);color:var(--ink);}
+.ky-wheel-item.selected{background:var(--brand-soft);color:var(--brand);transform:scale(1.03);}
+.ky-tw-colon{font:900 24px var(--font-num);color:var(--ink-2);padding-top:2px;}
+.ky-tw-actions{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding-top:12px;}
+.ky-tw-hidden{display:none!important;}
+
+.ky-wakelock-btn{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom));z-index:990;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(16,24,40,.78);color:#fff;backdrop-filter:blur(14px);box-shadow:0 12px 30px rgba(0,0,0,.25);font-size:12px;font-weight:800;}
+body.zen-mode .ky-wakelock-btn{display:flex;}
+.ky-wakelock-btn.on{box-shadow:0 0 0 2px rgba(52,211,153,.4),0 12px 30px rgba(0,0,0,.25);}
+.ky-wake-icon{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);}
+
+#kyImageLightbox{align-items:center;justify-content:center;padding:18px;}
+#kyImageLightbox .ky-img-large{position:relative;z-index:2;max-width:min(92vw,1000px);max-height:88dvh;width:auto;height:auto;object-fit:contain;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.4);background:#fff;}
+.ky-img-close{position:absolute;top:calc(14px + env(safe-area-inset-top));inset-inline-end:14px;z-index:3;background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.25)!important;}
+.ky-mistake-upload-preview{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;padding:10px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);}
+.ky-thumb-btn{width:76px;height:76px;overflow:hidden;border-radius:12px;border:1px solid var(--border);padding:0;background:var(--surface);cursor:zoom-in;flex:none;}
+.ky-thumb-btn img{width:100%;height:100%;object-fit:cover;}
+.ky-img-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;}
+
+/* Review checklist */
+.ky-review-panel{margin-top:14px;overflow:hidden;}
+.ky-review-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;}
+.ky-review-kicker{font-size:10px;letter-spacing:.08em;color:var(--brand);font-weight:900;text-transform:uppercase;}
+.ky-review-head h3{font-size:17px;margin-top:2px;}
+.ky-review-head p{font-size:12px;margin-top:4px;max-width:58ch;}
+.ky-review-score{min-width:86px;text-align:center;background:var(--brand-softer);border:1px solid var(--brand-soft);border-radius:16px;padding:10px;}
+.ky-review-score b{display:block;color:var(--brand);font-size:20px;}
+.ky-review-score span{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;}
+.ky-grade-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--surface-2);padding:5px;border-radius:14px;border:1px solid var(--border);margin-top:14px;}
+.ky-grade-tab{min-height:38px;border-radius:10px;font-size:12px;font-weight:800;color:var(--ink-2);}
+.ky-grade-tab.active{background:var(--surface);color:var(--brand);box-shadow:var(--sh-1);}
+.ky-subject-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 5px;scrollbar-width:none;}
+.ky-subject-strip::-webkit-scrollbar{display:none;}
+.ky-subject-card{min-width:102px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 11px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);text-align:start;}
+.ky-subject-card > span{width:9px;height:9px;border-radius:50%;background:var(--c,var(--brand));box-shadow:0 0 0 4px color-mix(in srgb,var(--c,var(--brand)) 12%,transparent);margin-bottom:2px;}
+.ky-subject-card b{font-size:12px;}
+.ky-subject-card small{font-size:9px;color:var(--ink-3);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ky-subject-card.active{border-color:var(--brand);background:var(--brand-softer);box-shadow:0 8px 24px -18px var(--brand-glow);}
+.ky-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:12px;}
+.ky-chapter-card{background:var(--surface-2);border:1px solid var(--border);border-radius:18px;padding:12px;}
+.ky-chapter-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.ky-chapter-top span{display:block;font-size:10px;color:var(--brand);font-weight:900;}
+.ky-chapter-top h4{font-size:13px;line-height:1.65;margin-top:2px;}
+.ky-chapter-top > b{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:10px;white-space:nowrap;}
+.ky-review-track{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px;}
+.ky-review-check{min-height:54px;border:1px solid var(--border);border-radius:11px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink-3);}
+.ky-review-check span{font-weight:900;font-size:12px;}
+.ky-review-check em{font-style:normal;font-size:8px;line-height:1.3;text-align:center;}
+.ky-review-check.done{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);}
+
+.ky-mini-grades{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.ky-mini-grade{min-height:36px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);font-size:11px;font-weight:800;color:var(--ink-2);}
+.ky-mini-grade.active{background:var(--brand-soft);border-color:var(--brand);color:var(--brand);}
+
+/* Couple */
+.ky-couple-card{overflow:hidden;background:linear-gradient(145deg,var(--surface),var(--brand-softer));}
+.ky-couple-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;}
+.ky-couple-top h3{font-size:16px;margin-top:2px;}
+.ky-couple-top p{font-size:11.5px;margin-top:3px;}
+.ky-couple-empty{display:flex;align-items:center;gap:14px;}
+.ky-couple-orb{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#fb7185,#db2777);color:#fff;font-size:23px;box-shadow:0 14px 30px -14px rgba(219,39,119,.7);}
+.ky-live-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:14px;}
+.ky-live-person{display:flex;align-items:center;gap:9px;padding:10px;border-radius:16px;background:var(--surface);border:1px solid var(--border);min-width:0;}
+.ky-live-avatar{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);font-size:11px;font-weight:900;flex:none;}
+.ky-live-person.partner .ky-live-avatar{background:var(--pink-soft);color:var(--pink);}
+.ky-live-person b{display:block;font:900 17px var(--font-num);white-space:nowrap;}
+.ky-live-person span{display:block;font-size:9.5px;color:var(--ink-3);margin-top:1px;}
+.ky-vs{font:900 10px var(--font-mono);color:var(--ink-3);}
+.ky-partner-now{display:flex;align-items:center;gap:9px;padding:11px 12px;margin-top:10px;border:1px dashed var(--border-strong);border-radius:15px;background:rgba(255,255,255,.28);}
+.ky-partner-now b{display:block;font-size:11px;}
+.ky-partner-now span{display:block;font-size:9.5px;color:var(--ink-3);margin-top:2px;}
+.ky-partner-now strong{display:block;font:900 19px var(--font-num);color:var(--brand);margin-top:2px;}
+.live-pulse{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px var(--ok-soft);animation:kyPulse 1.6s infinite;flex:none;}
+.live-pulse.off{background:var(--ink-3);box-shadow:0 0 0 5px var(--surface-3);animation:none;}
+@keyframes kyPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.82);opacity:.55}}
+.ky-compare-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.ky-compare-tabs > div{padding:10px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.ky-compare-tabs span,.ky-compare-tabs em{display:block;font-size:9.5px;color:var(--ink-3);font-style:normal;}
+.ky-compare-tabs b{display:block;font:900 14px var(--font-num);margin:3px 0;}
+.ky-compare-tabs em{color:var(--brand);font-weight:800;}
+.ky-mini-compare{display:grid;gap:6px;margin-top:10px;}
+.ky-mini-compare > div{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center;}
+.ky-mini-compare span{font-size:9px;color:var(--ink-3);}
+.ky-mini-compare i{display:block;height:7px;background:linear-gradient(90deg,var(--brand-4),var(--brand-2));border-radius:999px;min-width:2px;}
+
+/* AI coach */
+.ky-coach-card{margin-bottom:12px;background:linear-gradient(145deg,var(--surface),var(--purple-soft));}
+.ky-coach-head h3{font-size:17px;margin-top:2px;}
+.ky-coach-head p{font-size:11.5px;margin-top:3px;}
+.ky-coach-shortcuts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.ky-coach-goal{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.ky-goal-row{display:flex;gap:6px;margin-top:5px;}
+.ky-chat-log{display:flex;flex-direction:column;gap:8px;margin-top:12px;max-height:440px;overflow:auto;padding-right:1px;}
+.ky-msg{max-width:92%;padding:9px 11px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.ky-msg.user{align-self:flex-end;background:var(--brand-softer);border-color:var(--brand-soft);}
+.ky-msg span{font-size:9px;color:var(--ink-3);font-weight:800;}
+.ky-msg.user span{color:var(--brand);}
+.ky-msg p{font-size:12.5px;line-height:1.95;color:var(--ink);margin-top:2px;}
+.ky-coach-form{display:flex;gap:7px;align-items:flex-end;margin-top:10px;}
+.ky-coach-form .textarea{min-height:70px;}
+.ky-coach-form .btn{min-width:78px;}
+
+/* Mobile more sheet */
+.ky-bottom-more{flex:1;max-width:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;color:var(--ink-3);font-weight:800;}
+.ky-bottom-more > span{font-size:23px;line-height:20px;}
+.ky-bottom-more small{font-size:10px;}
+.ky-sheet{position:absolute;z-index:1;left:50%;bottom:0;transform:translate(-50%,105%);width:min(620px,100%);max-height:85dvh;overflow:auto;background:var(--surface);border-radius:24px 24px 0 0;border:1px solid var(--border);padding:9px 14px 18px;box-shadow:0 -24px 60px rgba(0,0,0,.22);transition:transform .26s var(--ease-out);}
+#kyMoreSheet.open .ky-sheet{transform:translate(-50%,0);}
+.ky-sheet-grab{width:44px;height:5px;border-radius:999px;background:var(--border-strong);margin:2px auto 10px;}
+.ky-sheet-head{padding:0 2px 10px;border-bottom:1px solid var(--border);}
+.ky-sheet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;}
+.ky-sheet-item{display:grid;grid-template-columns:34px 1fr;grid-template-rows:auto auto;column-gap:8px;text-align:start;padding:10px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2);}
+.ky-sheet-item > span{grid-row:1/3;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);}
+.ky-sheet-item b{font-size:11.5px;align-self:end;}
+.ky-sheet-item small{font-size:9px;color:var(--ink-3);margin-top:2px;}
+
+@media(max-width:600px){
+  .ky-review-head{flex-direction:column;}
+  .ky-review-score{align-self:stretch;display:flex;align-items:center;justify-content:space-between;text-align:right;}
+  .ky-review-score b{font-size:17px;}
+  .ky-review-grid{grid-template-columns:1fr;}
+  .ky-live-grid{grid-template-columns:1fr;}
+  .ky-vs{display:none;}
+  .ky-live-person{justify-content:space-between;}
+  .ky-compare-tabs{grid-template-columns:1fr;}
+  .ky-coach-form{flex-direction:column;align-items:stretch;}
+  .ky-coach-form .btn{width:100%;}
+  .ky-goal-row{flex-direction:column;}
+}
+
+@media(min-width:900px){
+  #kyMoreSheet{display:none!important;}
+  .ky-wakelock-btn{bottom:24px;}
+  .ky-review-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+</style>
+<script id="ky-ultimate-script">
+(function(){
+'use strict';
+
+/* ========================================================================
+ * KONKOOR YAR — ULTIMATE PRODUCT PATCH — 2026-10-07
+ * Additive only: the original project is preserved; this layer fixes UX,
+ * calendar correctness, partner realtime, AI routing, OCR, wake-lock,
+ * review checklists and the mistake editor.
+ * ====================================================================== */
+
+const KY = window.KY_ULTIMATE || {
+  installed: false,
+  checklist: {},
+  checklistLoaded: false,
+  coachHistory: [],
+  coachBusy: false,
+  coupleDashboard: null,
+  partnerLive: null,
+  coupleChannel: null,
+  coupleRefreshTimer: null,
+  coupleHeartbeat: null,
+  wakeLock: null,
+  wakeWanted: false,
+  calendar: { y: 1405, m: 7, mode: null, target: null },
+  original: {}
+};
+window.KY_ULTIMATE = KY;
+
+/* ------------------------------------------------------------------------
+ * 1) Persian digit helpers — never touch LTR inputs / API keys.
+ * ---------------------------------------------------------------------- */
+KY.fa = v => String(v ?? '').replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+KY.en = v => String(v ?? '')
+  .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
+  .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
+KY.pad2 = n => KY.fa(String(Math.max(0, Number(n) || 0)).padStart(2,'0'));
+
+/* ------------------------------------------------------------------------
+ * 2) Exact Jalali/Gregorian conversion, independent of browser locale.
+ *    This also handles leap years correctly for the supported modern range.
+ * ---------------------------------------------------------------------- */
+function kyG2J(gy, gm, gd){
+  let gY = gy - 1600;
+  let gM = gm - 1;
+  let gD = gd - 1;
+  const gdm = [31,28,31,30,31,30,31,31,30,31,30,31];
+  let gDayNo = 365*gY + Math.floor((gY+3)/4) - Math.floor((gY+99)/100) + Math.floor((gY+399)/400);
+  for(let i=0;i<gM;i++) gDayNo += gdm[i];
+  if(gM > 1 && ((gy%4===0 && gy%100!==0) || gy%400===0)) gDayNo++;
+  gDayNo += gD;
+  let jDayNo = gDayNo - 79;
+  const jNp = Math.floor(jDayNo / 12053);
+  jDayNo %= 12053;
+  let jy = 979 + 33*jNp + 4*Math.floor(jDayNo/1461);
+  jDayNo %= 1461;
+  if(jDayNo >= 366){
+    jy += Math.floor((jDayNo-1)/365);
+    jDayNo = (jDayNo-1)%365;
+  }
+  const jm = jDayNo < 186 ? 1 + Math.floor(jDayNo/31) : 7 + Math.floor((jDayNo-186)/30);
+  const jd = 1 + (jDayNo < 186 ? jDayNo%31 : (jDayNo-186)%30);
+  return [jy,jm,jd];
+}
+
+function kyJ2G(jy, jm, jd){
+  let jy2 = jy - 979;
+  let jDayNo = 365*jy2 + Math.floor(jy2/33)*8 + Math.floor((jy2%33 + 3)/4);
+  for(let i=1;i<jm;i++) jDayNo += i <= 6 ? 31 : 30;
+  jDayNo += jd - 1;
+  let gDayNo = jDayNo + 79;
+  let gy = 1600 + 400*Math.floor(gDayNo/146097);
+  gDayNo %= 146097;
+  let leap = true;
+  if(gDayNo >= 36525){
+    gDayNo--;
+    gy += 100*Math.floor(gDayNo/36524);
+    gDayNo %= 36524;
+    if(gDayNo >= 365) gDayNo++;
+    else leap = false;
+  }
+  gy += 4*Math.floor(gDayNo/1461);
+  gDayNo %= 1461;
+  if(gDayNo >= 366){
+    leap = false;
+    gDayNo--;
+    gy += Math.floor(gDayNo/365);
+    gDayNo %= 365;
+  }
+  const gd = gDayNo + 1;
+  const gdm = [0,31, leap?29:28,31,30,31,30,31,31,30,31,30,31];
+  let gm = 1;
+  let rem = gd;
+  while(gm <= 12 && rem > gdm[gm]){ rem -= gdm[gm]; gm++; }
+  return [gy,gm,rem];
+}
+
+function kyJalaliLeap(jy){
+  const a = kyJ2G(jy,1,1);
+  const b = kyJ2G(jy+1,1,1);
+  return (Date.UTC(b[0],b[1]-1,b[2]) - Date.UTC(a[0],a[1]-1,a[2])) === 366*86400000;
+}
+
+function kyIsoParts(iso){
+  const m = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.exec(String(iso||''));
+  if(!m) return null;
+  const y=Number(m[1]), mo=Number(m[2]), d=Number(m[3]);
+  const dt=new Date(y,mo-1,d,12,0,0,0);
+  if(Number.isNaN(dt.getTime()) || dt.getFullYear()!==y || dt.getMonth()!==mo-1 || dt.getDate()!==d) return null;
+  return [y,mo,d];
+}
+
+function kyTodayKey(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function kyAddDays(iso,n){
+  const p=kyIsoParts(iso); if(!p) return iso;
+  const x=new Date(Date.UTC(p[0],p[1]-1,p[2]));
+  x.setUTCDate(x.getUTCDate()+Number(n||0));
+  return x.getUTCFullYear()+'-'+String(x.getUTCMonth()+1).padStart(2,'0')+'-'+String(x.getUTCDate()).padStart(2,'0');
+}
+function kyDiffDays(a,b){
+  const x=kyIsoParts(a), y=kyIsoParts(b); if(!x||!y) return 0;
+  return Math.round((Date.UTC(y[0],y[1]-1,y[2])-Date.UTC(x[0],x[1]-1,x[2]))/86400000);
+}
+function kyJalaliPartsFromIso(iso){
+  const p=kyIsoParts(iso); return p ? kyG2J(p[0],p[1],p[2]) : null;
+}
+function kyIsoFromJalali(y,m,d){
+  const g=kyJ2G(Number(y),Number(m),Number(d));
+  return g[0]+'-'+String(g[1]).padStart(2,'0')+'-'+String(g[2]).padStart(2,'0');
+}
+const KY_JMONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const KY_WEEK=['ش','ی','د','س','چ','پ','ج'];
+
+function kyFaDate(v){
+  let iso;
+  if(v instanceof Date){
+    const d=v; iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  } else iso=String(v||'');
+  const p=kyJalaliPartsFromIso(iso); if(!p) return '—';
+  return KY.fa(p[2])+' '+KY_JMONTHS[p[1]-1]+' '+KY.fa(p[0]);
+}
+function kyFaDateSlash(v){
+  const p=kyJalaliPartsFromIso(String(v||'')); if(!p) return '—';
+  return KY.fa(p[0])+'/'+KY.pad2(p[1])+'/'+KY.pad2(p[2]);
+}
+
+/* Override global date helpers used by existing renderers. */
+try { window.todayKey = kyTodayKey; } catch(_){}
+try { window.addDays = kyAddDays; } catch(_){}
+try { window.diffDays = kyDiffDays; } catch(_){}
+try { window.faDate = function(v){ return kyFaDate(v); }; } catch(_){}
+try { window.jalaliMonthKey = function(v){
+  let iso;
+  if(v instanceof Date) iso=v.getFullYear()+'-'+String(v.getMonth()+1).padStart(2,'0')+'-'+String(v.getDate()).padStart(2,'0');
+  else iso=String(v||'');
+  const p=kyJalaliPartsFromIso(iso); return p ? String(p[0]).padStart(4,'0')+'-'+String(p[1]).padStart(2,'0') : '';
+}; } catch(_){}
+try { window.jalaliLabelFromDay = function(v){ const p=kyJalaliPartsFromIso(String(v||'')); return p ? KY_JMONTHS[p[1]-1]+' '+KY.fa(p[0]) : ''; }; } catch(_){}
+try { window.jalaliMonthYearFromDay = function(v){ const p=kyJalaliPartsFromIso(String(v||'')); return p ? {month:KY_JMONTHS[p[1]-1],year:KY.fa(p[0])} : {month:'',year:''}; }; } catch(_){}
+
+/* Patch the direct identifier bindings as well (classic script globals). */
+try { todayKey = kyTodayKey; } catch(_){}
+try { addDays = kyAddDays; } catch(_){}
+try { diffDays = kyDiffDays; } catch(_){}
+try { faDate = function(v){ return kyFaDate(v); }; } catch(_){}
+try { jalaliMonthKey = window.jalaliMonthKey; } catch(_){}
+try { jalaliLabelFromDay = window.jalaliLabelFromDay; } catch(_){}
+try { jalaliMonthYearFromDay = window.jalaliMonthYearFromDay; } catch(_){}
+
+/* ------------------------------------------------------------------------
+ * 3) Persian date picker for every date input. Existing form semantics
+ *    remain: hidden input carries YYYY-MM-DD; visible input is Persian.
+ * ---------------------------------------------------------------------- */
+function kyEnsureCalendarRoot(){
+  let root=document.getElementById('kyCalendarOverlay');
+  if(root) return root;
+  root=document.createElement('div');
+  root.id='kyCalendarOverlay';
+  root.innerHTML='\
+    <div class="ky-cal-backdrop" data-ky-cal-close></div>\
+    <div class="ky-cal-dialog" role="dialog" aria-modal="true" aria-label="تقویم شمسی">\
+      <div class="ky-cal-head">\
+        <button type="button" class="icon-btn sm" data-ky-cal-prev aria-label="ماه قبل">‹</button>\
+        <button type="button" class="ky-cal-title" data-ky-cal-title></button>\
+        <button type="button" class="icon-btn sm" data-ky-cal-next aria-label="ماه بعد">›</button>\
+      </div>\
+      <div class="ky-cal-week" data-ky-cal-week></div>\
+      <div class="ky-cal-grid" data-ky-cal-grid></div>\
+      <div class="ky-cal-foot">\
+        <button type="button" class="btn btn-sm" data-ky-cal-today>امروز</button>\
+        <button type="button" class="btn btn-sm btn-ghost" data-ky-cal-close>انصراف</button>\
+      </div>\
+    </div>';
+  document.body.appendChild(root);
+  root.addEventListener('click',e=>{
+    const t=e.target.closest('[data-ky-cal-close]'); if(t){kyCloseCalendar();return;}
+    const d=e.target.closest('[data-ky-cal-day]'); if(d){kyChooseCalendarDay(Number(d.dataset.kyYear),Number(d.dataset.kyMonth),Number(d.dataset.kyDay));}
+    const p=e.target.closest('[data-ky-cal-prev]'); if(p){kyMoveCalendar(-1);}
+    const n=e.target.closest('[data-ky-cal-next]'); if(n){kyMoveCalendar(1);}
+    const td=e.target.closest('[data-ky-cal-today]'); if(td){
+      const pp=kyJalaliPartsFromIso(kyTodayKey());
+      if(pp) kyChooseCalendarDay(pp[0],pp[1],pp[2]);
+    }
+  });
+  return root;
+}
+function kyOpenCalendar(visible){
+  const hidden=visible.__kyHidden; if(!hidden) return;
+  const pp=kyJalaliPartsFromIso(hidden.value || kyTodayKey()) || kyJalaliPartsFromIso(kyTodayKey());
+  if(!pp) return;
+  const root=kyEnsureCalendarRoot();
+  KY.calendar.y=pp[0]; KY.calendar.m=pp[1]; KY.calendar.target=visible;
+  root.classList.add('open');
+  kyRenderCalendar();
+}
+function kyCloseCalendar(){
+  const root=document.getElementById('kyCalendarOverlay'); if(root) root.classList.remove('open');
+  KY.calendar.target=null;
+}
+function kyMoveCalendar(delta){
+  let m=KY.calendar.m+delta, y=KY.calendar.y;
+  if(m<1){m=12;y--;} if(m>12){m=1;y++;}
+  KY.calendar.y=y; KY.calendar.m=m; kyRenderCalendar();
+}
+function kyDaysInJMonth(y,m){ if(m<=6)return 31; if(m<=11)return 30; return kyJalaliLeap(y)?30:29; }
+function kyRenderCalendar(){
+  const root=kyEnsureCalendarRoot();
+  root.querySelector('[data-ky-cal-title]').textContent=KY_JMONTHS[KY.calendar.m-1]+' '+KY.fa(KY.calendar.y);
+  root.querySelector('[data-ky-cal-week]').innerHTML=KY_WEEK.map(x=>'<span>'+x+'</span>').join('');
+  const firstIso=kyIsoFromJalali(KY.calendar.y,KY.calendar.m,1);
+  const gp=kyIsoParts(firstIso);
+  const first=new Date(gp[0],gp[1]-1,gp[2],12);
+  const offset=(first.getDay()+1)%7;
+  const days=kyDaysInJMonth(KY.calendar.y,KY.calendar.m);
+  const selected=KY.calendar.target?.__kyHidden?.value || '';
+  let html='';
+  for(let i=0;i<offset;i++) html+='<span class="ky-cal-empty"></span>';
+  for(let d=1;d<=days;d++){
+    const iso=kyIsoFromJalali(KY.calendar.y,KY.calendar.m,d);
+    const today=iso===kyTodayKey(), sel=iso===selected;
+    html+='<button type="button" data-ky-cal-day data-ky-year="'+KY.calendar.y+'" data-ky-month="'+KY.calendar.m+'" data-ky-day="'+d+'" class="ky-cal-day'+(today?' today':'')+(sel?' selected':'')+'">'+KY.fa(d)+'</button>';
+  }
+  root.querySelector('[data-ky-cal-grid]').innerHTML=html;
+}
+function kyChooseCalendarDay(y,m,d){
+  const iso=kyIsoFromJalali(y,m,d);
+  const visible=KY.calendar.target; const hidden=visible?.__kyHidden;
+  if(!visible||!hidden) return;
+  hidden.value=iso;
+  visible.value=kyFaDate(iso);
+  hidden.dispatchEvent(new Event('input',{bubbles:true}));
+  hidden.dispatchEvent(new Event('change',{bubbles:true}));
+  kyCloseCalendar();
+}
+function kyEnhanceDateInput(input){
+  if(input.dataset.kyDateEnhanced==='1') return;
+  if(input.disabled) return;
+  const originalName=input.name;
+  const originalValue=input.value || kyTodayKey();
+  const hidden=document.createElement('input');
+  hidden.type='hidden';
+  hidden.name=originalName;
+  hidden.value=/^\d{4}-\d{2}-\d{2}$/.test(originalValue)?originalValue:kyTodayKey();
+  hidden.dataset.kyDateValue='1';
+  const visible=input;
+  visible.removeAttribute('name');
+  visible.type='text';
+  visible.readOnly=true;
+  visible.inputMode='none';
+  visible.autocomplete='off';
+  visible.dataset.kyDateEnhanced='1';
+  visible.classList.add('ky-date-field');
+  visible.__kyHidden=hidden;
+  visible.value=kyFaDate(hidden.value);
+  visible.setAttribute('aria-haspopup','dialog');
+  visible.setAttribute('aria-label','انتخاب تاریخ');
+  visible.addEventListener('click',()=>kyOpenCalendar(visible));
+  visible.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();kyOpenCalendar(visible);}});
+  input.parentNode.insertBefore(hidden,input);
+}
+function kyScanDates(root=document){
+  root.querySelectorAll?.('input[type="date"]')?.forEach(kyEnhanceDateInput);
+}
+
+/* ------------------------------------------------------------------------
+ * 4) Wake Lock — keep screen on in focus mode.
+ * ---------------------------------------------------------------------- */
+async function kyRequestWakeLock(){
+  KY.wakeWanted=true;
+  if(!('wakeLock' in navigator)){
+    kyToast('مرورگرت قفل صفحه را از طریق وب پشتیبانی نمی‌کند.','warn');
+    kyUpdateWakeButton(); return;
+  }
+  try{
+    if(KY.wakeLock) await KY.wakeLock.release().catch(()=>{});
+    KY.wakeLock=await navigator.wakeLock.request('screen');
+    KY.wakeLock.addEventListener('release',()=>{KY.wakeLock=null;kyUpdateWakeButton();});
+    kyToast('صفحه تا پایان تمرکز روشن می‌ماند.','ok',1800);
+  }catch(e){
+    KY.wakeWanted=false; KY.wakeLock=null;
+    kyToast('مرورگر اجازه روشن ماندن صفحه را نداد.','warn');
+  }
+  kyUpdateWakeButton();
+}
+async function kyReleaseWakeLock(){
+  KY.wakeWanted=false;
+  if(KY.wakeLock){try{await KY.wakeLock.release();}catch(_){} KY.wakeLock=null;}
+  kyUpdateWakeButton();
+}
+async function kyReacquireWake(){
+  if(KY.wakeWanted && !document.hidden) await kyRequestWakeLock();
+}
+function kyUpdateWakeButton(){
+  document.querySelectorAll('.ky-wakelock-btn').forEach(b=>{
+    b.classList.toggle('on',!!KY.wakeLock);
+    b.setAttribute('aria-pressed',String(!!KY.wakeLock));
+    const label=b.querySelector('[data-wake-label]'); if(label) label.textContent=KY.wakeLock?'صفحه روشن است':'روشن ماندن صفحه';
+  });
+}
+function kyMountWakeButton(){
+  if(document.getElementById('kyWakeButton')) return;
+  const b=document.createElement('button');
+  b.id='kyWakeButton'; b.type='button'; b.className='ky-wakelock-btn'; b.dataset.action='toggle-wake-lock';
+  b.innerHTML='<span class="ky-wake-icon">☀</span><span data-wake-label>روشن ماندن صفحه</span>';
+  document.body.appendChild(b);
+  kyUpdateWakeButton();
+}
+
+/* ------------------------------------------------------------------------
+ * 5) Mistake image UX: preserve all fields, thumbnail, lightbox, OCR.
+ * ---------------------------------------------------------------------- */
+function kyGetMistakeFormState(){
+  const form=document.querySelector('form[data-form="mistake"]'); if(!form) return null;
+  const data={};
+  form.querySelectorAll('input[name],textarea[name],select[name]').forEach(el=>{
+    if(el.type==='file') return;
+    data[el.name]=el.value;
+  });
+  return data;
+}
+function kyRestoreMistakeFormState(data){
+  if(!data) return;
+  const form=document.querySelector('form[data-form="mistake"]'); if(!form) return;
+  Object.entries(data).forEach(([k,v])=>{const el=form.elements.namedItem(k); if(el && k!=='image') el.value=v;});
+  const imp=form.elements.namedItem('importance'); if(imp){try{updateImportanceStars(Number(imp.value)||3);}catch(_){} }
+}
+function kyMistakeLightbox(src){
+  let root=document.getElementById('kyImageLightbox');
+  if(!root){
+    root=document.createElement('div'); root.id='kyImageLightbox';
+    root.innerHTML='<div class="ky-img-bg"></div><button class="icon-btn ky-img-close" type="button">×</button><img alt="تصویر بزرگ" class="ky-img-large">';
+    document.body.appendChild(root);
+    root.addEventListener('click',e=>{if(e.target===root||e.target.classList.contains('ky-img-bg')||e.target.classList.contains('ky-img-close'))root.classList.remove('open');});
+  }
+  root.querySelector('img').src=src; root.classList.add('open');
+}
+function kyRenderMistakeImageArea(){
+  const p=document.getElementById('mistakeImagePreview'); if(!p) return;
+  if(typeof pendingMistakeImage==='undefined' || !pendingMistakeImage){p.innerHTML='';return;}
+  p.innerHTML='<div class="ky-mistake-upload-preview">'+
+    '<button type="button" class="ky-thumb-btn" data-action="open-mistake-image" data-src="'+String(pendingMistakeImage).replace(/"/g,'&quot;')+'">'+
+    '<img src="'+pendingMistakeImage+'" alt="پیش‌نمایش"></button>'+
+    '<div class="ky-img-actions"><span class="badge ok">آماده</span><button type="button" class="btn btn-xs" data-action="ocr-mistake-image">'+(window.ICONS?.spark||'')+' استخراج متن</button><button type="button" class="btn btn-xs btn-danger" data-action="clear-mistake-image">حذف</button></div>'+
+    '</div>';
+}
+async function kyPickMistakeImage(){
+  const snapshot=kyGetMistakeFormState();
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+  inp.addEventListener('change',async()=>{
+    const f=inp.files?.[0]; if(!f) return;
+    if(f.size>8*1024*1024){kyToast('حداکثر ۸ مگابایت.','error');return;}
+    try{
+      pendingMistakeImage=await compressImage(f,1200,500000);
+      requestAnimationFrame(()=>{
+        kyRestoreMistakeFormState(snapshot);
+        kyRenderMistakeImageArea();
+      });
+      kyToast('تصویر اضافه شد؛ انتخاب‌ها و متن حفظ شدند.','ok',1800);
+    }catch(e){kyToast('خواندن تصویر ناموفق بود.','error');}
+  });
+  inp.click();
+}
+
+/* ------------------------------------------------------------------------
+ * 6) AI model registry — current free-capable choices checked against
+ *    official provider pages. JSON is parsed locally so models without
+ *    response_format support still work.
+ * ---------------------------------------------------------------------- */
+const KY_GEMINI_MODELS=[
+  {id:'gemini-3.8-flash',label:'Gemini 3.8 Flash — قوی و سریع',vision:true},
+  {id:'gemini-3.6-flash',label:'Gemini 3.6 Flash — متعادل',vision:true},
+  {id:'gemini-3.5-flash',label:'Gemini 3.5 Flash — پایدار',vision:true},
+  {id:'gemini-3.5-flash-lite',label:'Gemini 3.5 Flash-Lite — سریع و سبک',vision:true},
+  {id:'gemini-3.1-flash-lite',label:'Gemini 3.1 Flash-Lite — سبک',vision:true}
+];
+const KY_OR_MODELS=[
+  {id:'openrouter/free',label:'OpenRouter Free Router — خودکار',vision:true},
+  {id:'google/gemma-4-31b-it:free',label:'Gemma 4 31B — رایگان و چندرسانه‌ای',vision:true},
+  {id:'google/gemma-4-26b-a4b-it:free',label:'Gemma 4 26B A4B — رایگان و چندرسانه‌ای',vision:true},
+  {id:'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',label:'Nemotron 3 Nano Omni — رایگان، تصویر/متن',vision:true},
+  {id:'nvidia/nemotron-3-ultra-550b-a55b:free',label:'Nemotron 3 Ultra — رایگان، استدلال',vision:false},
+  {id:'nvidia/nemotron-3.5-lightning:free',label:'Nemotron 3.5 Lightning — رایگان، سریع',vision:false},
+  {id:'poolside/laguna-s-2.1:free',label:'Laguna S 2.1 — رایگان',vision:false}
+];
+function kyInstallModels(){
+  try{ GEMINI_MODELS.splice(0,GEMINI_MODELS.length,...KY_GEMINI_MODELS.map(x=>({id:x.id,label:x.label}))); }catch(_){}
+  try{ OPENROUTER_MODELS.splice(0,OPENROUTER_MODELS.length,...KY_OR_MODELS.map(x=>({id:x.id,label:x.label}))); }catch(_){}
+  if(S.settings.ai){
+    if(!KY_GEMINI_MODELS.some(x=>x.id===S.settings.ai.geminiModel))S.settings.ai.geminiModel='gemini-3.8-flash';
+    if(!KY_OR_MODELS.some(x=>x.id===S.settings.ai.openrouterModel))S.settings.ai.openrouterModel='openrouter/free';
+    try{saveSettings();}catch(_){}
+  }
+}
+kyInstallModels();
+
+function kyExtractResponseTextGemini(data){
+  return (data?.candidates?.[0]?.content?.parts||[]).map(x=>x.text||'').join('');
+}
+function kyExtractResponseTextOR(data){
+  const c=data?.choices?.[0]?.message?.content;
+  if(Array.isArray(c)) return c.map(x=>x.text||'').join('');
+  return String(c||'');
+}
+async function kyFetch(url,options,timeout=55000){
+  const c=new AbortController(); const t=setTimeout(()=>c.abort(),timeout);
+  try{return await fetch(url,Object.assign({},options,{signal:c.signal}));}
+  catch(e){if(e?.name==='AbortError')throw new Error('زمان پاسخ تمام شد');throw new Error('درخواست شبکه اجرا نشد؛ VPN/فایروال/اتصال اینترنت را بررسی کن');}
+  finally{clearTimeout(t);}
+}
+function kyAiError(provider,status,body){
+  let msg='HTTP '+status; try{const j=JSON.parse(body);msg=j?.error?.message||msg;}catch(_){}
+  if(status===400&&/api.?key|key/i.test(msg)) return provider+' — کلید نامعتبر است';
+  if(status===401) return provider+' — کلید نامعتبر/احراز هویت رد شد';
+  if(status===403) return provider+' — دسترسی این کلید/مدل مجاز نیست';
+  if(status===404) return provider+' — مدل یا endpoint پیدا نشد';
+  if(status===409) return provider+' — درخواست همزمان ناسازگار بود';
+  if(status===413) return provider+' — تصویر/درخواست بیش از حد بزرگ است';
+  if(status===429) return provider+' — سهم/Rate limit تمام شده؛ مدل رایگان دیگری امتحان می‌کنم';
+  if(status>=500) return provider+' — سرور موقتاً خطا داد';
+  return provider+' — '+msg.slice(0,260);
+}
+function kyStructuredPrompt(feature,payload){
+  const base=(window.getSystemPromptFor?getSystemPromptFor(feature):'')||'';
+  let user='';
+  if(feature==='quiz-from-topic'){
+    user='بر اساس داده زیر سؤال‌های چهارگزینه‌ای بساز. خروجی فقط JSON معتبر. موضوع: '+JSON.stringify(payload||{});
+  } else if(feature==='explain-topic'){
+    user='موضوع و درس را دقیق و در چارچوب کنکور ایران توضیح بده. خروجی JSON معتبر. '+JSON.stringify(payload||{});
+  } else if(feature==='make-slides'){
+    user='اسلایدهای آموزشی بساز. خروجی JSON معتبر. '+JSON.stringify(payload||{});
+  } else if(feature==='mistake-analysis'){
+    user='دفترچه غلط را تحلیل کن. خروجی JSON معتبر. '+JSON.stringify(payload||{});
+  } else if(feature==='suggest-plan'){
+    user='برای امروز برنامه عملی و قابل اجرا پیشنهاد بده. خروجی JSON معتبر. '+JSON.stringify(payload||{});
+  } else user=JSON.stringify(payload||{});
+  return base+'\n\n'+user+'\nفقط JSON خام برگردان، بدون Markdown.';
+}
+async function kyGeminiText(model,key,prompt,imageData){
+  if(!key) throw new Error('کلید Gemini تنظیم نشده');
+  const parts=[{text:prompt}];
+  if(imageData){
+    const m=/^data:([^;]+);base64,(.*)$/.exec(imageData); if(!m)throw new Error('فرمت تصویر نامعتبر');
+    parts.push({inlineData:{mimeType:m[1],data:m[2]}});
+  }
+  const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent';
+  const body={contents:[{role:'user',parts}],generationConfig:{temperature:.25,maxOutputTokens:5000}};
+  const res=await kyFetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
+  const raw=await res.text(); if(!res.ok)throw new Error(kyAiError('Gemini',res.status,raw));
+  const data=JSON.parse(raw); const text=kyExtractResponseTextGemini(data); if(!text.trim())throw new Error('Gemini پاسخ خالی برگرداند');
+  return {provider:'gemini',model,text};
+}
+async function kyOpenRouterText(model,key,prompt,imageData){
+  if(!key) throw new Error('کلید OpenRouter تنظیم نشده');
+  const content=imageData ? [
+    {type:'text',text:prompt},
+    {type:'image_url',image_url:{url:imageData}}
+  ] : prompt;
+  const res=await kyFetch('https://openrouter.ai/api/v1/chat/completions',{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.origin,'X-Title':'KonkoorYar'},
+    body:JSON.stringify({model,messages:[{role:'system',content:'تو یک دستیار فارسی متخصص مطالعه و کنکور ایران هستی. پاسخ دقیق و بدون حدس بی‌پایه بده.'},{role:'user',content}],temperature:.2,max_tokens:5000})
+  });
+  const raw=await res.text(); if(!res.ok)throw new Error(kyAiError('OpenRouter',res.status,raw));
+  const data=JSON.parse(raw); const text=kyExtractResponseTextOR(data); if(!text.trim())throw new Error('OpenRouter پاسخ خالی برگرداند');
+  return {provider:'openrouter',model,text};
+}
+function kyParseJSON(text){
+  let t=String(text||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/i,'').trim();
+  const s=t.indexOf('{'), e=t.lastIndexOf('}');
+  if(s>=0&&e>s){try{return JSON.parse(t.slice(s,e+1));}catch(_){} }
+  const a=t.indexOf('['), b=t.lastIndexOf(']');
+  if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1));}catch(_){} }
+  throw new Error('خروجی JSON قابل خواندن نبود');
+}
+async function kyCallStructured(feature,payload){
+  const a=S.settings.ai||{}; const errors=[];
+  const p=a.primaryProvider||'gemini';
+  const providers=p==='openrouter'?['openrouter','gemini']:['gemini','openrouter'];
+  for(const provider of providers){
+    if(provider==='gemini'&&!a.geminiKey)continue;
+    if(provider==='openrouter'&&!a.openrouterKey)continue;
+    const list=provider==='gemini'?KY_GEMINI_MODELS:KY_OR_MODELS;
+    const selected=provider==='gemini'?a.geminiModel:a.openrouterModel;
+    const models=[selected,...list.map(x=>x.id)].filter((x,i,arr)=>x&&arr.indexOf(x)===i);
+    for(const model of models.slice(0,Math.min(models.length,4))){
+      try{
+        const r=provider==='gemini'
+          ?await kyGeminiText(model,a.geminiKey,kyStructuredPrompt(feature,payload))
+          :await kyOpenRouterText(model,a.openrouterKey,kyStructuredPrompt(feature,payload));
+        const parsed=kyParseJSON(r.text);
+        return {ok:true,data:(window.validateShapeLocal?validateShapeLocal(feature,parsed):parsed),provider:r.provider,model:r.model};
+      }catch(e){errors.push((provider==='gemini'?'Gemini':'OpenRouter')+' / '+model+': '+(e.message||e));}
+    }
+  }
+  throw new Error('AIها موفق نشدند:\n'+errors.slice(0,8).map(x=>'• '+x).join('\n'));
+}
+function kyCallText(prompt,{imageData=null,preferredVision=false}={}){
+  return (async()=>{
+    const a=S.settings.ai||{}; const errors=[];
+    const providers=(a.primaryProvider||'gemini')==='openrouter'?['openrouter','gemini']:['gemini','openrouter'];
+    for(const provider of providers){
+      const key=provider==='gemini'?a.geminiKey:a.openrouterKey; if(!key)continue;
+      const list=provider==='gemini'?KY_GEMINI_MODELS:KY_OR_MODELS;
+      const selected=provider==='gemini'?a.geminiModel:a.openrouterModel;
+      const usable=list.filter(x=>!imageData||!preferredVision||x.vision);
+      const ids=[selected,...usable.map(x=>x.id)].filter((x,i,arr)=>x&&arr.indexOf(x)===i);
+      for(const model of ids.slice(0,5)){
+        const meta=list.find(x=>x.id===model);
+        if(imageData&&preferredVision&&meta&&!meta.vision)continue;
+        try{return provider==='gemini'
+          ?await kyGeminiText(model,key,prompt,imageData)
+          :await kyOpenRouterText(model,key,prompt,imageData);
+        }catch(e){errors.push((provider==='gemini'?'Gemini':'OpenRouter')+' / '+model+': '+(e.message||e));}
+      }
+    }
+    throw new Error(errors.slice(0,10).join('\n'));
+  })();
+}
+
+/* Make existing AI features use the robust implementation. */
+try{ window.aiCall=kyCallStructured; aiCall=kyCallStructured; }catch(_){}
+
+/* ------------------------------------------------------------------------
+ * 7) OCR / image understanding.
+ * ---------------------------------------------------------------------- */
+async function kyOCRImage(imageData){
+  kyToast('در حال استخراج متن از تصویر…','info',1800);
+  const prompt='متن موجود در این تصویر را دقیق استخراج کن. زبان فارسی/انگلیسی را حفظ کن. اگر تصویر سؤال تستی است، خود سؤال و گزینه‌ها را مرتب استخراج کن. هیچ توضیح اضافه‌ای نده. فقط متن استخراج‌شده را برگردان.';
+  const r=await kyCallText(prompt,{imageData,preferredVision:true});
+  return String(r.text||'').trim();
+}
+async function kyOCRMistake(){
+  if(!pendingMistakeImage){kyToast('اول تصویر را انتخاب کن.','warn');return;}
+  try{
+    const text=await kyOCRImage(pendingMistakeImage);
+    const form=document.querySelector('form[data-form="mistake"]');
+    const q=form?.elements?.namedItem('question');
+    if(q){q.value=text;q.focus();q.dispatchEvent(new Event('input',{bubbles:true}));}
+    kyToast('متن استخراج شد و داخل صورت سؤال قرار گرفت.','ok',2600);
+  }catch(e){kyToast('استخراج متن ناموفق بود: '+(e.message||e),'error',6000);}
+}
+
+/* ------------------------------------------------------------------------
+ * 8) Review checklist — chapter-by-chapter, grade tabs, all subjects.
+ *    Stored in the existing IDB meta store so no new DB schema is required.
+ * ---------------------------------------------------------------------- */
+const KY_REVIEW_STAGES=[
+  {id:'study',label:'مطالعه اصلی',icon:'📖'},
+  {id:'r1',label:'مرور اولیه',icon:'۱'},
+  {id:'r2',label:'مرور ثانویه',icon:'۲'},
+  {id:'r3',label:'مرور سوم',icon:'۳'},
+  {id:'final',label:'جمع‌بندی',icon:'✓'}
+];
+function kyReviewKey(subject,grade,index,stage){return [subject,grade,index,stage].join('|');}
+function kyReviewGroups(subject){
+  const src=SUBJECT_CHAPTERS?.[subject]||[];
+  const out={دهم:[],یازدهم:[],دوازدهم:[],سایر:[]};
+  src.forEach(x=>{
+    const s=String(x||'');
+    if(s.startsWith('دهم:'))out.دهم.push(s.slice(5).trim());
+    else if(s.startsWith('یازدهم:'))out.یازدهم.push(s.slice(7).trim());
+    else if(s.startsWith('دوازدهم:'))out.دوازدهم.push(s.slice(8).trim());
+    else out.سایر.push(s);
+  });
+  return out;
+}
+async function kyLoadChecklist(){
+  if(KY.checklistLoaded)return KY.checklist;
+  try{const x=await getMeta('reviewChecklist');KY.checklist=x||{};}catch(_){KY.checklist={};}
+  KY.checklistLoaded=true; return KY.checklist;
+}
+let kyChecklistSaveTimer=null;
+function kySaveChecklistSoon(){
+  clearTimeout(kyChecklistSaveTimer);
+  kyChecklistSaveTimer=setTimeout(()=>{try{saveMeta('reviewChecklist',KY.checklist);}catch(_){}},250);
+}
+function kyChecklistStats(){
+  let done=0,total=0;
+  const groups=KY.checklist||{};
+  Object.keys(groups).forEach(k=>{total++;if(groups[k])done++;});
+  return {done,total,pct:total?done/total*100:0};
+}
+function kyChecklistPanelHtml(){
+  const subjects=(SUBJECTS||[]);
+  const activeGrade=KY.reviewGrade||'دهم';
+  const activeSub=KY.reviewSubject||subjects[0]?.id||'bio';
+  const groups=kyReviewGroups(activeSub); const chapters=groups[activeGrade]||groups.سایر||[];
+  const overall=kyChecklistStats();
+  const head='<div class="ky-review-head">'+
+    '<div><div class="ky-review-kicker">سیستم مرور</div><h3>چک‌لیست مرور مبحث‌به‌مبحث</h3><p>برای هر فصل، مطالعه اصلی و مرورهای بعدی را جداگانه علامت بزن.</p></div>'+
+    '<div class="ky-review-score"><b>'+KY.fa(Math.round(overall.pct))+'٪</b><span>'+KY.fa(overall.done)+' از '+KY.fa(overall.total)+'</span></div>'+
+    '</div>'+
+    '<div class="ky-grade-tabs">'+['دهم','یازدهم','دوازدهم'].map(g=>'<button type="button" class="ky-grade-tab '+(activeGrade===g?'active':'')+'" data-ky-grade="'+g+'">'+g+'</button>').join('')+'</div>'+
+    '<div class="ky-subject-strip">'+subjects.map(s=>'<button type="button" class="ky-subject-card '+(activeSub===s.id?'active':'')+'" data-ky-review-subject="'+s.id+'"><span style="--c:'+s.color+'"></span><b>'+esc(s.short)+'</b><small>'+esc(s.name)+'</small></button>').join('')+'</div>';
+  let body='';
+  if(!chapters.length){body='<div class="empty"><b>برای این پایه مبحثی ثبت نشده</b><p>در فهرست فعلی اپ برای این درس، فصل این پایه تعریف نشده است.</p></div>';} else {
+    body='<div class="ky-review-grid">'+chapters.map((chapter,i)=>{
+      const checks=KY_REVIEW_STAGES.map(st=>{
+        const key=kyReviewKey(activeSub,activeGrade,i,st.id); const on=!!KY.checklist[key];
+        return '<button type="button" class="ky-review-check '+(on?'done':'')+'" data-ky-check="'+key+'" aria-pressed="'+on+'"><span>'+st.icon+'</span><em>'+st.label+'</em></button>';
+      }).join('');
+      const count=KY_REVIEW_STAGES.filter(st=>KY.checklist[kyReviewKey(activeSub,activeGrade,i,st.id)]).length;
+      return '<article class="ky-chapter-card"><div class="ky-chapter-top"><div><span>فصل '+KY.fa(i+1)+'</span><h4>'+esc(chapter)+'</h4></div><b>'+KY.fa(count)+'/۵</b></div><div class="ky-review-track">'+checks+'</div></article>';
+    }).join('')+'</div>';
+  }
+  return '<section class="card ky-review-panel" data-ky-review-panel>'+head+body+'</section>';
+}
+async function kyMountReviewPanel(){
+  const root=document.getElementById('mistakesRoot'); if(!root)return;
+  await kyLoadChecklist();
+  if(!KY.reviewSubject)KY.reviewSubject=SUBJECTS?.[0]?.id||'bio';
+  if(!KY.reviewGrade)KY.reviewGrade='دهم';
+  root.querySelector('[data-ky-review-panel]')?.remove();
+  const title=root.querySelector('.view-title');
+  if(title) title.insertAdjacentHTML('afterend',kyChecklistPanelHtml());
+  else root.insertAdjacentHTML('afterbegin',kyChecklistPanelHtml());
+}
+function kyHandleChecklistEvent(e){
+  const g=e.target.closest('[data-ky-grade]');
+  if(g){e.preventDefault();KY.reviewGrade=g.dataset.kyGrade;kyMountReviewPanel();return true;}
+  const s=e.target.closest('[data-ky-review-subject]');
+  if(s){e.preventDefault();KY.reviewSubject=s.dataset.kyReviewSubject;kyMountReviewPanel();return true;}
+  const c=e.target.closest('[data-ky-check]');
+  if(c){e.preventDefault();const key=c.dataset.kyCheck;KY.checklist[key]=!KY.checklist[key];c.classList.toggle('done',!!KY.checklist[key]);c.setAttribute('aria-pressed',String(!!KY.checklist[key]));kySaveChecklistSoon();kyUpdateChecklistScore();return true;}
+  return false;
+}
+function kyUpdateChecklistScore(){
+  const s=kyChecklistStats();const score=document.querySelector('[data-ky-review-panel] .ky-review-score'); if(!score)return;
+  score.innerHTML='<b>'+KY.fa(Math.round(s.pct))+'٪</b><span>'+KY.fa(s.done)+' از '+KY.fa(s.total)+'</span>';
+}
+
+/* ------------------------------------------------------------------------
+ * 9) Grade/chapter selector inside mistake editor without losing data.
+ * ---------------------------------------------------------------------- */
+function kyEnhanceMistakeEditor(){
+  const form=document.querySelector('form[data-form="mistake"]'); if(!form||form.dataset.kyEditorEnhanced==='1')return;
+  form.dataset.kyEditorEnhanced='1';
+  const subject=form.elements.namedItem('subject'); const chapter=form.elements.namedItem('chapter'); if(!subject||!chapter)return;
+  const gradeWrap=document.createElement('div');
+  gradeWrap.className='ky-mistake-grade-wrap';
+  gradeWrap.innerHTML='<label class="label">پایه</label><div class="ky-mini-grades">'+['دهم','یازدهم','دوازدهم'].map(g=>'<button type="button" class="ky-mini-grade" data-ky-mk-grade="'+g+'">'+g+'</button>').join('')+'</div>';
+  subject.closest('.field')?.parentNode?.parentNode?.insertBefore(gradeWrap,subject.closest('.field').parentNode);
+  function gradeForSelected(){
+    const val=String(chapter.value||''); return val.startsWith('دهم:')?'دهم':val.startsWith('یازدهم:')?'یازدهم':val.startsWith('دوازدهم:')?'دوازدهم':KY.mistakeGrade||'دهم';
+  }
+  KY.mistakeGrade=gradeForSelected();
+  function rebuild(){
+    KY.mistakeGrade=KY.mistakeGrade||'دهم';
+    gradeWrap.querySelectorAll('.ky-mini-grade').forEach(b=>b.classList.toggle('active',b.dataset.kyMkGrade===KY.mistakeGrade));
+    const old=chapter.value; const arr=Array.from(chapter.options);
+    chapter.innerHTML='<option value="">— انتخاب فصل —</option>';
+    const src=SUBJECT_CHAPTERS?.[subject.value]||[];
+    let foundOld=false;
+    src.forEach(x=>{
+      const s=String(x); const ok=s.startsWith(KY.mistakeGrade+':');
+      if(ok){const opt=document.createElement('option');opt.value=s;opt.textContent=s.slice(KY.mistakeGrade.length+1).trim();chapter.appendChild(opt);if(old===s){opt.selected=true;foundOld=true;}}
+    });
+    if(!foundOld && old) chapter.value='';
+  }
+  gradeWrap.addEventListener('click',e=>{const b=e.target.closest('[data-ky-mk-grade]');if(!b)return;KY.mistakeGrade=b.dataset.kyMkGrade;rebuild();});
+  subject.addEventListener('change',rebuild);
+  rebuild();
+}
+
+/* ------------------------------------------------------------------------
+ * 10) Couple realtime state + daily/weekly/monthly comparison.
+ * ---------------------------------------------------------------------- */
+function kyMyTodaySeconds(){
+  const base=(CACHE.sessions||[]).filter(s=>!s.deleted_at&&s.day===kyTodayKey()).reduce((a,s)=>a+Number(s.seconds||0),0);
+  let live=0;
+  try{live=Timer?.state?Number(Timer.elapsedSeconds?.()||0):0;}catch(_){}
+  return Math.max(0,Math.round(base+live));
+}
+function kyLivePayload(){
+  if(!currentUser||!currentProfile?.partner_id||!sb)return null;
+  const running=!!(Timer?.state&&Timer.state.status==='running');
+  const elapsed=running?Number(Timer.elapsedSeconds?.()||0):Number(Timer?.elapsedSeconds?.()||0);
+  let started=null;
+  if(running&&Timer.state?.started_at)started=new Date(Number(Timer.state.started_at)).toISOString();
+  const persisted=(CACHE.sessions||[]).filter(s=>!s.deleted_at&&s.day===kyTodayKey()).reduce((a,s)=>a+Number(s.seconds||0),0);
+  return {user_id:currentUser.id,partner_id:currentProfile.partner_id,day:kyTodayKey(),today_seconds:Math.max(0,Math.round(persisted)),is_studying:running,subject:running?Timer.state.subject:null,started_at:started,session_elapsed_seconds:Math.max(0,Math.round(elapsed)),updated_at:new Date().toISOString()};
+}
+async function kyPublishLive(){
+  const p=kyLivePayload();if(!p||!sb)return;
+  try{await sb.from('couple_live_state').upsert(p,{onConflict:'user_id'});}catch(e){if(!/permission|relation|schema/i.test(String(e.message||''))){} }
+}
+function kyLiveProjected(state){
+  if(!state)return 0;
+  let extra=0;
+  if(state.is_studying&&state.started_at){extra=Math.max(0,Math.floor((Date.now()-new Date(state.started_at).getTime())/1000));}
+  return Math.max(0,Number(state.today_seconds||0)+Number(state.session_elapsed_seconds||0)+extra);
+}
+function kyPairKey(){
+  if(!currentUser||!currentProfile?.partner_id)return '';
+  return [currentUser.id,currentProfile.partner_id].sort().join('_');
+}
+async function kyLoadCoupleDashboard(){
+  if(!sb||!currentUser||!currentProfile?.partner_id)return null;
+  try{const {data,error}=await sb.rpc('get_couple_dashboard',{day_date:kyTodayKey()});if(error)throw error;KY.coupleDashboard=data;return data;}
+  catch(e){KY.coupleDashboard=null;return null;}
+}
+async function kyLoadPartnerLive(){
+  if(!sb||!currentUser||!currentProfile?.partner_id)return null;
+  const {data,error}=await sb.from('couple_live_state').select('*').eq('user_id',currentProfile.partner_id).maybeSingle();
+  if(error)return null; KY.partnerLive=data; partnerPresence=data?{online:true,subject:data.subject,started_at:data.started_at?new Date(data.started_at).getTime():null,session_elapsed_seconds:Number(data.session_elapsed_seconds||0),today_seconds:Number(data.today_seconds||0),status:data.is_studying?'running':'idle'}:null; return data;
+}
+async function kyStartPresence(){
+  if(!sb||!currentUser||!currentProfile?.partner_id)return;
+  await kyStopPresence();
+  const pair=kyPairKey(); if(!pair)return;
+  try{
+    KY.coupleChannel=sb.channel('ky-couple-live-'+pair,{config:{private:true}});
+    KY.coupleChannel.on('postgres_changes',{event:'*',schema:'public',table:'couple_live_state',filter:'user_id=eq.'+currentProfile.partner_id},async payload=>{
+      KY.partnerLive=payload.new||null;
+      partnerPresence=KY.partnerLive?{online:true,subject:KY.partnerLive.subject,started_at:KY.partnerLive.started_at?new Date(KY.partnerLive.started_at).getTime():null,session_elapsed_seconds:Number(KY.partnerLive.session_elapsed_seconds||0),today_seconds:Number(KY.partnerLive.today_seconds||0),status:KY.partnerLive.is_studying?'running':'idle'}:null;
+      renderPartnerCard?.();
+    });
+    await KY.coupleChannel.subscribe(async status=>{if(status==='SUBSCRIBED'){await kyLoadPartnerLive();await kyPublishLive();renderPartnerCard?.();}});
+  }catch(e){/* fallback to polling */}
+  clearInterval(KY.coupleRefreshTimer);KY.coupleRefreshTimer=setInterval(()=>{if(document.hidden)return;kyLoadPartnerLive().then(()=>renderPartnerCard?.());kyLoadCoupleDashboard().then(()=>renderPartnerCard?.());},15000);
+  clearInterval(KY.coupleHeartbeat);KY.coupleHeartbeat=setInterval(()=>{if(!document.hidden&&Timer?.state?.status==='running')kyPublishLive();},15000);
+  await kyLoadCoupleDashboard(); await kyLoadPartnerLive(); renderPartnerCard?.();
+}
+async function kyStopPresence(){
+  clearInterval(KY.coupleRefreshTimer);KY.coupleRefreshTimer=null;
+  clearInterval(KY.coupleHeartbeat);KY.coupleHeartbeat=null;
+  if(KY.coupleChannel&&sb){try{await sb.removeChannel(KY.coupleChannel);}catch(_){} }
+  KY.coupleChannel=null; KY.partnerLive=null; partnerPresence=null;
+}
+async function kyTrackPresence(){await kyPublishLive();}
+function kySec(s){s=Math.max(0,Math.floor(Number(s)||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return KY.fa(String(h).padStart(2,'0'))+':'+KY.fa(String(m).padStart(2,'0'))+':'+KY.fa(String(x).padStart(2,'0'));}
+function kyStatsRows(type){
+  const d=KY.coupleDashboard?.[type]; return Array.isArray(d)?d:[];
+}
+function kyFmtWinner(rows,key){
+  if(rows.length<2)return '';
+  const a=Number(rows[0][key]||0),b=Number(rows[1][key]||0); if(a===b)return 'برابر'; return a>b?(rows[0].user_id===currentUser?.id?'تو جلو هستی':'شریکت جلو است'):(rows[1].user_id===currentUser?.id?'تو جلو هستی':'شریکت جلو است');
+}
+function kyMemberName(row,isMe){return isMe?'تو':(row?.display_name||row?.email||'شریک');}
+function renderCoupleCard(){
+  if(!currentUser)return '';
+  if(!currentProfile?.partner_id)return '<section class="card ky-couple-card" data-couple-live-host><div class="ky-couple-empty"><div class="ky-couple-orb">♥</div><div><h3>رقابت دونفره</h3><p>حساب همسرت را لینک کن تا تایمر زنده و مقایسه روزانه/هفتگی/ماهانه فعال شود.</p><button class="btn btn-primary btn-sm" data-action="open-link-partner">لینک شریک</button></div></div></section>';
+  const live=KY.partnerLive; const rowsT=kyStatsRows('today'),rowsW=kyStatsRows('week'),rowsM=kyStatsRows('month');
+  const meT=rowsT.find(x=>x.user_id===currentUser.id), paT=rowsT.find(x=>x.user_id!==currentUser.id);
+  const todayMe=Math.max(0,kyMyTodaySeconds()), todayPa=live?kyLiveProjected(live):Number(paT?.today_seconds||0);
+  const weekWinner=kyFmtWinner(rowsW,'week_seconds'), monthWinner=kyFmtWinner(rowsM,'month_seconds');
+  return '<section class="card ky-couple-card" data-couple-live-host>'+
+    '<div class="ky-couple-top"><div><span class="ky-review-kicker">دونفره</span><h3>رقابت مطالعه</h3><p>تایمر زنده و مجموع مطالعه هر دو نفر</p></div><span class="badge ok"><span class="dot"></span>همگام</span></div>'+
+    '<div class="ky-live-grid">'+
+      '<div class="ky-live-person me"><div class="ky-live-avatar">تو</div><div><b>'+kySec(todayMe)+'</b><span>مطالعه امروز</span></div></div>'+
+      '<div class="ky-vs">VS</div>'+ 
+      '<div class="ky-live-person partner"><div class="ky-live-avatar">♥</div><div><b>'+kySec(todayPa)+'</b><span>مطالعه امروز</span></div></div>'+ 
+    '</div>'+
+    '<div class="ky-partner-now">'+
+      (live?.is_studying?'<span class="live-pulse"></span><div><b>الان در حال مطالعه '+esc(subj(live.subject).name)+'</b><strong id="kyPartnerLiveClock">'+kySec((live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)))+'</strong></div>':'<span class="live-pulse off"></span><div><b>الان مشغول مطالعه نیست</b><span>به‌محض شروع تایمر، اینجا زنده می‌شود.</span></div>')+ 
+    '</div>'+
+    '<div class="ky-compare-tabs">'+
+      '<div><span>این هفته</span><b>'+KY.fa(Math.round((Number(rowsW.find(x=>x.user_id===currentUser.id)?.week_seconds||0))/60))+' دقیقه</b><em>'+esc(weekWinner)+'</em></div>'+ 
+      '<div><span>این ماه</span><b>'+KY.fa(Math.round((Number(rowsM.find(x=>x.user_id===currentUser.id)?.month_seconds||0))/60))+' دقیقه</b><em>'+esc(monthWinner)+'</em></div>'+ 
+    '</div>'+
+    '<div class="ky-mini-compare">'+
+      '<div><span>تو</span><i style="width:'+Math.min(100,Number(rowsW.find(x=>x.user_id===currentUser.id)?.week_seconds||0)/Math.max(1,Math.max(...rowsW.map(x=>Number(x.week_seconds||0))))*100)+'%"></i></div>'+ 
+      '<div><span>شریک</span><i style="width:'+Math.min(100,Number(rowsW.find(x=>x.user_id!==currentUser.id)?.week_seconds||0)/Math.max(1,Math.max(...rowsW.map(x=>Number(x.week_seconds||0))))*100)+'%"></i></div>'+ 
+    '</div>'+
+    '</section>';
+}
+function renderPartnerCard(){
+  const host=document.querySelector('#homeRoot'); if(!host)return;
+  host.querySelectorAll('[data-partner-card],[data-couple-live-host]').forEach(x=>x.remove());
+  const title=host.querySelector('.view-title'); if(title) title.insertAdjacentHTML('afterend',renderCoupleCard()); else host.insertAdjacentHTML('afterbegin',renderCoupleCard());
+}
+
+/* ------------------------------------------------------------------------
+ * 11) Smart coach / chat using the app's real data.
+ * ---------------------------------------------------------------------- */
+const KY_COACH_MODES={analysis:'وضعیت من را تحلیل کن',plan:'برای امروز و چند روز آینده برنامه عملی بده',lag:'دقیق حساب کن از هدف و پلن فعلی چقدر عقب یا جلو هستم'};
+function kyCoachContext(){
+  const today=kyTodayKey();
+  const weekStart=kyAddDays(today,-6), monthStart=kyAddDays(today,-29);
+  const sessions=(CACHE.sessions||[]).filter(s=>!s.deleted_at);
+  const agg=(from,to)=>{const x=sessions.filter(s=>s.day>=from&&s.day<=to);return {minutes:Math.round(x.reduce((a,s)=>a+Number(s.seconds||0),0)/60),sessions:x.length,tests:x.reduce((a,s)=>a+Number(s.correct||0)+Number(s.wrong||0)+Number(s.blank||0),0)};};
+  const todayAgg=agg(today,today),weekAgg=agg(weekStart,today),monthAgg=agg(monthStart,today);
+  const plan=(CACHE.plans||[]).find(p=>p.day===today&&!p.deleted_at); const done=plan?.items?.filter(x=>x.done).length||0,total=plan?.items?.length||0;
+  const mistakes=(CACHE.mistakes||[]).filter(m=>!m.deleted_at); const due=mistakes.filter(m=>m.next_review<=today).length;
+  const recentProgress=(CACHE.progress||[]).filter(p=>!p.deleted_at).sort((a,b)=>String(b.day).localeCompare(String(a.day))).slice(0,15);
+  const exam=(CACHE.exams||[]).filter(e=>!e.deleted_at).slice(-10);
+  return {today,todayAgg,weekAgg,monthAgg,plan:{items:total,done,completion:total?Math.round(done/total*100):0},mistakes:{total:mistakes.length,due},progress:recentProgress,exams:exam,goal:{dailyMinutes:Number(S.settings.dailyGoalMinutes||0),dailyTests:Number(S.settings.dailyGoalTests||0),text:String(S.settings.ai?.coachPlanGoal||'')},couple:KY.coupleDashboard};
+}
+async function kyCoachCall(userText,mode){
+  const ctx=kyCoachContext();
+  const prompt='تو مربی مطالعه فارسی منی. بر اساس داده واقعی زیر جواب بده.\n'+
+    'قواعد: اعداد دقیق داده‌شده را حفظ کن؛ چیزی را حدس نزن؛ اگر داده کافی نیست صریح بگو؛ برنامه را عملی و زمان‌بندی‌شده بده؛ از فشار غیرواقعی پرهیز کن.\n'+
+    'هدف کلی ذخیره‌شده: '+ctx.goal.text+'\n'+
+    'داده: '+JSON.stringify(ctx)+'\n'+
+    'درخواست کاربر: '+(mode?KY_COACH_MODES[mode]+'\n':'')+String(userText||'تحلیل کن')+'\n'+
+    'در پاسخ: اول نتیجه مهم، سپس عددهای کلیدی، سپس کارهای بعدی. فارسی و خوانا.';
+  const history=KY.coachHistory.slice(-8).map(m=>m.role+': '+m.text).join('\n');
+  return kyCallText(prompt+'\nگفت‌وگوهای اخیر:\n'+history);
+}
+function kyCoachHtml(){
+  const hist=KY.coachHistory.slice(-8).map(m=>'<div class="ky-msg '+m.role+'"><span>'+ (m.role==='user'?'تو':'AI') +'</span><p dir="auto">'+esc(m.text).replace(/\n/g,'<br>')+'</p></div>').join('');
+  return '<section class="card ky-coach-card">'+
+    '<div class="ky-coach-head"><div><span class="ky-review-kicker">COACH</span><h3>تحلیل‌گر و برنامه‌ریز شخصی</h3><p>به داده‌های مطالعه، پلن، غلط‌ها و در صورت اتصال، آمار دونفره دسترسی دارد.</p></div></div>'+
+    '<div class="ky-coach-shortcuts"><button type="button" class="btn btn-sm" data-ky-coach-mode="analysis">تحلیل وضعیت</button><button type="button" class="btn btn-sm" data-ky-coach-mode="plan">برنامه‌ریزی</button><button type="button" class="btn btn-sm" data-ky-coach-mode="lag">چقدر عقبم؟</button></div>'+
+    '<div class="ky-coach-goal"><label class="label">پلن کلی / محدودیتت را اینجا ذخیره کن</label><div class="ky-goal-row"><input id="kyCoachGoal" class="input" value="'+esc(S.settings.ai?.coachPlanGoal||'')+'" placeholder="مثلاً روزی ۸ ساعت، جمعه‌ها سبک، اولویت با زیست و شیمی…"><button class="btn btn-sm" data-action="save-coach-goal">ذخیره</button></div></div>'+ 
+    '<div class="ky-chat-log" id="kyCoachLog">'+hist+'<div data-ky-coach-anchor></div></div>'+ 
+    '<form data-form="ky-coach" class="ky-coach-form"><textarea class="textarea" name="message" placeholder="مثلاً: امروز ۲ ساعت کمتر از پلنم خوندم؛ با توجه به هفته‌ام بگو چطور جبران کنم…"></textarea><button type="submit" class="btn btn-primary">تحلیل کن</button></form>'+ 
+    '</section>';
+}
+function kyMountCoach(){
+  const root=document.getElementById('aiRoot');if(!root)return;
+  const old=root.querySelector('[data-ky-coach-card]');if(old)old.remove();
+  const host=document.createElement('div');host.setAttribute('data-ky-coach-card','1');host.innerHTML=kyCoachHtml();
+  root.insertBefore(host,root.firstChild?.nextSibling||null);
+}
+
+/* ------------------------------------------------------------------------
+ * 12) More menu / UX grouping without deleting any view.
+ * ---------------------------------------------------------------------- */
+function kyMoreMenu(){
+  const entries=[
+    ['plan','برنامه روزانه','تقویم، بیدارباش، چک‌لیست'],
+    ['sim','آزمون شبیه‌ساز','آزمون زمان‌دار'],
+    ['monthly','گزارش ماهانه','روند کامل ماه'],
+    ['ai','دستیار AI','مبحث‌گو، چت، تحلیل'],
+    ['settings','تنظیمات','حساب، AI، ظاهر'],
+    ['diag','عیب‌یابی','لاگ‌ها و سلامت اتصال']
+  ];
+  let root=document.getElementById('kyMoreSheet');
+  if(!root){root=document.createElement('div');root.id='kyMoreSheet';root.innerHTML='<div class="ky-sheet-bg"></div><div class="ky-sheet"><div class="ky-sheet-grab"></div><div class="ky-sheet-head"><h3>همه بخش‌ها</h3><button class="icon-btn sm" data-ky-more-close>×</button></div><div class="ky-sheet-grid">'+entries.map(x=>'<button type="button" class="ky-sheet-item" data-ky-more-nav="'+x[0]+'"><span>'+(window.ICONS?.[x[0]==='settings'?'settings':x[0]==='plan'?'plan':x[0]==='sim'?'sim':x[0]==='monthly'?'stats':x[0]==='ai'?'spark':'diag']||'✦')+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small></button>').join('')+'</div></div>';document.body.appendChild(root);root.addEventListener('click',e=>{if(e.target.closest('.ky-sheet-bg,[data-ky-more-close]'))root.classList.remove('open');const n=e.target.closest('[data-ky-more-nav]');if(n){root.classList.remove('open');navigate(n.dataset.kyMoreNav);}});}
+  root.classList.add('open');
+}
+function kyBuildMobileMore(){
+  const nav=document.getElementById('bottomNav');if(!nav||nav.dataset.kyMoreAdded==='1')return;
+  nav.dataset.kyMoreAdded='1';
+  const b=document.createElement('button');b.type='button';b.className='ky-bottom-more';b.innerHTML='<span>⋯</span><small>بیشتر</small>';b.addEventListener('click',kyMoreMenu);nav.appendChild(b);
+}
+
+/* ------------------------------------------------------------------------
+ * 13) Render wrappers.
+ * ---------------------------------------------------------------------- */
+async function kyRenderMistakes(){
+  const orig=KY.original.renderMistakes;
+  if(orig){await orig();}
+  kyEnhanceMistakeEditor(); kyRenderMistakeImageArea(); await kyMountReviewPanel(); kyNormalizeDigits(document.getElementById('mistakesRoot'));
+}
+async function kyRenderPlan(){
+  const orig=KY.original.renderPlan;if(orig){await orig();}
+  kyScanDates(document.getElementById('planRoot')||document);
+  const input=document.querySelector('form[data-form="plan-wake"] input[name="wake"]');
+  if(input&&!input.dataset.kyWakeWheel){
+    input.dataset.kyWakeWheel='1';input.type='text';input.readOnly=true;input.classList.add('ky-time-display');
+    const hidden=document.createElement('input');hidden.type='hidden';hidden.name='wake';hidden.value=String((document.querySelector('form[data-form="plan-wake"]')?.elements?.namedItem('wake')?.value)||'');
+    /* If the original input was already modified by an earlier render, recover from its value. */
+    hidden.value=/^\d{2}:\d{2}$/.test(input.value)?input.value:(/^\d{2}:\d{2}$/.test(String(planWakeValueSafe()))?planWakeValueSafe():'');
+    input.removeAttribute('name');input.__kyWakeHidden=hidden;input.value=hidden.value?KY.fa(hidden.value):'';input.parentNode.insertBefore(hidden,input);
+    input.addEventListener('click',()=>kyOpenTimeWheel(input));
+  }
+  kyEnhanceTimeInput();
+}
+function planWakeValueSafe(){const f=document.querySelector('form[data-form="plan-wake"]');return f?.elements?.namedItem('wake')?.value||'';}
+function kyEnhanceTimeInput(){const input=document.querySelector('form[data-form="plan-wake"] input.ky-time-display');if(!input)return;const h=input.__kyWakeHidden;if(h)input.value=h.value?KY.fa(h.value):'';}
+function kyOpenTimeWheel(input){
+  let root=document.getElementById('kyTimeWheel');
+  if(!root){
+    root=document.createElement('div');
+    root.id='kyTimeWheel';
+    root.innerHTML='<div class="ky-tw-bg"></div><div class="ky-tw-dialog"><div class="ky-tw-head"><div><span>ساعت بیدارباش</span><b data-ky-tw-title>ساعت را انتخاب کن</b><small class="ky-tw-step" data-ky-tw-step>مرحله ۱ از ۲</small></div><button class="icon-btn sm" data-ky-tw-close>×</button></div><div class="ky-tw-stage"><div class="ky-wheel" data-ky-wheel-h></div><div class="ky-tw-colon">:</div><div class="ky-wheel ky-tw-hidden" data-ky-wheel-m></div></div><div class="ky-tw-actions"><button class="btn" data-ky-tw-cancel>انصراف</button><button class="btn btn-primary" data-ky-tw-next>مرحله بعد</button></div></div>';
+    document.body.appendChild(root);
+    root.addEventListener('click',e=>{
+      if(e.target.closest('.ky-tw-bg,[data-ky-tw-close],[data-ky-tw-cancel]')){root.classList.remove('open');return;}
+      if(e.target.closest('[data-ky-tw-next]')){
+        if(root.__step===1){
+          root.__step=2;
+          root.querySelector('[data-ky-wheel-h]').classList.add('ky-tw-hidden');
+          root.querySelector('[data-ky-wheel-m]').classList.remove('ky-tw-hidden');
+          root.querySelector('[data-ky-tw-title]').textContent='دقیقه را انتخاب کن';
+          root.querySelector('[data-ky-tw-step]').textContent='مرحله ۲ از ۲';
+          root.querySelector('[data-ky-tw-next]').textContent='ثبت ساعت';
+        }else{
+          const h=Number(root.querySelector('[data-ky-wheel-h]').dataset.value||7);
+          const m=Number(root.querySelector('[data-ky-wheel-m]').dataset.value||0);
+          const hidden=root.__input?.__kyWakeHidden;
+          if(hidden){hidden.value=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');root.__input.value=KY.fa(hidden.value);hidden.dispatchEvent(new Event('input',{bubbles:true}));hidden.dispatchEvent(new Event('change',{bubbles:true}));}
+          root.classList.remove('open');
+        }
+      }
+    });
+  }
+  const current=input.__kyWakeHidden?.value||'';
+  let hh=Number(String(current).slice(0,2));let mm=Number(String(current).slice(3,5));
+  if(!Number.isFinite(hh)||hh<0||hh>23)hh=7;
+  if(!Number.isFinite(mm)||mm<0||mm>59)mm=0;
+  root.__input=input;root.__step=1;
+  const hEl=root.querySelector('[data-ky-wheel-h]'),mEl=root.querySelector('[data-ky-wheel-m]');
+  kyRenderWheel(hEl,24,hh);kyRenderWheel(mEl,60,mm);
+  hEl.classList.remove('ky-tw-hidden');mEl.classList.add('ky-tw-hidden');
+  root.querySelector('[data-ky-tw-title]').textContent='ساعت را انتخاب کن';
+  root.querySelector('[data-ky-tw-step]').textContent='مرحله ۱ از ۲';
+  root.querySelector('[data-ky-tw-next]').textContent='مرحله بعد';
+  root.classList.add('open');
+}
+function kyWheelValue(el){return Number(el?.dataset.value||0);}
+function kyRenderWheel(el,count,value){
+  if(!el)return;
+  const v=Math.max(0,Math.min(count-1,Number(value)||0));
+  const items=['','',''].map(()=>0);
+  let html='<div class="ky-wheel-spacer"></div>';
+  for(let i=0;i<count;i++) html+='<button type="button" class="ky-wheel-item '+(i===v?'selected':'')+'" data-v="'+i+'">'+KY.pad2(i)+'</button>';
+  html+='<div class="ky-wheel-spacer"></div>';
+  el.innerHTML=html;el.dataset.value=String(v);
+  const selected=el.querySelector('.ky-wheel-item.selected');
+  requestAnimationFrame(()=>{if(selected)el.scrollTop=Math.max(0,selected.offsetTop-el.clientHeight/2+selected.offsetHeight/2);});
+  el.onscroll=()=>{
+    const rect=el.getBoundingClientRect();const center=rect.top+rect.height/2;let best=null,bestDist=1e9;
+    el.querySelectorAll('.ky-wheel-item').forEach(b=>{const r=b.getBoundingClientRect();const dist=Math.abs((r.top+r.height/2)-center);if(dist<bestDist){bestDist=dist;best=b;}});
+    if(best){el.dataset.value=best.dataset.v;el.querySelectorAll('.ky-wheel-item').forEach(b=>b.classList.toggle('selected',b===best));}
+  };
+  el.onclick=e=>{const b=e.target.closest('[data-v]');if(b){el.dataset.value=b.dataset.v;el.scrollTo({top:Math.max(0,b.offsetTop-el.clientHeight/2+b.offsetHeight/2),behavior:'smooth'});}};
+}
+
+async function kyRenderHome(){
+  const orig=KY.original.renderHome;if(orig)await orig();
+  renderPartnerCard?.(); kyScanDates(document.getElementById('homeRoot')||document); kyEnsureCoupleTicker();
+}
+function kyEnsureCoupleTicker(){
+  if(KY.coupleTicker)return;
+  KY.coupleTicker=setInterval(()=>{const el=document.getElementById('kyPartnerLiveClock');if(el&&KY.partnerLive?.is_studying&&KY.partnerLive.started_at)el.textContent=kySec(Number(KY.partnerLive.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(KY.partnerLive.started_at).getTime())/1000)));const host=document.querySelector('[data-couple-live-host]');if(host&&S?.activeView==='home')renderPartnerCard?.();},1000);
+}
+function kyRenderAI(){
+  const orig=KY.original.renderAI;if(orig)orig();
+  setTimeout(()=>kyMountCoach(),0);
+}
+
+/* ------------------------------------------------------------------------
+ * 14) Event interception. Capture phase prevents the old image handler from
+ *    re-rendering and wiping the form.
+ * ---------------------------------------------------------------------- */
+document.addEventListener('click',async e=>{
+  if(kyHandleChecklistEvent(e))return;
+  const action=e.target.closest('[data-action]')?.dataset?.action;
+  if(action==='pick-mistake-image'){e.preventDefault();e.stopImmediatePropagation();await kyPickMistakeImage();return;}
+  if(action==='clear-mistake-image'){e.preventDefault();pendingMistakeImage=null;kyRenderMistakeImageArea();return;}
+  if(action==='open-mistake-image'){e.preventDefault();kyMistakeLightbox(e.target.closest('[data-src]')?.dataset?.src||'');return;}
+  if(action==='ocr-mistake-image'){e.preventDefault();await kyOCRMistake();return;}
+  if(action==='toggle-wake-lock'){e.preventDefault();if(KY.wakeLock)await kyReleaseWakeLock();else await kyRequestWakeLock();return;}
+  if(action==='save-coach-goal'){e.preventDefault();S.settings.ai=S.settings.ai||{};S.settings.ai.coachPlanGoal=document.getElementById('kyCoachGoal')?.value||'';await saveSettings();kyToast('پلن کلی ذخیره شد.','ok',1600);return;}
+},true);
+
+document.addEventListener('submit',async e=>{
+  const form=e.target.closest('form[data-form="ky-coach"]');if(!form)return;e.preventDefault();
+  if(KY.coachBusy)return;KY.coachBusy=true;
+  const ta=form.elements.message;const text=String(ta?.value||'').trim()||'تحلیل کن';
+  KY.coachHistory.push({role:'user',text});
+  const root=document.querySelector('[data-ky-coach-card]'); if(root){root.innerHTML=kyCoachHtml();}
+  try{const r=await kyCoachCall(text);KY.coachHistory.push({role:'assistant',text:r.text});}catch(err){KY.coachHistory.push({role:'assistant',text:'خطا: '+(err.message||err)});}
+  KY.coachBusy=false; const aiRoot=document.getElementById('aiRoot'); if(aiRoot){const h=aiRoot.querySelector('[data-ky-coach-card]');if(h)h.innerHTML=kyCoachHtml();}
+},true);
+
+document.addEventListener('click',async e=>{
+  const m=e.target.closest('[data-ky-coach-mode]');if(m){e.preventDefault();if(KY.coachBusy)return;const mode=m.dataset.kyCoachMode;KY.coachBusy=true;KY.coachHistory.push({role:'user',text:KY_COACH_MODES[mode]});const host=document.querySelector('[data-ky-coach-card]');if(host)host.innerHTML=kyCoachHtml();try{const r=await kyCoachCall('',mode);KY.coachHistory.push({role:'assistant',text:r.text});}catch(err){KY.coachHistory.push({role:'assistant',text:'خطا: '+(err.message||err)});}KY.coachBusy=false;const h=document.querySelector('[data-ky-coach-card]');if(h)h.innerHTML=kyCoachHtml();}
+});
+
+/* Reacquire wake lock after tab returns. */
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)kyReacquireWake();});
+
+/* ------------------------------------------------------------------------
+ * 15) Wrap original renderers and bootstrap safely.
+ * ---------------------------------------------------------------------- */
+KY.original.renderHome=window.renderHome; KY.original.renderMistakes=window.renderMistakes; KY.original.renderPlan=window.renderPlan; KY.original.renderAI=window.renderAI;
+try{window.renderHome=kyRenderHome;renderHome=kyRenderHome;}catch(_){}
+try{window.renderMistakes=kyRenderMistakes;renderMistakes=kyRenderMistakes;}catch(_){}
+try{window.renderPlan=kyRenderPlan;renderPlan=kyRenderPlan;}catch(_){}
+try{window.renderAI=kyRenderAI;renderAI=kyRenderAI;}catch(_){}
+try{if(window.RENDER){window.RENDER.home=kyRenderHome;window.RENDER.mistakes=kyRenderMistakes;window.RENDER.plan=kyRenderPlan;window.RENDER.ai=kyRenderAI;}}catch(_){}
+
+/* Couple overrides. */
+KY.original.linkPartner=window.linkPartner; KY.original.startPresence=window.startPresence; KY.original.trackPresence=window.trackPresence; KY.original.stopPresence=window.stopPresence; KY.original.renderPartnerCard=window.renderPartnerCard;
+try{window.startPresence=kyStartPresence;startPresence=kyStartPresence;}catch(_){}
+try{window.trackPresence=kyTrackPresence;trackPresence=kyTrackPresence;}catch(_){}
+try{window.stopPresence=kyStopPresence;stopPresence=kyStopPresence;}catch(_){}
+try{window.renderPartnerCard=renderPartnerCard;}catch(_){}
+try{window.linkPartner=async function(email){if(!KY.original.linkPartner)throw new Error('تابع لینک شریک در برنامه پیدا نشد');const r=await KY.original.linkPartner(email);await fetchMyProfile();await kyStartPresence();await kyLoadCoupleDashboard();renderPartnerCard?.();return r;};linkPartner=window.linkPartner;}catch(_){}
+
+/* Update timer transitions by wrapping the original track function semantics. */
+try{
+  const oldTrack=window.trackPresence;
+  window.addEventListener('beforeunload',()=>{try{navigator.sendBeacon?.('data:,','');}catch(_){}});
+}catch(_){}
+
+/* Mobile UX regrouping. */
+try{buildNav?.();}catch(_){}
+setTimeout(()=>{kyBuildMobileMore();kyMountWakeButton();},500);
+
+/* Date scan on all current and future DOM. */
+kyScanDates(document);
+const observer=new MutationObserver(ms=>{for(const m of ms){for(const n of m.addedNodes){if(n.nodeType===1)kyScanDates(n);}}});
+try{observer.observe(document.body,{subtree:true,childList:true});}catch(_){}
+
+/* Rebind settings AI test button to actual current model diagnostics. */
+window.KY_ULTIMATE_TEST_AI=async function(){
+  const r=[]; const a=S.settings.ai||{};
+  for(const provider of ['gemini','openrouter']){
+    try{
+      const list=provider==='gemini'?KY_GEMINI_MODELS:KY_OR_MODELS; const selected=provider==='gemini'?a.geminiModel:a.openrouterModel; const model=list.find(x=>x.id===selected)||list[0];
+      const key=provider==='gemini'?a.geminiKey:a.openrouterKey; if(!key){r.push({provider,ok:false,msg:'کلید ثبت نشده'});continue;}
+      const p=provider==='gemini'?'یک کلمه پاسخ بده: تست':'یک کلمه پاسخ بده: تست';
+      const x=provider==='gemini'?await kyGeminiText(model.id,key,p):await kyOpenRouterText(model.id,key,p);
+      r.push({provider,ok:true,msg:model.label});
+    }catch(e){r.push({provider,ok:false,msg:e.message||String(e)});}
+  }
+  return r;
+};
+
+/* Optional direct smart OCR from any image file input with data-ai-ocr="1". */
+document.addEventListener('change',async e=>{
+  const input=e.target.closest('input[type="file"][data-ai-ocr="1"]');if(!input||!input.files?.[0])return;
+  try{const data=await compressImage(input.files[0],1200,500000);const text=await kyOCRImage(data);const target=document.querySelector(input.dataset.target||'textarea');if(target)target.value=text;}catch(err){kyToast('OCR ناموفق: '+(err.message||err),'error',5000);}
+});
+
+/* Keep partner live state current when timer UI actions occur. */
+setInterval(()=>{if(currentUser&&currentProfile?.partner_id&&Timer?.state?.status==='running')kyPublishLive().catch(()=>{});},15000);
+
+/* Avoid duplicate partner card timers from previous patches. */
+setTimeout(()=>{try{if(currentUser&&currentProfile?.partner_id)kyStartPresence();}catch(_){}},1800);
+
+KY.installed=true;
+})();
+
+</script>
 </body>
 </html>
