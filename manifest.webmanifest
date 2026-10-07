@@ -1,34 +1,24 @@
 {
-  "id": "/Konkour/",
+  "id": "./",
   "name": "کنکوریار",
   "short_name": "کنکوریار",
-  "description": "دستیار مطالعه آفلاین-first برای کنکور",
+  "description": "کنکوریار — دستیار مطالعه آفلاین و همراه مطالعه",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "/Konkour/",
-  "scope": "/Konkour/",
+  "start_url": "./?source=pwa",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "orientation": "portrait",
+  "theme_color": "#f0f4fa",
   "background_color": "#f0f4fa",
-  "theme_color": "#2563eb",
+  "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "اتاق تمرکز", "short_name": "تمرکز", "url": "./?view=timer", "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "آزمون‌ها", "short_name": "آزمون‌ها", "url": "./?view=exams", "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
