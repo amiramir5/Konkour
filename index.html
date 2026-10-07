@@ -12149,5 +12149,290 @@ window.addEventListener('unhandledrejection', (e) => {
   setTimeout(()=>kyNormalizeDigits(document.body),700);
 })();
 </script>
+
+<!-- ============================================================================
+ * KONKOOR YAR 2.0 — FINAL AI + PWA COMPATIBILITY PATCH — 2026-10-07
+ * Additive only: existing source is preserved.
+ * ========================================================================== -->
+<style id="ky-ai-pwa-final-patch">
+.ky-install-btn{display:none!important;}
+.ky-install-btn.ky-install-ready{display:inline-flex!important;}
+@media(max-width:420px){
+  .ky-install-btn{width:42px;min-width:42px;padding:0!important;gap:0!important;}
+  .ky-install-btn span.ky-install-label{display:none;}
+}
+.ky-ai-diagnostic{line-height:1.9;word-break:break-word;}
+</style>
+<script>
+(function(){
+  'use strict';
+
+  /* --------------------------------------------------------------------------
+   * 1) OpenRouter: migrate deprecated model selections to the current free
+   *    router. OpenRouter's free-model router dynamically selects a free model
+   *    and supports structured-output-aware routing.
+   * ------------------------------------------------------------------------ */
+  const KY_OR_FREE = 'openrouter/free';
+  const KY_OR_MODELS = [
+    { id: 'openrouter/free', label: 'OpenRouter Free — رایگان و خودکار (پیشنهادی)' },
+    { id: 'nvidia/nemotron-3-ultra-550b-a55b:free', label: 'Nemotron 3 Ultra — رایگان' },
+    { id: 'qwen/qwen3.5-35b-a3b', label: 'Qwen 3.5 35B A3B — پرداختی' },
+    { id: 'qwen/qwen3.5-plus-20260420', label: 'Qwen 3.5 Plus — پرداختی' },
+    { id: 'qwen/qwen3.6-35b-a3b', label: 'Qwen 3.6 35B A3B — پرداختی' }
+  ];
+  try {
+    if (Array.isArray(window.OPENROUTER_MODELS)) {
+      OPENROUTER_MODELS.splice(0, OPENROUTER_MODELS.length, ...KY_OR_MODELS);
+    }
+  } catch(_) {}
+
+  function kyMigrateAIConfig(){
+    try{
+      S.settings.ai = S.settings.ai || {};
+      const a=S.settings.ai;
+      const old=String(a.openrouterModel||'');
+      if(!old || /:free$/i.test(old) || old==='qwen/qwen3.6-plus' || old==='qwen/qwen3.6-plus:free'){
+        a.openrouterModel=KY_OR_FREE;
+      }
+      const gm=String(a.geminiModel||'');
+      const validGemini=new Set(['gemini-3.8-flash','gemini-3.7-flash','gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite']);
+      if(!validGemini.has(gm)) a.geminiModel='gemini-3.8-flash';
+      if(typeof saveSettings==='function') saveSettings().catch(()=>{});
+    }catch(_){}
+  }
+  kyMigrateAIConfig();
+
+  /* --------------------------------------------------------------------------
+   * 2) More reliable Gemini diagnostics.
+   *    First validate that the key can access the Models API, then test the
+   *    exact generateContent route used by the app. This separates bad key,
+   *    disabled API, model problems and network/CORS/VPN failures.
+   * ------------------------------------------------------------------------ */
+  async function kyFetchJson(url, options, timeoutMs){
+    const controller=new AbortController();
+    const t=setTimeout(()=>controller.abort(), timeoutMs||30000);
+    try{
+      const res=await fetch(url,Object.assign({},options||{}, {signal:controller.signal}));
+      const raw=await res.text();
+      let data=null; try{data=raw?JSON.parse(raw):null;}catch(_){}
+      return {res,data,raw};
+    }catch(e){
+      if(e && e.name==='AbortError') throw new Error('زمان پاسخ تمام شد');
+      throw new Error('درخواست شبکه اجرا نشد؛ VPN/فایروال/اتصال اینترنت را بررسی کن');
+    }finally{clearTimeout(t);}
+  }
+
+  async function kyGeminiConnectionTest(){
+    const form=document.querySelector('form[data-form="ai-settings"]');
+    const a=S.settings.ai||{};
+    const typedKey=String(form && form.geminiKey ? form.geminiKey.value : '').trim();
+    const key=typedKey || String(a.geminiKey||'').trim();
+    const typedModel=String(form && form.geminiModel ? form.geminiModel.value : '').trim();
+    const model=typedModel || String(a.geminiModel||'gemini-3.8-flash');
+    if(!key) throw new Error('کلید Gemini وارد نشده است');
+
+    const models=await kyFetchJson('https://generativelanguage.googleapis.com/v1beta/models',{
+      method:'GET',
+      headers:{'x-goog-api-key':key,'Accept':'application/json'}
+    },20000);
+    if(!models.res.ok){
+      const msg=models.data?.error?.message || models.raw?.slice(0,220) || ('HTTP '+models.res.status);
+      if(models.res.status===400||models.res.status===401) throw new Error('کلید Gemini نامعتبر است یا ساختار کلید مشکل دارد: '+msg);
+      if(models.res.status===403) throw new Error('کلید Gemini معتبر است اما دسترسی API برای آن فعال نیست یا محدودیت کلید مانع درخواست شده است: '+msg);
+      throw new Error('Gemini Models API خطا داد: HTTP '+models.res.status+' — '+msg);
+    }
+
+    const list=Array.isArray(models.data?.models)?models.data.models:[];
+    const resource=list.find(x=>String(x.name||'')==='models/'+model);
+    if(!resource){
+      throw new Error('مدل انتخاب‌شده در لیست API این کلید نیست: '+model);
+    }
+    const supported=resource.supportedGenerationMethods||[];
+    if(!supported.includes('generateContent')){
+      throw new Error('مدل '+model+' از generateContent پشتیبانی نمی‌کند');
+    }
+
+    const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent';
+    const body={
+      contents:[{role:'user',parts:[{text:'فقط این JSON را برگردان: {"ok":true}'}]}],
+      generationConfig:{temperature:0,maxOutputTokens:100,responseMimeType:'application/json'}
+    };
+    const gen=await kyFetchJson(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-goog-api-key':key,'Accept':'application/json'},
+      body:JSON.stringify(body)
+    },30000);
+    if(!gen.res.ok){
+      const msg=gen.data?.error?.message || gen.raw?.slice(0,260) || ('HTTP '+gen.res.status);
+      if(gen.res.status===400) throw new Error('درخواست Gemini رد شد: '+msg);
+      if(gen.res.status===401||gen.res.status===403) throw new Error('کلید Gemini یا مجوز API مشکل دارد: '+msg);
+      if(gen.res.status===404) throw new Error('مدل Gemini پیدا نشد: '+model);
+      if(gen.res.status===429) throw new Error('سهم/Rate Limit Gemini پر شده است');
+      throw new Error('Gemini generateContent خطا داد: HTTP '+gen.res.status+' — '+msg);
+    }
+    return 'اتصال موفق — کلید، مدل و generateContent همگی قابل دسترسی‌اند';
+  }
+
+  /* --------------------------------------------------------------------------
+   * 3) Test current OpenRouter configuration with current form values. Empty
+   *    masked inputs never overwrite the stored key.
+   * ------------------------------------------------------------------------ */
+  async function kyOpenRouterConnectionTest(){
+    const form=document.querySelector('form[data-form="ai-settings"]');
+    const a=S.settings.ai||{};
+    const typedKey=String(form && form.openrouterKey ? form.openrouterKey.value : '').trim();
+    const key=typedKey || String(a.openrouterKey||'').trim();
+    const typedModel=String(form && form.openrouterModel ? form.openrouterModel.value : '').trim();
+    const model=typedModel || String(a.openrouterModel||KY_OR_FREE);
+    if(!key) throw new Error('کلید OpenRouter وارد نشده است');
+
+    const controller=new AbortController();
+    const t=setTimeout(()=>controller.abort(),30000);
+    let res;
+    try{
+      res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+        method:'POST',signal:controller.signal,
+        headers:{
+          'Authorization':'Bearer '+key,
+          'Content-Type':'application/json',
+          'HTTP-Referer':location.href.startsWith('http')?location.href:location.origin,
+          'X-Title':'KonkoorYar'
+        },
+        body:JSON.stringify({
+          model,
+          messages:[
+            {role:'system',content:'فقط JSON معتبر برگردان.'},
+            {role:'user',content:'فقط {"ok":true} را برگردان.'}
+          ],
+          max_tokens:100,
+          temperature:0,
+          response_format:{type:'json_object'}
+        })
+      });
+      const raw=await res.text();
+      let data=null; try{data=raw?JSON.parse(raw):null;}catch(_){}
+      if(!res.ok){
+        const msg=data?.error?.message || raw?.slice(0,280) || ('HTTP '+res.status);
+        if(res.status===401) throw new Error('کلید OpenRouter نامعتبر است: '+msg);
+        if(res.status===402) throw new Error('کلید معتبر است ولی اعتبار/بودجه OpenRouter کافی نیست: '+msg);
+        if(res.status===429) throw new Error('Rate Limit / سهم OpenRouter پر شده است: '+msg);
+        if(res.status===404) throw new Error('مدل OpenRouter پیدا نشد: '+model);
+        throw new Error('OpenRouter خطا داد: HTTP '+res.status+' — '+msg);
+      }
+      return 'اتصال موفق — مدل '+model+' پاسخ داد';
+    }catch(e){
+      if(e && e.name==='AbortError') throw new Error('زمان پاسخ OpenRouter تمام شد');
+      throw e;
+    }finally{clearTimeout(t);}
+  }
+
+  function kyShowAIResults(results){
+    const el=document.getElementById('aiTestResult'); if(!el) return;
+    el.innerHTML=results.map(r=>
+      '<div class="card card-inset ky-ai-diagnostic" style="padding:12px;margin-top:8px;border:1px solid '+(r.ok?'var(--ok)':'var(--bad)')+'">'+
+        '<div class="flex items-center gap-2" style="color:'+(r.ok?'var(--ok)':'var(--bad)')+'">'+
+        (r.ok?ICONS.check:ICONS.warning)+
+        '<b class="t-sm">'+esc(r.provider)+': '+esc(r.message)+'</b></div>'+
+      '</div>'
+    ).join('');
+  }
+
+  async function kyRunAIConnectionTest(){
+    const el=document.getElementById('aiTestResult');
+    if(el) el.innerHTML='<div class="card card-inset" style="padding:12px"><div class="flex items-center gap-2"><span class="spinner"></span><span class="t-xs muted">در حال تست واقعی کلید و مدل…</span></div></div>';
+    const form=document.querySelector('form[data-form="ai-settings"]');
+    try{
+      if(form?.openrouterModel?.value) S.settings.ai.openrouterModel=form.openrouterModel.value;
+      if(form?.geminiModel?.value) S.settings.ai.geminiModel=form.geminiModel.value;
+      const results=[];
+      if(String(form?.geminiKey?.value||'').trim() || String(S.settings.ai.geminiKey||'').trim()){
+        try{ results.push({provider:'Gemini',ok:true,message:await kyGeminiConnectionTest()}); }
+        catch(e){ results.push({provider:'Gemini',ok:false,message:e.message||String(e)}); }
+      }
+      if(String(form?.openrouterKey?.value||'').trim() || String(S.settings.ai.openrouterKey||'').trim()){
+        try{ results.push({provider:'OpenRouter',ok:true,message:await kyOpenRouterConnectionTest()}); }
+        catch(e){ results.push({provider:'OpenRouter',ok:false,message:e.message||String(e)}); }
+      }
+      kyShowAIResults(results);
+    }catch(e){
+      kyShowAIResults([{provider:'AI',ok:false,message:e.message||String(e)}]);
+    }
+  }
+
+  /* Intercept the old click listener before it gets to the legacy test code. */
+  document.addEventListener('click',function(e){
+    const el=e.target && e.target.closest ? e.target.closest('[data-action="test-ai-connection"]') : null;
+    if(!el) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    kyRunAIConnectionTest();
+  },true);
+
+  /* --------------------------------------------------------------------------
+   * 4) PWA install UX. Browser support controls whether the prompt exists;
+   *    the website cannot force Brave Android to mint a real WebAPK.
+   * ------------------------------------------------------------------------ */
+  let kyDeferredInstallPrompt=null;
+
+  function kyStandalone(){
+    return window.matchMedia && window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+  }
+  function kyGetInstallButton(){
+    let b=document.getElementById('kyInstallButton');
+    if(b) return b;
+    const actions=document.querySelector('.top-actions');
+    if(!actions) return null;
+    b=document.createElement('button');
+    b.type='button';
+    b.id='kyInstallButton';
+    b.className='icon-btn ky-install-btn';
+    b.setAttribute('aria-label','نصب برنامه');
+    b.title='نصب کنکوریار';
+    b.innerHTML=(ICONS.download||'')+'<span class="ky-install-label">نصب</span>';
+    actions.insertBefore(b,actions.firstChild);
+    b.addEventListener('click',async()=>{
+      if(!kyDeferredInstallPrompt){
+        alert('این مرورگر فعلاً نصب مستقیم PWA را ارائه نکرده است. برای نصب واقعی، همین صفحه را در Google Chrome باز کن و گزینه Install را بزن.');
+        return;
+      }
+      const prompt=kyDeferredInstallPrompt;
+      kyDeferredInstallPrompt=null;
+      b.classList.remove('ky-install-ready');
+      try{
+        await prompt.prompt();
+        await prompt.userChoice;
+      }catch(_){}
+    });
+    return b;
+  }
+
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();
+    kyDeferredInstallPrompt=e;
+    const b=kyGetInstallButton();
+    if(b && !kyStandalone()) b.classList.add('ky-install-ready');
+  });
+
+  window.addEventListener('appinstalled',function(){
+    kyDeferredInstallPrompt=null;
+    const b=document.getElementById('kyInstallButton');
+    if(b) b.classList.remove('ky-install-ready');
+  });
+
+  function kyEnsurePWAInstallAssets(){
+    if(!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+    const p=location.pathname;
+    const base=p.endsWith('/')?p:p.slice(0,p.lastIndexOf('/')+1);
+    navigator.serviceWorker.register(base+'sw.js',{scope:base}).catch(()=>{});
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    kyGetInstallButton();
+    kyEnsurePWAInstallAssets();
+  });
+  setTimeout(()=>{kyGetInstallButton();kyEnsurePWAInstallAssets();},1500);
+})();
+</script>
+
 </body>
 </html>
