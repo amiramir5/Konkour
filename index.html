@@ -2772,6 +2772,13 @@ async function loadSettings() {
     if (!S.settings.ai.openrouterModel) S.settings.ai.openrouterModel = 'qwen/qwen3.6-plus:free';
     /* Update default goal */
     if (S.settings.dailyGoalMinutes === 240) S.settings.dailyGoalMinutes = 600;
+
+    /* Keep the built-in 1406 planning target identical across devices.
+       A user who renamed the target keeps their custom exam date. */
+    if (S.settings.examTitle === 'کنکور سراسری ۱۴۰۶ — تجربی' && S.settings.examDate !== '2027-07-01') {
+      S.settings.examDate = '2027-07-01';
+      await saveSettings();
+    }
   } else {
     await saveSettings();
   }
@@ -4753,7 +4760,7 @@ function buildHeatmapCard() {
     const cls = 'heat-cell' + (level > 0 ? ' l' + level : '') + (isToday ? ' today' : '');
     cells.push(
       '<div class="' + cls + '" title="' + esc(faDate(k, 'long')) + ' — ' + faNum(mins) + ' دقیقه">' +
-        '<span class="day-num">' + faNum(d.getDate()) + '</span>' +
+        '<span class="day-num">' + faNum((typeof kyJalaliPartsFromIso === 'function' && kyJalaliPartsFromIso(k)) ? kyJalaliPartsFromIso(k)[2] : d.getDate()) + '</span>' +
       '</div>'
     );
   }
@@ -11419,7 +11426,7 @@ function renderCoupleCard(){
       '<div class="ky-live-person partner"><div class="ky-live-avatar">♥</div><div><b>'+kySec(todayPa)+'</b><span>مطالعه امروز</span></div></div>'+ 
     '</div>'+
     '<div class="ky-partner-now">'+
-      (live?.is_studying?'<span class="live-pulse"></span><div><b>الان در حال مطالعه '+esc(subj(live.subject).name)+'</b><strong id="kyPartnerLiveClock">'+kySec((live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)))+'</strong></div>':'<span class="live-pulse off"></span><div><b>الان مشغول مطالعه نیست</b><span>به‌محض شروع تایمر، اینجا زنده می‌شود.</span></div>')+ 
+      (live?.is_studying?'<span class="live-pulse"></span><div><b>الان در حال مطالعه '+esc(subj(live.subject).name)+'</b><strong id="kyPartnerLiveClock">'+kySec((live.live_session_seconds!=null?live.live_session_seconds:Number(live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-Number(live.updated_at||Date.now()))/1000))))+'</strong></div>':'<span class="live-pulse off"></span><div><b>الان مشغول مطالعه نیست</b><span>به‌محض شروع تایمر، اینجا زنده می‌شود.</span></div>')+ 
     '</div>'+
     '<div class="ky-compare-tabs">'+
       '<div><span>این هفته</span><b>'+KY.fa(Math.round((Number(rowsW.find(x=>x.user_id===currentUser.id)?.week_seconds||0))/60))+' دقیقه</b><em>'+esc(weekWinner)+'</em></div>'+ 
@@ -11855,14 +11862,14 @@ async function kyFinalRenderCouple(){
   const meW=w.find(x=>x.user_id===currentUser.id)||{},paW=w.find(x=>x.user_id!==currentUser.id)||{};
   const meM=m.find(x=>x.user_id===currentUser.id)||{},paM=m.find(x=>x.user_id!==currentUser.id)||{};
   const live=window.KY?.partnerLive;
-  const partnerNow=live?Number(live.today_seconds||0)+Number(live.session_elapsed_seconds||0)+(live.is_studying&&live.started_at?Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)):0):Number(paT.today_seconds||0);
+  const partnerNow=live?Number(live.today_seconds||0)+Number(live.live_session_seconds!=null?live.live_session_seconds:(Number(live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(live.updated_at||Date.now()).getTime())/1000)))):Number(paT.today_seconds||0);
   const myNow=(typeof kyMyTodaySeconds==='function'?kyMyTodaySeconds():Number(meT.today_seconds||0));
   const ww=Number(meW.week_seconds||0),pw=Number(paW.week_seconds||0),mm=Number(meM.month_seconds||0),pm=Number(paM.month_seconds||0);
   root.innerHTML='<div class="ky-couple-page">'+
     '<div class="page-head"><div><span class="ky-review-kicker">COUPLE</span><h1>رقابت مطالعه</h1><p class="muted">همزمان ببین چه کسی جلوتر است.</p></div><button class="btn" data-action="sync-now">همگام‌سازی</button></div>'+
     '<section class="card ky-couple-card"><div class="ky-couple-top"><div><h3>الان</h3><p>تایمر همسرت بدون بازسازی کارت به‌صورت زنده جلو می‌رود.</p></div><span class="badge ok"><span class="dot"></span>زنده</span></div>'+
       '<div class="ky-live-grid"><div class="ky-live-person me"><div class="ky-live-avatar">تو</div><div><b>'+kyFinalSec(myNow)+'</b><span>مطالعه امروز</span></div></div><div class="ky-vs">VS</div><div class="ky-live-person partner"><div class="ky-live-avatar">♥</div><div><b id="kyFinalPartnerTotal">'+kyFinalSec(partnerNow)+'</b><span>'+(live?.is_studying?'در حال مطالعه':'امروز')+'</span></div></div></div>'+ 
-      '<div class="ky-partner-now">'+(live?.is_studying?'<span class="live-pulse"></span><div><b>همسرت الان '+esc(typeof subj==='function'?subj(live.subject).name:'در حال مطالعه')+' می‌خواند</b><strong id="kyFinalPartnerClock">'+kyFinalSec(Number(live.session_elapsed_seconds||0)+(live.started_at?Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)):0))+'</strong></div>':'<span class="live-pulse off"></span><div><b>همسرت الان در حال مطالعه نیست</b><span>با شروع تایمر، وضعیت زنده می‌شود.</span></div>')+'</div>'+
+      '<div class="ky-partner-now">'+(live?.is_studying?'<span class="live-pulse"></span><div><b>همسرت الان '+esc(typeof subj==='function'?subj(live.subject).name:'در حال مطالعه')+' می‌خواند</b><strong id="kyFinalPartnerClock">'+kyFinalSec(Number(live.live_session_seconds!=null?live.live_session_seconds:(Number(live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(live.updated_at||Date.now()).getTime())/1000)))))+'</strong></div>':'<span class="live-pulse off"></span><div><b>همسرت الان در حال مطالعه نیست</b><span>با شروع تایمر، وضعیت زنده می‌شود.</span></div>')+'</div>'+
     '</section>'+
     '<div class="grid g2 section">'+
       '<section class="card"><div class="card-head"><h3>امروز</h3><span class="badge">'+esc(kyFinalWinner(Number(meT.today_seconds||0),Number(paT.today_seconds||0)))+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+kyFinalSec(myNow)+'</b></div><div><span>همسرت</span><b>'+kyFinalSec(partnerNow)+'</b></div></div></section>'+
@@ -12680,13 +12687,8 @@ body.zen-mode .ky-wake-icon{
   function updateHomeLive(){
     updateHomeStudyStat();
     updateHomePartnerCard();
-    try{
-      const hero = document.querySelector('#homeRoot .hero-num');
-      if(hero && S.settings?.dailyGoalMinutes != null){
-        const mins = ownTodaySeconds()/60;
-        hero.textContent = typeof faNum === 'function' ? faNum(Math.floor(mins)) : String(Math.floor(mins));
-      }
-    }catch(_){ }
+    /* The blue hero is the exam countdown. It must never be replaced by the
+       live study total. The study total is updated only in the stat card. */
   }
 
   const originalRenderHomeFinal = window.renderHome;
@@ -12972,5 +12974,575 @@ body.zen-mode .ky-wake-icon{
 })();
 </script>
 
+
+
+<!-- ============================================================================
+ * KONKOOR YAR — FINAL LIVE/DATE HOTFIX — 2026-10-07
+ * This is an additive correctness layer. Existing application modules stay intact.
+ * ========================================================================== -->
+<style id="ky-live-date-hotfix-style">
+/* Heatmap cells: show the Jalali day cleanly. */
+.heat-cell .day-num{font-variant-numeric:tabular-nums;}
+
+/* Stable couple card: compact, readable, no giant/overflowing numbers. */
+.ky-hotfix-couple-card .ky-hotfix-live-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+}
+.ky-hotfix-couple-card .ky-hotfix-person{
+  min-width:0;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface-2);
+}
+.ky-hotfix-couple-card .ky-hotfix-person .name{
+  display:block;
+  font-size:11px;
+  color:var(--ink-2);
+  margin-bottom:5px;
+}
+.ky-hotfix-couple-card .ky-hotfix-person .time{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:20px;
+  font-weight:800;
+  direction:ltr;
+  text-align:right;
+  letter-spacing:.02em;
+}
+.ky-hotfix-couple-card .ky-hotfix-vs{
+  font-size:11px;
+  font-weight:900;
+  color:var(--ink-3);
+}
+.ky-hotfix-couple-card .ky-hotfix-now{
+  margin-top:10px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:var(--brand-softer);
+  border:1px solid var(--border);
+}
+.ky-hotfix-couple-card .ky-hotfix-dot{
+  width:9px;height:9px;border-radius:50%;flex:none;
+  background:var(--ink-3);
+}
+.ky-hotfix-couple-card .ky-hotfix-dot.live{
+  background:var(--ok);
+  box-shadow:0 0 0 5px var(--ok-soft);
+}
+.ky-hotfix-couple-card .ky-hotfix-now-main{flex:1;min-width:0;}
+.ky-hotfix-couple-card .ky-hotfix-now-main b{
+  display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ky-hotfix-couple-card .ky-hotfix-now-main span{
+  display:block;font-family:var(--font-mono);font-size:15px;font-weight:800;margin-top:2px;direction:ltr;text-align:right;
+}
+.ky-hotfix-couple-card .ky-hotfix-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;
+}
+.ky-hotfix-couple-card .ky-hotfix-stat{
+  padding:10px 11px;border:1px solid var(--border);border-radius:12px;background:var(--surface);
+}
+.ky-hotfix-couple-card .ky-hotfix-stat span{display:block;font-size:10px;color:var(--ink-3);}
+.ky-hotfix-couple-card .ky-hotfix-stat b{display:block;font-family:var(--font-mono);font-size:15px;margin-top:3px;direction:ltr;text-align:right;}
+.ky-hotfix-couple-card .ky-hotfix-stat em{display:block;font-size:9px;color:var(--ink-3);font-style:normal;margin-top:2px;}
+@media(max-width:560px){
+  .ky-hotfix-couple-card .ky-hotfix-live-row{grid-template-columns:1fr 1fr;}
+  .ky-hotfix-couple-card .ky-hotfix-vs{display:none;}
+  .ky-hotfix-couple-card .ky-hotfix-person .time{font-size:18px;}
+}
+</style>
+<script id="ky-live-date-hotfix-script">
+(function(){
+  'use strict';
+
+  const H = window.KY_HOTFIX = window.KY_HOTFIX || {};
+  H.version = '2026.10.07.4';
+  H.heartbeat = H.heartbeat || null;
+  H.poll = H.poll || null;
+  H.bootTimer = H.bootTimer || null;
+  H.today = H.today || null;
+  H.week = H.week || null;
+  H.month = H.month || null;
+  H.partner = H.partner || null;
+  H.channel = H.channel || null;
+  H.linkedId = H.linkedId || null;
+  H.freshMs = 30000;
+
+  /* ------------------------------------------------------------------------
+   * Date helpers: a Date object and an ISO civil-day string must behave the
+   * same way. This fixes the heatmap heading/day labels without touching the
+   * database format.
+   * ---------------------------------------------------------------------- */
+  function isoFromDate(d){
+    if(!(d instanceof Date)) d=new Date(d||Date.now());
+    if(Number.isNaN(d.getTime())) return '';
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
+  function jalaliParts(value){
+    const iso=isoFromDate(value);
+    try{return typeof kyJalaliPartsFromIso==='function'?kyJalaliPartsFromIso(iso):null;}catch(_){return null;}
+  }
+  function fixedFaDate(value,style){
+    const p=jalaliParts(value);
+    if(!p)return '—';
+    const y=p[0],m=p[1],d=p[2];
+    const months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+    const wd=new Date(new Date(isoFromDate(value)).getTime()).getDay();
+    const weekdays=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+    const core=(typeof faNum==='function'?faNum(String(d)):String(d))+' '+months[m-1]+' '+(typeof faNum==='function'?faNum(String(y)):String(y));
+    return style==='weekday' ? weekdays[wd]+'، '+core : core;
+  }
+  try{ window.faDate=fixedFaDate; faDate=fixedFaDate; }catch(_){ }
+  try{
+    const oldJMY=window.jalaliMonthYearFromDay;
+    window.jalaliMonthYearFromDay=function(value){
+      const p=jalaliParts(value);
+      if(!p && typeof oldJMY==='function')return oldJMY(value);
+      const months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+      return p?{month:months[p[1]-1],year:typeof faNum==='function'?faNum(String(p[0])):String(p[0])}:{month:'',year:''};
+    };
+    jalaliMonthYearFromDay=window.jalaliMonthYearFromDay;
+  }catch(_){ }
+  try{
+    window.jalaliLabelFromDay=function(value){
+      const x=window.jalaliMonthYearFromDay(value);
+      return x.month&&x.year?x.month+' '+x.year:'';
+    };
+    jalaliLabelFromDay=window.jalaliLabelFromDay;
+  }catch(_){ }
+
+  /* ------------------------------------------------------------------------
+   * Exam countdown: the app's built-in 1406 planning date is 2027-07-01.
+   * It is a planning target, not an official Sanjesh announcement.
+   * ---------------------------------------------------------------------- */
+  const PLANNED_EXAM_DATE='2027-07-01';
+  function normalizeExamTarget(){
+    try{
+      if(S && S.settings && S.settings.examTitle==='کنکور سراسری ۱۴۰۶ — تجربی' && S.settings.examDate!==PLANNED_EXAM_DATE){
+        S.settings.examDate=PLANNED_EXAM_DATE;
+        saveSettings?.();
+      }
+    }catch(_){ }
+  }
+  normalizeExamTarget();
+
+  function studyTodaySeconds(){
+    let n=0;
+    try{
+      const day=typeof kyStudyDayKey==='function'?kyStudyDayKey(new Date()):(typeof todayKey==='function'?todayKey():isoFromDate(new Date()));
+      n=(CACHE.sessions||[]).filter(x=>!x.deleted_at&&x.day===day).reduce((a,x)=>a+Math.max(0,Number(x.seconds)||0),0);
+      if(Timer?.state && Timer.state.status==='running')n+=Math.max(0,Number(Timer.elapsedSeconds?.()||0));
+    }catch(_){ }
+    return Math.max(0,Math.floor(n));
+  }
+  function fmtHM(sec){
+    sec=Math.max(0,Math.floor(Number(sec)||0));
+    const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);
+    const raw=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+    return typeof faNum==='function'?faNum(raw):raw;
+  }
+  function fmtHMS(sec){
+    sec=Math.max(0,Math.floor(Number(sec)||0));
+    const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+    const raw=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    return typeof faNum==='function'?faNum(raw):raw;
+  }
+
+  /* ------------------------------------------------------------------------
+   * Heatmap: final safety pass for Jalali day labels and heading.
+   * ---------------------------------------------------------------------- */
+  const previousHeatmap=window.buildHeatmapCard;
+  if(typeof previousHeatmap==='function'){
+    const fixedHeatmap=function(){
+      const html=previousHeatmap.apply(this,arguments);
+      const box=document.createElement('div');
+      box.innerHTML=html;
+      box.querySelectorAll('.heat-cell:not(.empty)').forEach(cell=>{
+        const title=cell.getAttribute('title')||'';
+        const num=cell.querySelector('.day-num');
+        const match=title.match(/^\s*([۰-۹0-9]+)/);
+        if(num&&match)num.textContent=match[1].replace(/[0-9]/g,d=>typeof faNum==='function'?faNum(d):d);
+      });
+      return box.innerHTML;
+    };
+    try{window.buildHeatmapCard=fixedHeatmap;buildHeatmapCard=fixedHeatmap;}catch(_){ }
+  }
+
+  /* ------------------------------------------------------------------------
+   * Live presence. One channel, one heartbeat, exact partner filtering, and
+   * stale-state rejection. No database upsert is used for live state here.
+   * ---------------------------------------------------------------------- */
+  function pairTopic(){
+    if(!currentUser||!currentProfile?.partner_id)return '';
+    const a=String(currentUser.id),b=String(currentProfile.partner_id);
+    if(!a||!b||a===b)return '';
+    return 'ky-hotfix-couple-'+[a,b].sort().join('-');
+  }
+  function payloadFresh(p){
+    const t=Number(p?.updated_at||0);
+    return !!p && t>0 && (Date.now()-t)<=H.freshMs;
+  }
+  function normalizePartner(p){
+    if(!p)return null;
+    if(String(p.user_id||'')!==String(currentProfile?.partner_id||''))return null;
+    if(!payloadFresh(p))return null;
+    const base=Math.max(0,Math.floor(Number(p.today_seconds)||0));
+    const pub=Math.max(0,Math.floor(Number(p.session_elapsed_seconds)||0));
+    const drift=(p.status==='studying'||p.is_studying===true)?Math.max(0,Math.floor((Date.now()-Number(p.updated_at))/1000)):0;
+    const liveSession=pub+drift;
+    const studying=(p.status==='studying'||p.is_studying===true)&&!!p.subject;
+    const resting=p.status==='resting'||p.status==='paused';
+    return {
+      user_id:String(p.user_id),
+      status:studying?'studying':(resting?'resting':'online'),
+      is_studying:studying,
+      is_paused:resting,
+      subject:studying?p.subject:null,
+      today_seconds:base,
+      session_elapsed_seconds:pub,
+      live_session_seconds:liveSession,
+      projected_today_seconds:base+liveSession,
+      updated_at:Number(p.updated_at),
+      online:true
+    };
+  }
+  function ownPresencePayload(){
+    const running=!!(Timer?.state&&Timer.state.status==='running');
+    const paused=!!(Timer?.state&&Timer.state.status==='paused');
+    return {
+      user_id:String(currentUser?.id||''),
+      online:true,
+      status:running?'studying':(paused?'resting':'online'),
+      is_studying:running,
+      subject:running?Timer.state.subject:null,
+      started_at:running?Number(Timer.state.started_at||Date.now()):null,
+      session_elapsed_seconds:running?Math.max(0,Math.floor(Number(Timer.elapsedSeconds?.()||0))):0,
+      today_seconds:studyTodaySeconds()-(running?Math.max(0,Math.floor(Number(Timer.elapsedSeconds?.()||0))):0),
+      updated_at:Date.now()
+    };
+  }
+  function getPartnerRaw(channel){
+    try{
+      const state=channel?.presenceState?.()||{};
+      const pid=String(currentProfile?.partner_id||'');
+      let candidates=[];
+      for(const [key,list] of Object.entries(state)){
+        if(!Array.isArray(list))continue;
+        for(const p of list){
+          if(String(p?.user_id||key)===pid)candidates.push(p);
+        }
+      }
+      if(!candidates.length)return null;
+      /* Prefer a current studying device; otherwise choose the newest state. */
+      candidates.sort((a,b)=>{
+        const sa=(a?.is_studying||a?.status==='studying')?1:0;
+        const sb=(b?.is_studying||b?.status==='studying')?1:0;
+        if(sa!==sb)return sb-sa;
+        return Number(b?.updated_at||0)-Number(a?.updated_at||0);
+      });
+      return candidates[0];
+    }catch(_){return null;}
+  }
+  function setPartnerFromRaw(raw){
+    const n=normalizePartner(raw);
+    H.partner=n;
+    partnerPresence=n;
+    try{if(window.KY)window.KY.partnerLive=n;}catch(_){ }
+    updateHotfixPartnerDom();
+  }
+  function clearPartner(){
+    H.partner=null;
+    partnerPresence=null;
+    try{if(window.KY)window.KY.partnerLive=null;}catch(_){ }
+    updateHotfixPartnerDom();
+  }
+
+  async function startHotfixPresence(){
+    if(!sb||!currentUser||!currentProfile?.partner_id)return;
+    const topic=pairTopic();if(!topic)return;
+    if(H.channel){try{await sb.removeChannel(H.channel);}catch(_){ } H.channel=null;}
+    clearInterval(H.heartbeat);H.heartbeat=null;
+    const channel=sb.channel(topic,{presence:{key:String(currentUser.id)+'-'+String(S.settings.deviceId||'device')}});
+    H.channel=channel;
+    channel.on('presence',{event:'sync'},()=>setPartnerFromRaw(getPartnerRaw(channel)));
+    channel.on('presence',{event:'join'},()=>setPartnerFromRaw(getPartnerRaw(channel)));
+    channel.on('presence',{event:'leave'},()=>setPartnerFromRaw(getPartnerRaw(channel)));
+    const result=await new Promise(resolve=>{
+      let settled=false;
+      const finish=x=>{if(settled)return;settled=true;resolve(x);};
+      channel.subscribe(status=>{
+        if(status==='SUBSCRIBED')finish(true);
+        else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'||status==='CLOSED')finish(false);
+      });
+      setTimeout(()=>finish(false),7000);
+    });
+    if(!result){try{await sb.removeChannel(channel);}catch(_){ } H.channel=null;clearPartner();return;}
+    async function heartbeat(){
+      if(!H.channel||!currentUser)return;
+      try{await H.channel.track(ownPresencePayload());}catch(_){ }
+      const raw=getPartnerRaw(H.channel); setPartnerFromRaw(raw);
+    }
+    await heartbeat();
+    H.heartbeat=setInterval(heartbeat,5000);
+  }
+
+  async function stopHotfixPresence(){
+    clearInterval(H.heartbeat);H.heartbeat=null;
+    const c=H.channel;H.channel=null;clearPartner();
+    if(c){try{await c.untrack();}catch(_){ }try{await sb?.removeChannel(c);}catch(_){ }}
+  }
+  try{window.startPresence=startHotfixPresence;startPresence=startHotfixPresence;}catch(_){ }
+  try{window.trackPresence=async()=>{if(H.channel)try{await H.channel.track(ownPresencePayload());}catch(_){ } };trackPresence=window.trackPresence;}catch(_){ }
+  try{window.stopPresence=stopHotfixPresence;stopPresence=stopHotfixPresence;}catch(_){ }
+
+  /* Timer state changes: immediate heartbeat, no stale study state. */
+  function wireTimerMethod(name){
+    const fn=Timer?.[name];
+    if(typeof fn!=='function')return;
+    const marker='__kyHotfix_'+name;
+    if(Timer[marker])return;
+    Timer[marker]=true;
+    Timer[name]=function(){
+      const out=fn.apply(this,arguments);
+      Promise.resolve(out).finally(()=>{
+        try{window.trackPresence?.();}catch(_){ }
+        updateHotfixPartnerDom();
+        updateHotfixHomeStudy();
+      });
+      return out;
+    };
+  }
+  ['start','pause','resume','reset','clear'].forEach(wireTimerMethod);
+
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden){
+      setTimeout(()=>{try{window.trackPresence?.();}catch(_){ }},350);
+      setTimeout(()=>{try{startHotfixPresence();}catch(_){ }},600);
+    }
+  });
+  window.addEventListener('online',()=>setTimeout(()=>startHotfixPresence(),500));
+  window.addEventListener('pagehide',()=>{try{H.channel?.untrack();}catch(_){ }});
+
+  /* ------------------------------------------------------------------------
+   * Historical comparison with RPC first and direct session fallback second.
+   * This fixes week/month showing 0 when the dashboard RPC is empty/stale.
+   * ---------------------------------------------------------------------- */
+  function rangeFor(mode){
+    const today=typeof kyStudyDayKey==='function'?kyStudyDayKey(new Date()):(typeof todayKey==='function'?todayKey():isoFromDate(new Date()));
+    if(mode==='day')return {start:today,end:today};
+    if(mode==='week')return {start:typeof kyAddDays==='function'?kyAddDays(today,-6):today,end:today};
+    const p=jalaliParts(today);
+    if(!p)return {start:today,end:today};
+    const start=typeof kyIsoFromJalali==='function'?kyIsoFromJalali(p[0],p[1],1):today;
+    return {start,end:today};
+  }
+  function rowsToPair(data){
+    if(!data)return null;
+    if(data.me&&data.partner)return data;
+    if(Array.isArray(data)){
+      const me=data.find(x=>String(x.user_id)===String(currentUser?.id));
+      const pa=data.find(x=>String(x.user_id)===String(currentProfile?.partner_id));
+      if(me||pa)return {me:me||{},partner:pa||{}};
+    }
+    return null;
+  }
+  async function queryComparison(mode){
+    if(!sb||!currentUser||!currentProfile?.partner_id)return null;
+    const r=rangeFor(mode);
+    try{
+      const {data,error}=await sb.rpc('get_couple_comparison',{p_start:r.start,p_end:r.end});
+      if(!error){const pair=rowsToPair(data);if(pair)return pair;}
+    }catch(_){ }
+    /* Direct partner session fallback, subject to the project's existing RLS. */
+    try{
+      const {data,error}=await sb.from('sessions').select('day,seconds,deleted_at,user_id').eq('user_id',currentProfile.partner_id).gte('day',r.start).lte('day',r.end);
+      if(error)throw error;
+      const partnerSeconds=(data||[]).filter(x=>!x.deleted_at).reduce((a,x)=>a+Math.max(0,Number(x.seconds)||0),0);
+      const ownSeconds=(CACHE.sessions||[]).filter(x=>!x.deleted_at&&x.day>=r.start&&x.day<=r.end).reduce((a,x)=>a+Math.max(0,Number(x.seconds)||0),0)
+        + (r.start<= (typeof kyStudyDayKey==='function'?kyStudyDayKey(new Date()):todayKey()) ? Math.max(0,Number(Timer?.state?.status==='running'?Timer.elapsedSeconds?.()||0:0)) : 0);
+      return {me:{user_id:currentUser.id,study_seconds:ownSeconds},partner:{user_id:currentProfile.partner_id,study_seconds:partnerSeconds}};
+    }catch(_){return null;}
+  }
+  async function refreshComparisons(){
+    const [d,w,m]=await Promise.all([queryComparison('day'),queryComparison('week'),queryComparison('month')]);
+    H.today=d;H.week=w;H.month=m;updateHotfixPartnerDom();
+    return {week:w,month:m};
+  }
+
+  function safeSeconds(data,who){return Math.max(0,Math.floor(Number(data?.[who]?.study_seconds||0)));}
+  function winner(me,pa){return me===pa?'مساوی':me>pa?'تو جلو هستی':'شریکت جلو است';}
+  function partnerName(){
+    try{return window.KY_LINKED_PARTNER?.display_name||window.KY_LINKED_PARTNER?.username||window.KY_LINKED_PARTNER?.email||'شریک';}catch(_){return 'شریک';}
+  }
+  function currentLive(){
+    const p=normalizePartner(H.partner||partnerPresence);
+    H.partner=p;return p;
+  }
+  function coupleCardHtml(){
+    if(!currentUser)return '';
+    if(!currentProfile?.partner_id){
+      return '<section class="card section ky-hotfix-couple-card"><div class="card-head"><h3>رقابت مطالعه</h3></div><p class="t-sm muted" style="line-height:2">حساب همسرت را لینک کن تا تایمر زنده و مقایسه روزانه، هفتگی و ماهانه فعال شود.</p><button class="btn btn-primary btn-sm" data-action="open-link-partner">لینک شریک</button></section>';
+    }
+    const live=currentLive();
+    const own=studyTodaySeconds();
+    const pa=live?Number(live.projected_today_seconds||0):safeSeconds(H.today,'partner');
+    const weekMe=safeSeconds(H.week,'me'),weekPa=safeSeconds(H.week,'partner');
+    const monthMe=safeSeconds(H.month,'me'),monthPa=safeSeconds(H.month,'partner');
+    const running=!!live?.is_studying;
+    const subject=running&&typeof subj==='function'?subj(live.subject):null;
+    const todayWinner=winner(own,pa);
+    const weekWinner=H.week?winner(weekMe,weekPa):'داده‌ای دریافت نشد';
+    const monthWinner=H.month?winner(monthMe,monthPa):'داده‌ای دریافت نشد';
+    return '<section class="card section ky-hotfix-couple-card" data-ky-hotfix-couple-card="1">'+
+      '<div class="card-head"><div style="min-width:0"><h3>رقابت مطالعه</h3><p>تایمر زنده و مجموع مطالعه هر دو نفر</p></div><span class="badge '+(live?'ok':'')+'"><span class="dot"></span>'+(live?'زنده':'در انتظار اتصال')+'</span></div>'+
+      '<div class="ky-hotfix-live-row">'+
+        '<div class="ky-hotfix-person"><span class="name">تو · مطالعه امروز</span><span class="time" id="kyHFOwnToday">'+fmtHM(own)+'</span></div>'+ 
+        '<div class="ky-hotfix-vs">VS</div>'+ 
+        '<div class="ky-hotfix-person"><span class="name">'+esc(partnerName())+' · مطالعه امروز</span><span class="time" id="kyHFPartnerToday">'+fmtHM(pa)+'</span></div>'+ 
+      '</div>'+ 
+      '<div class="ky-hotfix-now"><span class="ky-hotfix-dot '+(running?'live':'')+'"></span><div class="ky-hotfix-now-main"><b id="kyHFPartnerStatus">'+esc(running?(subject?.name?'در حال مطالعه · '+subject.name:'در حال مطالعه'):(live?'در حال مطالعه نیست · آنلاین':'آفلاین'))+'</b><span id="kyHFPartnerClock">'+(running?fmtHM(live.live_session_seconds):'—')+'</span></div></div>'+
+      '<div class="ky-hotfix-stats">'+
+        '<div class="ky-hotfix-stat"><span>این هفته</span><b id="kyHFWeekMe">'+fmtHM(weekMe)+'</b><em id="kyHFWeekCompare">شریک: '+fmtHM(weekPa)+' · '+esc(weekWinner)+'</em></div>'+
+        '<div class="ky-hotfix-stat"><span>این ماه</span><b id="kyHFMonthMe">'+fmtHM(monthMe)+'</b><em id="kyHFMonthCompare">شریک: '+fmtHM(monthPa)+' · '+esc(monthWinner)+'</em></div>'+ 
+      '</div>'+
+      '<div class="t-xs muted mt-2" id="kyHFCompareText">امروز: '+esc(todayWinner)+(live&&running?' · '+esc(subject?.name||'در حال مطالعه'):'')+'</div>'+
+    '</section>';
+  }
+
+  function updateHotfixHomeStudy(){
+    const root=document.getElementById('homeRoot');if(!root)return;
+    const cards=root.querySelectorAll('.stat');
+    for(const card of cards){
+      const label=card.querySelector('.lbl');
+      if(label&&String(label.textContent||'').includes('مطالعه امروز')){
+        const val=card.querySelector('.val');if(val)val.textContent=typeof fmtHMfa==='function'?fmtHMfa(studyTodaySeconds()/60):fmtHM(studyTodaySeconds());
+        break;
+      }
+    }
+  }
+  function updateHotfixPartnerDom(){
+    const card=document.querySelector('[data-ky-hotfix-couple-card="1"]');
+    if(!card)return;
+    const live=currentLive();
+    const own=studyTodaySeconds();
+    const pa=live?Number(live.projected_today_seconds||0):safeSeconds(H.today,'partner');
+    const running=!!live?.is_studying;
+    const subject=running&&typeof subj==='function'?subj(live.subject):null;
+    const ownEl=document.getElementById('kyHFOwnToday');if(ownEl)ownEl.textContent=fmtHM(own);
+    const pEl=document.getElementById('kyHFPartnerToday');if(pEl)pEl.textContent=fmtHM(pa);
+    const status=document.getElementById('kyHFPartnerStatus');if(status)status.textContent=running?('در حال مطالعه'+(subject?.name?' · '+subject.name:'')):(live?'در حال مطالعه نیست · آنلاین':'آفلاین');
+    const dot=card.querySelector('.ky-hotfix-dot');if(dot)dot.classList.toggle('live',running);
+    const clock=document.getElementById('kyHFPartnerClock');if(clock)clock.textContent=running?fmtHM(live.live_session_seconds):'—';
+    const ws=document.getElementById('kyHFWeekMe');if(ws)ws.textContent=fmtHM(safeSeconds(H.week,'me'));
+    const ms=document.getElementById('kyHFMonthMe');if(ms)ms.textContent=fmtHM(safeSeconds(H.month,'me'));
+    const wc=document.getElementById('kyHFWeekCompare');if(wc)wc.textContent=H.week?'شریک: '+fmtHM(safeSeconds(H.week,'partner'))+' · '+winner(safeSeconds(H.week,'me'),safeSeconds(H.week,'partner')):'داده‌ای دریافت نشد';const mc=document.getElementById('kyHFMonthCompare');if(mc)mc.textContent=H.month?'شریک: '+fmtHM(safeSeconds(H.month,'partner'))+' · '+winner(safeSeconds(H.month,'me'),safeSeconds(H.month,'partner')):'داده‌ای دریافت نشد';
+    const cmp=document.getElementById('kyHFCompareText');if(cmp)cmp.textContent='امروز: '+winner(own,pa)+(running&&subject?.name?' · '+subject.name:'');
+  }
+
+  function replaceHomePartner(){
+    const root=document.getElementById('homeRoot');if(!root)return;
+    let host=root.querySelector('[data-partner-card="1"]');
+    if(!host){
+      const title=root.querySelector('.view-title');
+      if(title){host=document.createElement('div');host.setAttribute('data-partner-card','1');title.insertAdjacentElement('afterend',host);}
+    }
+    if(host)host.innerHTML=coupleCardHtml();
+  }
+
+  const previousRenderHome=window.renderHome;
+  window.renderHome=async function(){
+    if(typeof previousRenderHome==='function')await previousRenderHome();
+    replaceHomePartner();
+    updateHotfixHomeStudy();
+    updateHotfixPartnerDom();
+    refreshComparisons().catch(()=>{});
+  };
+  try{renderHome=window.renderHome;}catch(_){ }
+  try{if(window.RENDER)window.RENDER.home=window.renderHome;}catch(_){ }
+
+  const previousRenderPartner=window.renderPartnerCard;
+  window.renderPartnerCard=function(){
+    replaceHomePartner();
+    updateHotfixPartnerDom();
+    return coupleCardHtml();
+  };
+  try{renderPartnerCard=window.renderPartnerCard;}catch(_){ }
+
+  /* Dedicated couple view uses the same data source, so it cannot drift from Home. */
+  window.renderCouple=async function(){
+    const root=document.getElementById('coupleRoot');if(!root)return;
+    if(!currentUser){root.innerHTML='<div class="card section"><h3>رقابت زوجی</h3><p class="t-sm muted">برای استفاده از این بخش وارد حساب شو.</p><button class="btn btn-primary mt-3" data-action="open-account">ورود به حساب</button></div>';return;}
+    if(!currentProfile?.partner_id){root.innerHTML=coupleCardHtml();return;}
+    await refreshComparisons();
+    await startHotfixPresence();
+    const live=currentLive();
+    const own=studyTodaySeconds(),pa=live?Number(live.projected_today_seconds||0):safeSeconds(H.today,'partner');
+    const wm=safeSeconds(H.week,'me'),wp=safeSeconds(H.week,'partner'),mm=safeSeconds(H.month,'me'),mp=safeSeconds(H.month,'partner');
+    root.innerHTML='<div class="ky-couple-page"><div class="page-head"><div><h1>رقابت مطالعه</h1><p class="muted">مقایسه فقط بین تو و '+esc(partnerName())+'</p></div><button class="btn" data-action="sync-now">همگام‌سازی</button></div>'+coupleCardHtml()+
+      '<div class="grid g2 section">'+
+      '<section class="card"><div class="card-head"><h3>امروز</h3><span class="badge">'+esc(winner(own,pa))+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+fmtHM(own)+'</b></div><div><span>شریک</span><b>'+fmtHM(pa)+'</b></div></div></section>'+
+      '<section class="card"><div class="card-head"><h3>این هفته</h3><span class="badge">'+esc(H.week?winner(wm,wp):'داده‌ای دریافت نشد')+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+fmtHM(wm)+'</b></div><div><span>شریک</span><b>'+fmtHM(wp)+'</b></div></div></section>'+
+      '<section class="card"><div class="card-head"><h3>این ماه</h3><span class="badge">'+esc(H.month?winner(mm,mp):'داده‌ای دریافت نشد')+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+fmtHM(mm)+'</b></div><div><span>شریک</span><b>'+fmtHM(mp)+'</b></div></div></section>'+
+      '<section class="card"><div class="card-head"><h3>وضعیت فعلی</h3></div><p class="t-sm" style="line-height:2">امروز: <b>'+esc(winner(own,pa))+'</b><br>هفته: <b>'+esc(H.week?winner(wm,wp):'نامشخص')+'</b><br>ماه: <b>'+esc(H.month?winner(mm,mp):'نامشخص')+'</b></p></section>'+
+      '</div></div>';
+  };
+  try{renderCouple=window.renderCouple;if(window.RENDER)window.RENDER.couple=window.renderCouple;}catch(_){ }
+
+  /* Stable one-second updater. It updates text only; no card re-render loop. */
+  clearInterval(H.poll);
+  H.poll=setInterval(()=>{
+    H.partner=normalizePartner(H.partner||partnerPresence);
+    partnerPresence=H.partner;
+    updateHotfixHomeStudy();
+    updateHotfixPartnerDom();
+  },1000);
+
+  async function boot(){
+    if(!currentUser||!sb||!currentProfile?.partner_id)return;
+    if(H.linkedId!==String(currentProfile.partner_id)){
+      H.linkedId=String(currentProfile.partner_id);
+      try{window.KY_LINKED_PARTNER=await fetchPartnerProfile();}catch(_){ }
+    }
+    normalizeExamTarget();
+    await startHotfixPresence();
+    await refreshComparisons();
+    if(S.activeView==='home'){
+      replaceHomePartner();
+      updateHotfixHomeStudy();
+      updateHotfixPartnerDom();
+    }
+  }
+  H.bootTimer=setTimeout(()=>boot(),900);
+  [1800,3500,6500].forEach(ms=>setTimeout(()=>boot(),ms));
+
+  /* Replace stale same-file couple timers with our single ticker. */
+  try{if(window.KY){['coupleTicker','coupleRefreshTimer','coupleHeartbeat'].forEach(k=>{if(window.KY[k]){clearInterval(window.KY[k]);window.KY[k]=null;}})}}catch(_){ }
+
+  window.KY_HOTFIX_DIAGNOSTICS=function(){
+    return {
+      civilDay:isoFromDate(new Date()),
+      studyDay:typeof kyStudyDayKey==='function'?kyStudyDayKey(new Date()):null,
+      examDate:S?.settings?.examDate||null,
+      countdown:S?.settings?.examDate&&typeof diffDays==='function'?Math.max(0,diffDays(todayKey(),S.settings.examDate)):null,
+      timerStatus:Timer?.state?.status||'idle',
+      ownTodaySeconds:studyTodaySeconds(),
+      partner: H.partner ? {status:H.partner.status,subject:H.partner.subject||null,projected_today_seconds:H.partner.projected_today_seconds} : null,
+      today: H.today ? {me:safeSeconds(H.today,'me'),partner:safeSeconds(H.today,'partner')} : null,
+      week: H.week ? {me:safeSeconds(H.week,'me'),partner:safeSeconds(H.week,'partner')} : null,
+      month: H.month ? {me:safeSeconds(H.month,'me'),partner:safeSeconds(H.month,'partner')} : null,
+      heartbeat:!!H.heartbeat,
+      channel:!!H.channel
+    };
+  };
+})();
+</script>
 </body>
 </html>
