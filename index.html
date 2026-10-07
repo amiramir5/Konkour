@@ -2556,8 +2556,8 @@ const STORE_KEY = 'app';
 const SUPABASE_URL = 'https://fsyfdwgtteeyxtoumltz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OAtQRxO5sP6unCn_5BnxMA_Wm0Z7LEN';
 
-const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6JCmdeF2I4oVmCpmsVkn15DUfCws2d6d4uc3cggk_j3cg';
-const OPENROUTER_API_KEY_DEFAULT = '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';
+const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6K_Jy6HhacA0g8MdJp47S3rM4UeFCqdgi0oaYMKytL27w';
+const OPENROUTER_API_KEY_DEFAULT = '';
 
 /* Subjects — تجربی کامل */
 const SUBJECTS = [
@@ -2721,9 +2721,9 @@ function defaultState() {
         primaryProvider: 'gemini',
         fallbackEnabled: true,
         geminiKey: GEMINI_API_KEY_DEFAULT,
-        geminiModel: 'gemini-3.5-flash',
+        geminiModel: 'gemini-3.8-flash',
         openrouterKey: OPENROUTER_API_KEY_DEFAULT,
-        openrouterModel: 'qwen/qwen3.6-plus:free'
+        openrouterModel: 'openrouter/free'
       }
     }
   };
@@ -4983,8 +4983,8 @@ const STORE_KEY = 'app';
 const SUPABASE_URL = 'https://fsyfdwgtteeyxtoumltz.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OAtQRxO5sP6unCn_5BnxMA_Wm0Z7LEN';
 
-const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6JCmdeF2I4oVmCpmsVkn15DUfCws2d6d4uc3cggk_j3cg';
-const OPENROUTER_API_KEY_DEFAULT = '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';
+const GEMINI_API_KEY_DEFAULT = 'AQ.Ab8RN6K_Jy6HhacA0g8MdJp47S3rM4UeFCqdgi0oaYMKytL27w';
+const OPENROUTER_API_KEY_DEFAULT = '';
 
 /* Subjects — تجربی کامل */
 const SUBJECTS = [
@@ -5148,9 +5148,9 @@ function defaultState() {
         primaryProvider: 'gemini',
         fallbackEnabled: true,
         geminiKey: GEMINI_API_KEY_DEFAULT,
-        geminiModel: 'gemini-3.5-flash',
+        geminiModel: 'gemini-3.8-flash',
         openrouterKey: OPENROUTER_API_KEY_DEFAULT,
-        openrouterModel: 'qwen/qwen3.6-plus:free'
+        openrouterModel: 'openrouter/free'
       }
     }
   };
@@ -12865,19 +12865,7 @@ window.addEventListener('unhandledrejection', (e) => {
   setTimeout(refreshNow, 500);
   setTimeout(refreshNow, 1500);
 
-  // Keep the displayed clocks local; Presence itself is NOT tracked every second.
-  setInterval(() => {
-    try {
-      const t = document.getElementById('kyPartnerLiveTimer');
-      if (t && KY.partnerPresence && KY.partnerPresence.status === 'running' && KY.partnerPresence.started_at) {
-        t.textContent = fmtSeconds(Math.floor((Date.now() - Number(KY.partnerPresence.started_at)) / 1000));
-      }
-      const p = document.getElementById('kyPartnerTodayTotal');
-      if (p) p.textContent = fmtSeconds(partnerLiveTodaySeconds());
-      const live = document.querySelector('[data-couple-live-host]');
-      if (live && S?.activeView === 'home') live.innerHTML = renderCoupleLiveCard();
-    } catch (_) {}
-  }, 1000);
+  // Live clock is updated by the final stable ticker below; no DOM rebuild loop here.
 
   window.addEventListener('online', () => {
     setTimeout(() => {
@@ -14134,6 +14122,262 @@ setInterval(()=>{if(currentUser&&currentProfile?.partner_id&&Timer?.state?.statu
 setTimeout(()=>{try{if(currentUser&&currentProfile?.partner_id)kyStartPresence();}catch(_){}},1800);
 
 KY.installed=true;
+})();
+
+</script>
+<script>
+(function(){
+'use strict';
+
+/* ========================= FINAL UX / AI / COUPLE FIXES ========================= */
+window.KY_FINAL_FIX = window.KY_FINAL_FIX || {version:'2026.10.07.2'};
+try{ if(window.KY_ULTIMATE) window.KY = window.KY_ULTIMATE; }catch(_){}
+
+/* ---------- AI defaults ---------- */
+try{
+  if(window.S && S.settings){
+    S.settings.ai = S.settings.ai || {};
+    /* User-supplied Gemini key. WARNING: any frontend key is public. */
+    S.settings.ai.geminiKey = 'AQ.Ab8RN6K_Jy6HhacA0g8MdJp47S3rM4UeFCqdgi0oaYMKytL27w';
+    if(!S.settings.ai.geminiModel || /^gemini-3\\.0|^gemini-3\\.5-pro$/.test(S.settings.ai.geminiModel)) S.settings.ai.geminiModel='gemini-3.8-flash';
+    /* Never ship the old invalid OpenRouter key as a default. */
+    if(S.settings.ai.openrouterKey === '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') S.settings.ai.openrouterKey='';
+    if(!S.settings.ai.openrouterModel || /:free$/.test(S.settings.ai.openrouterModel) && S.settings.ai.openrouterModel==='qwen/qwen3.6-plus:free') S.settings.ai.openrouterModel='openrouter/free';
+    if(typeof saveSettings==='function') saveSettings().catch(()=>{});
+  }
+}catch(_){ }
+
+/* ---------- Model registry: current free-capable choices ---------- */
+try{
+  if(Array.isArray(window.GEMINI_MODELS)){
+    GEMINI_MODELS.splice(0,GEMINI_MODELS.length,
+      {id:'gemini-3.8-flash',label:'Gemini 3.8 Flash — قوی و سریع'},
+      {id:'gemini-3.7-flash',label:'Gemini 3.7 Flash — استدلال قوی'},
+      {id:'gemini-3.6-flash',label:'Gemini 3.6 Flash — متعادل'},
+      {id:'gemini-3.5-flash',label:'Gemini 3.5 Flash — پایدار'},
+      {id:'gemini-3.5-flash-lite',label:'Gemini 3.5 Flash-Lite — سبک'}
+    );
+  }
+  if(Array.isArray(window.OPENROUTER_MODELS)){
+    OPENROUTER_MODELS.splice(0,OPENROUTER_MODELS.length,
+      {id:'openrouter/free',label:'OpenRouter Free — انتخاب خودکار مدل رایگان'},
+      {id:'nvidia/nemotron-3-ultra-253b-a26b-instruct:free',label:'Nemotron 3 Ultra — رایگان'},
+      {id:'nvidia/nemotron-3.5-lightning:free',label:'Nemotron 3.5 Lightning — رایگان و سریع'},
+      {id:'poolside/laguna-s-2.1:free',label:'Laguna S 2.1 — رایگان'}
+    );
+  }
+}catch(_){ }
+
+/* ---------- Couple link: verify immediately and keep UI state ---------- */
+try{
+  const originalLink = window.linkPartner;
+  if(typeof originalLink==='function'){
+    window.linkPartner = async function(email){
+      const normalized=String(email||'').trim().toLowerCase();
+      if(!normalized) throw new Error('ایمیل شریک را وارد کن');
+      if(!sb || !currentUser) throw new Error('اول وارد حساب شو');
+      const {data,error}=await sb.rpc('link_partner',{partner_email:normalized});
+      if(error) throw new Error(error.message||'لینک شریک انجام نشد');
+      if(!data || data.ok!==true || !data.partner_id) throw new Error('سرور لینک را تأیید نکرد');
+      currentProfile = currentProfile || {user_id:currentUser.id};
+      currentProfile.partner_id=data.partner_id;
+      currentProfile.email=currentProfile.email||currentUser.email;
+      let pp=null;
+      try{ pp=await fetchPartnerProfile(); }catch(_){ }
+      window.KY_LINKED_PARTNER = pp || {user_id:data.partner_id,email:data.partner_email};
+      try{ await kyStopPresence?.(); }catch(_){ }
+      try{ await kyStartPresence?.(); }catch(_){ }
+      try{ await kyLoadCoupleDashboard?.(); }catch(_){ }
+      try{ await kyLoadPartnerLive?.(); }catch(_){ }
+      try{ if(typeof saveSettings==='function') await saveSettings(); }catch(_){ }
+      try{ renderHome?.(); }catch(_){ }
+      try{ if(S.activeView==='settings') renderSettings?.(); }catch(_){ }
+      return data;
+    };
+    try{linkPartner=window.linkPartner;}catch(_){ }
+  }
+}catch(_){ }
+
+/* ---------- Stop the old one-second DOM re-render loop ---------- */
+try{
+  if(window.KY_COUPLE && window.KY_COUPLE._oldRenderLoop){clearInterval(window.KY_COUPLE._oldRenderLoop);}
+}catch(_){ }
+
+/* ---------- Stable live ticker: update text only, never rebuild cards ---------- */
+function kyFinalUpdateLiveText(){
+  try{
+    const live=window.KY?.partnerLive || window.KY_COUPLE?.partnerPresence;
+    if(!live) return;
+    const started=live.started_at ? new Date(live.started_at).getTime() : 0;
+    const extra=live.is_studying&&started ? Math.max(0,Math.floor((Date.now()-started)/1000)) : 0;
+    const session=Number(live.session_elapsed_seconds||0)+extra;
+    const total=Number(live.today_seconds||0)+session;
+    const clock=document.getElementById('kyPartnerLiveClock')||document.getElementById('kyPartnerLiveTimer');
+    if(clock) clock.textContent=typeof kySec==='function'?kySec(session):String(session);
+    const totalEl=document.getElementById('kyPartnerTodayTotal');
+    if(totalEl) totalEl.textContent=typeof kySec==='function'?kySec(total):String(total);
+  }catch(_){ }
+}
+try{
+  if(window.KY && window.KY.coupleTicker) clearInterval(window.KY.coupleTicker);
+  if(window.KY) window.KY.coupleTicker=setInterval(kyFinalUpdateLiveText,1000);
+}catch(_){ }
+
+/* ---------- Realtime: use postgres_changes with table RLS, not private Presence ---------- */
+try{
+  if(typeof kyStartPresence==='function'){
+    window.kyStartPresenceFinal=async function(){
+      if(!sb||!currentUser||!currentProfile?.partner_id) return;
+      try{ if(window.KY?.coupleChannel) await sb.removeChannel(window.KY.coupleChannel); }catch(_){ }
+      const pair=typeof kyPairKey==='function'?kyPairKey():[currentUser.id,currentProfile.partner_id].sort().join('_');
+      const channel=sb.channel('ky-couple-live-'+pair);
+      if(window.KY) window.KY.coupleChannel=channel;
+      channel.on('postgres_changes',{event:'*',schema:'public',table:'couple_live_state',filter:'user_id=eq.'+currentProfile.partner_id},payload=>{
+        const row=payload.eventType==='DELETE'?null:(payload.new||null);
+        if(window.KY) window.KY.partnerLive=row;
+        partnerPresence=row?{online:true,subject:row.subject,started_at:row.started_at?new Date(row.started_at).getTime():null,session_elapsed_seconds:Number(row.session_elapsed_seconds||0),today_seconds:Number(row.today_seconds||0),status:row.is_studying?'running':'idle'}:null;
+        kyFinalUpdateLiveText();
+        try{renderPartnerCard?.();}catch(_){ }
+      });
+      await channel.subscribe(async status=>{
+        if(status==='SUBSCRIBED'){
+          try{await kyLoadPartnerLive?.();}catch(_){ }
+          try{await kyLoadCoupleDashboard?.();}catch(_){ }
+          kyFinalUpdateLiveText();
+        }
+      });
+      if(window.KY) window.KY.coupleChannel=channel;
+    };
+    window.startPresence=window.kyStartPresenceFinal;
+    try{startPresence=window.kyStartPresenceFinal;}catch(_){ }
+  }
+}catch(_){ }
+
+/* ---------- Dedicated couple comparison view ---------- */
+function kyFinalEnsureCoupleView(){
+  document.querySelectorAll('.main').forEach(main=>{
+    if(!main.querySelector('#view-couple')){
+      const s=document.createElement('section');
+      s.id='view-couple'; s.className='view'; s.setAttribute('aria-label','رقابت زوجی');
+      s.innerHTML='<div id="coupleRoot"></div>';
+      main.appendChild(s);
+    }
+  });
+  try{
+    if(!NAV_ITEMS.some(x=>x.id==='couple')) NAV_ITEMS.splice(7,0,{id:'couple',label:'رقابت زوجی',icon:'stats'});
+    VIEW_TITLES.couple='رقابت زوجی';
+  }catch(_){ }
+}
+
+function kyFinalSec(s){s=Math.max(0,Math.floor(Number(s)||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return (typeof faNum==='function'?faNum:window.faNum)(String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0'));}
+function kyFinalDateLabel(key){try{return typeof faDate==='function'?faDate(key,'short'):key;}catch(_){return key;}}
+function kyFinalRows(type){return Array.isArray(window.KY?.coupleDashboard?.[type])?window.KY.coupleDashboard[type]:[];}
+function kyFinalWinner(a,b){if(a===b)return 'مساوی';return a>b?'تو جلو هستی':'همسرت جلو است';}
+
+async function kyFinalRenderCouple(){
+  const root=document.getElementById('coupleRoot');if(!root)return;
+  if(!currentUser){root.innerHTML='<div class="card section"><h3>رقابت زوجی</h3><p class="t-sm muted">برای استفاده از این بخش وارد حساب شو.</p><button class="btn btn-primary mt-3" data-action="open-account">ورود به حساب</button></div>';return;}
+  if(!currentProfile?.partner_id){root.innerHTML='<div class="card section ky-couple-card"><div class="ky-couple-empty"><div class="ky-couple-orb">♥</div><div><span class="ky-review-kicker">رقابت دونفره</span><h2>هنوز شریک لینک نشده</h2><p>ایمیل همسرت را یک‌بار لینک کن؛ بعد از آن این صفحه تایمر زنده و مقایسه روزانه، هفتگی و ماهانه را نشان می‌دهد.</p><button class="btn btn-primary mt-3" data-action="open-link-partner">لینک شریک</button></div></div></div>';return;}
+  try{await kyLoadCoupleDashboard?.();await kyLoadPartnerLive?.();}catch(_){ }
+  const d=window.KY?.coupleDashboard||{};
+  const t=kyFinalRows('today'),w=kyFinalRows('week'),m=kyFinalRows('month');
+  const meT=t.find(x=>x.user_id===currentUser.id)||{},paT=t.find(x=>x.user_id!==currentUser.id)||{};
+  const meW=w.find(x=>x.user_id===currentUser.id)||{},paW=w.find(x=>x.user_id!==currentUser.id)||{};
+  const meM=m.find(x=>x.user_id===currentUser.id)||{},paM=m.find(x=>x.user_id!==currentUser.id)||{};
+  const live=window.KY?.partnerLive;
+  const partnerNow=live?Number(live.today_seconds||0)+Number(live.session_elapsed_seconds||0)+(live.is_studying&&live.started_at?Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)):0):Number(paT.today_seconds||0);
+  const myNow=(typeof kyMyTodaySeconds==='function'?kyMyTodaySeconds():Number(meT.today_seconds||0));
+  const ww=Number(meW.week_seconds||0),pw=Number(paW.week_seconds||0),mm=Number(meM.month_seconds||0),pm=Number(paM.month_seconds||0);
+  root.innerHTML='<div class="ky-couple-page">'+
+    '<div class="page-head"><div><span class="ky-review-kicker">COUPLE</span><h1>رقابت مطالعه</h1><p class="muted">همزمان ببین چه کسی جلوتر است.</p></div><button class="btn" data-action="sync-now">همگام‌سازی</button></div>'+
+    '<section class="card ky-couple-card"><div class="ky-couple-top"><div><h3>الان</h3><p>تایمر همسرت بدون بازسازی کارت به‌صورت زنده جلو می‌رود.</p></div><span class="badge ok"><span class="dot"></span>زنده</span></div>'+
+      '<div class="ky-live-grid"><div class="ky-live-person me"><div class="ky-live-avatar">تو</div><div><b>'+kyFinalSec(myNow)+'</b><span>مطالعه امروز</span></div></div><div class="ky-vs">VS</div><div class="ky-live-person partner"><div class="ky-live-avatar">♥</div><div><b id="kyFinalPartnerTotal">'+kyFinalSec(partnerNow)+'</b><span>'+(live?.is_studying?'در حال مطالعه':'امروز')+'</span></div></div></div>'+ 
+      '<div class="ky-partner-now">'+(live?.is_studying?'<span class="live-pulse"></span><div><b>همسرت الان '+esc(typeof subj==='function'?subj(live.subject).name:'در حال مطالعه')+' می‌خواند</b><strong id="kyFinalPartnerClock">'+kyFinalSec(Number(live.session_elapsed_seconds||0)+(live.started_at?Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000)):0))+'</strong></div>':'<span class="live-pulse off"></span><div><b>همسرت الان در حال مطالعه نیست</b><span>با شروع تایمر، وضعیت زنده می‌شود.</span></div>')+'</div>'+
+    '</section>'+
+    '<div class="grid g2 section">'+
+      '<section class="card"><div class="card-head"><h3>امروز</h3><span class="badge">'+esc(kyFinalWinner(Number(meT.today_seconds||0),Number(paT.today_seconds||0)))+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+kyFinalSec(myNow)+'</b></div><div><span>همسرت</span><b>'+kyFinalSec(partnerNow)+'</b></div></div></section>'+
+      '<section class="card"><div class="card-head"><h3>این هفته</h3><span class="badge">'+esc(kyFinalWinner(ww,pw))+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+kyFinalSec(ww)+'</b></div><div><span>همسرت</span><b>'+kyFinalSec(pw)+'</b></div></div><div class="ky-dual-bar"><i style="width:'+Math.min(100,ww/Math.max(1,Math.max(ww,pw))*100)+'%"></i><i style="width:'+Math.min(100,pw/Math.max(1,Math.max(ww,pw))*100)+'%"></i></div></section>'+ 
+      '<section class="card"><div class="card-head"><h3>این ماه</h3><span class="badge">'+esc(kyFinalWinner(mm,pm))+'</span></div><div class="ky-compare-big"><div><span>تو</span><b>'+kyFinalSec(mm)+'</b></div><div><span>همسرت</span><b>'+kyFinalSec(pm)+'</b></div></div><div class="ky-dual-bar"><i style="width:'+Math.min(100,mm/Math.max(1,Math.max(mm,pm))*100)+'%"></i><i style="width:'+Math.min(100,pm/Math.max(1,Math.max(mm,pm))*100)+'%"></i></div></section>'+ 
+      '<section class="card"><div class="card-head"><h3>وضعیت رقابت</h3><span class="badge brand">هفته / ماه</span></div><p class="t-sm" style="line-height:2">هفته: <b>'+esc(kyFinalWinner(ww,pw))+'</b><br>ماه: <b>'+esc(kyFinalWinner(mm,pm))+'</b><br>اختلاف هفتگی: <b>'+kyFinalSec(Math.abs(ww-pw))+'</b><br>اختلاف ماهانه: <b>'+kyFinalSec(Math.abs(mm-pm))+'</b></p></section>'+ 
+    '</div></div>';
+}
+
+/* ---------- Navigation: one shared More menu, no duplicate second menu ---------- */
+try{
+  if(Array.isArray(BOTTOM_NAV)){
+    BOTTOM_NAV.splice(0,BOTTOM_NAV.length,'home','timer','exams','stats');
+  }
+  kyFinalEnsureCoupleView();
+  if(typeof buildNav==='function') buildNav();
+  const oldMore=window.kyMoreMenu;
+  window.kyMoreMenu=function(){
+    try{if(typeof kyToggleMobileMenu==='function'){kyToggleMobileMenu(true);return;}}catch(_){ }
+    try{oldMore?.();}catch(_){ }
+  };
+  try{kyMoreMenu=window.kyMoreMenu;}catch(_){ }
+  /* Hide the extra top menu trigger created by the older patch; the original mobile
+     hamburger remains the single full navigation entry point. */
+  document.querySelectorAll('.mobile-more-btn').forEach(x=>x.style.display='none');
+  /* Add Couple to the existing hamburger menu, with correct icon/label. */
+  if(typeof kyRenderMobileMenu==='function') kyRenderMobileMenu();
+}catch(_){ }
+
+/* ---------- Dedicated couple render registration ---------- */
+try{
+  if(window.RENDER) window.RENDER.couple=kyFinalRenderCouple;
+  window.renderCouple=kyFinalRenderCouple;
+  renderCouple=kyFinalRenderCouple;
+}catch(_){ }
+
+/* ---------- Account body: show actual linked partner ---------- */
+try{
+  const oldAccountBody=window.buildAccountBody;
+  if(typeof oldAccountBody==='function'){
+    window.buildAccountBody=function(){
+      const html=oldAccountBody();
+      if(!currentProfile?.partner_id)return html;
+      const partner=window.KY_LINKED_PARTNER;
+      const label=partner?.display_name||partner?.email||'حساب متصل';
+      return html.replace('<b class="t-sm">لینک‌شده</b>','<b class="t-sm">'+esc(label)+'</b>');
+    };
+    try{buildAccountBody=window.buildAccountBody;}catch(_){ }
+  }
+}catch(_){ }
+
+/* ---------- Fix home card: update in place instead of replacing whole card ---------- */
+try{
+  const oldTicker=window.KY?.coupleTicker;
+  if(oldTicker)clearInterval(oldTicker);
+  if(window.KY) window.KY.coupleTicker=setInterval(()=>{
+    kyFinalUpdateLiveText();
+    const el=document.getElementById('kyFinalPartnerClock');
+    const live=window.KY?.partnerLive;
+    if(el&&live?.is_studying&&live.started_at){
+      const s=Number(live.session_elapsed_seconds||0)+Math.max(0,Math.floor((Date.now()-new Date(live.started_at).getTime())/1000));
+      el.textContent=kyFinalSec(s);
+    }
+  },1000);
+}catch(_){ }
+
+/* ---------- Boot: refresh profile and start couple channel once ---------- */
+async function kyFinalBootCouple(){
+  try{
+    if(!currentUser||!sb)return;
+    await fetchMyProfile();
+    if(currentProfile?.partner_id){
+      try{window.KY_LINKED_PARTNER=await fetchPartnerProfile();}catch(_){ }
+      try{await kyStartPresenceFinal();}catch(_){ }
+      try{await kyLoadCoupleDashboard?.();}catch(_){ }
+      try{await kyLoadPartnerLive?.();}catch(_){ }
+      try{if(S.activeView==='home')renderHome?.();}catch(_){ }
+    }
+  }catch(_){ }
+}
+setTimeout(kyFinalBootCouple,1200);
+
+/* ---------- Expose direct navigation helper ---------- */
+window.openCoupleCompetition=function(){kyFinalEnsureCoupleView();navigate('couple');};
+
 })();
 
 </script>
