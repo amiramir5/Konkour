@@ -12434,5 +12434,468 @@ window.addEventListener('unhandledrejection', (e) => {
 })();
 </script>
 
+
+<script>
+/* ============================================================================
+ * KONKOOR YAR — COUPLE LIVE / COMPETITION PATCH
+ *
+ * Paste this script AFTER the existing application scripts and BEFORE </body>.
+ * It does not delete or replace existing application lines; it overrides the
+ * live couple functions and extends the Home / Weekly / Monthly views.
+ *
+ * Requires the Supabase SQL schema v2.1 supplied with this patch:
+ *   - get_couple_comparison(date,date)
+ *   - private Presence policies on realtime.messages
+ * ============================================================================ */
+(function () {
+  'use strict';
+
+  const KY = window.KY_COUPLE = window.KY_COUPLE || {
+    presenceChannel: null,
+    partnerPresence: null,
+    comparisonBusy: false,
+    lastComparison: null,
+    installed: false
+  };
+
+  function pairTopic() {
+    try {
+      if (!currentUser || !currentProfile || !currentProfile.partner_id) return null;
+      const a = String(currentUser.id || '');
+      const b = String(currentProfile.partner_id || '');
+      if (!a || !b || a === b) return null;
+      const ids = [a, b].sort();
+      return 'couple:' + ids[0] + ':' + ids[1];
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function todayCompletedSeconds() {
+    try {
+      const key = typeof todayKey === 'function' ? todayKey() : '';
+      return (CACHE?.sessions || [])
+        .filter(s => !s.deleted_at && s.day === key)
+        .reduce((sum, s) => sum + Math.max(0, Number(s.seconds) || 0), 0);
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  function myLiveTodaySeconds() {
+    let total = todayCompletedSeconds();
+    try {
+      if (Timer && Timer.state && Timer.state.status === 'running') {
+        total += Math.max(0, Number(Timer.elapsedSeconds()) || 0);
+      }
+    } catch (_) {}
+    return total;
+  }
+
+  function fmtSeconds(seconds) {
+    seconds = Math.max(0, Math.floor(Number(seconds) || 0));
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) return faNum(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0'));
+    return faNum(String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
+  }
+
+  function partnerLiveTodaySeconds() {
+    const p = KY.partnerPresence;
+    if (!p) return 0;
+    let base = Math.max(0, Number(p.today_seconds) || 0);
+    if (p.status === 'running' && p.started_at) {
+      base += Math.max(0, Math.floor((Date.now() - Number(p.started_at)) / 1000));
+    }
+    return base;
+  }
+
+  function safeRenderPartner() {
+    try {
+      if (typeof renderPartnerCard === 'function') renderPartnerCard();
+    } catch (_) {}
+  }
+
+  function renderCoupleLiveCard() {
+    if (!currentUser) return '';
+    if (!currentProfile || !currentProfile.partner_id) {
+      return '<div class="card section">' +
+        '<div class="card-head"><h3>رقابت زوجی</h3></div>' +
+        '<p class="t-sm muted" style="line-height:2">برای دیدن تایمر زنده و مقایسه آمار، حساب همسرت را از بخش حساب کاربری لینک کن.</p>' +
+      '</div>';
+    }
+
+    const my = myLiveTodaySeconds();
+    const partner = partnerLiveTodaySeconds();
+    const pp = KY.partnerPresence;
+    const isRunning = !!(pp && pp.status === 'running' && pp.subject);
+    const sj = isRunning && typeof subj === 'function' ? subj(pp.subject) : null;
+
+    const partnerStatus = !pp
+      ? '<span class="badge">آفلاین</span>'
+      : isRunning
+        ? '<span class="badge ok"><span class="dot"></span>در حال مطالعه</span>'
+        : '<span class="badge ok"><span class="dot"></span>آنلاین</span>';
+
+    return '<div class="card section" data-couple-live-card="1">' +
+      '<div class="card-head">' +
+        '<h3>رقابت زنده</h3>' +
+        partnerStatus +
+      '</div>' +
+      '<div class="grid g2" style="gap:10px">' +
+        '<div class="card card-inset" style="padding:13px">' +
+          '<div class="t-xs muted">امروز تو</div>' +
+          '<div class="mono" style="font-size:25px;font-weight:800;margin-top:4px">' + fmtSeconds(my) + '</div>' +
+          '<div class="t-xs muted" style="margin-top:3px">مطالعه امروز</div>' +
+        '</div>' +
+        '<div class="card card-inset" style="padding:13px">' +
+          '<div class="t-xs muted">امروز همسر</div>' +
+          '<div class="mono" style="font-size:25px;font-weight:800;margin-top:4px">' + fmtSeconds(partner) + '</div>' +
+          '<div class="t-xs muted" style="margin-top:3px">' +
+            (isRunning && sj ? 'در حال مطالعه ' + esc(sj.name) : (pp ? 'آنلاین' : 'آفلاین')) +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function newPartnerCardHtml() {
+    if (!currentUser) return '';
+    if (!currentProfile || !currentProfile.partner_id) {
+      return '<div class="card section">' +
+        '<div class="card-head">' + ICONS.info + '<h3>شریک مطالعه</h3></div>' +
+        '<p class="t-sm muted mb-3" style="line-height:2">برای دیدن وضعیت زنده و رقابت، حساب شریک را لینک کن.</p>' +
+        '<button class="btn btn-sm btn-primary" data-action="open-link-partner">' +
+          ICONS.plus + '<span>لینک شریک</span>' +
+        '</button>' +
+      '</div>';
+    }
+
+    if (!KY.partnerPresence) {
+      return '<div class="card section">' +
+        '<div class="card-head">' + ICONS.info + '<h3>وضعیت شریک</h3><span class="badge">آفلاین</span></div>' +
+        '<p class="t-sm muted">همسر آفلاین است.</p>' +
+        '<div class="t-xs muted mt-2">مجموع امروز همسر: <b class="mono">' + fmtSeconds(0) + '</b></div>' +
+      '</div>';
+    }
+
+    const p = KY.partnerPresence;
+    const running = p.status === 'running' && p.subject;
+    const sj = running && typeof subj === 'function' ? subj(p.subject) : null;
+    const liveTimer = running && p.started_at
+      ? Math.max(0, Math.floor((Date.now() - Number(p.started_at)) / 1000))
+      : 0;
+
+    return '<div class="card section">' +
+      '<div class="card-head">' + ICONS.flame +
+        '<h3>وضعیت زنده همسر</h3>' +
+        '<span class="badge ok"><span class="dot"></span>آنلاین</span>' +
+      '</div>' +
+      '<div class="flex items-center gap-3">' +
+        (sj ? '<span style="width:12px;height:12px;border-radius:50%;background:' + sj.color + ';flex:none"></span>' : '') +
+        '<div style="flex:1;min-width:0">' +
+          '<b class="t-sm">' + (sj ? 'در حال مطالعه ' + esc(sj.name) : 'فعلاً مطالعه نمی‌کند') + '</b>' +
+          (running ? '<div class="mono" style="font-size:23px;font-weight:800" id="kyPartnerLiveTimer">' + fmtSeconds(liveTimer) + '</div>' : '') +
+          '<div class="t-xs muted mt-1">مجموع مطالعه امروز: <b class="mono" id="kyPartnerTodayTotal">' + fmtSeconds(partnerLiveTodaySeconds()) + '</b></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  async function kyStartPresence() {
+    if (!sb || !currentUser || !currentProfile || !currentProfile.partner_id) return;
+    const topic = pairTopic();
+    if (!topic) return;
+
+    try {
+      if (KY.presenceChannel && sb) await sb.removeChannel(KY.presenceChannel);
+    } catch (_) {}
+
+    KY.partnerPresence = null;
+    KY.presenceChannel = sb.channel(topic, {
+      config: {
+        private: true,
+        presence: { key: currentUser.id }
+      }
+    });
+
+    KY.presenceChannel.on('presence', { event: 'sync' }, () => {
+      try {
+        const state = KY.presenceChannel.presenceState();
+        const others = Object.keys(state).filter(k => k !== currentUser.id);
+        if (!others.length) {
+          KY.partnerPresence = null;
+          safeRenderPartner();
+          return;
+        }
+
+        // Because the SQL policy only lets the two linked users enter this topic,
+        // the only valid "other" user here is the linked partner.
+        const list = state[others[0]] || [];
+        const payload = list[0] || null;
+        if (!payload) {
+          KY.partnerPresence = null;
+        } else {
+          KY.partnerPresence = {
+            online: payload.online !== false,
+            status: payload.status || (payload.subject ? 'running' : 'online'),
+            subject: payload.subject || null,
+            started_at: payload.started_at || null,
+            today_seconds: Math.max(0, Number(payload.today_seconds) || 0),
+            updated_at: payload.updated_at || Date.now()
+          };
+        }
+        safeRenderPartner();
+      } catch (err) {
+        try { logError('couple presence sync: ' + (err.message || err)); } catch (_) {}
+      }
+    });
+
+    KY.presenceChannel.on('presence', { event: 'join' }, () => safeRenderPartner());
+    KY.presenceChannel.on('presence', { event: 'leave' }, () => {
+      KY.partnerPresence = null;
+      safeRenderPartner();
+    });
+
+    await KY.presenceChannel.subscribe(async status => {
+      if (status === 'SUBSCRIBED') {
+        await kyTrackPresence();
+      }
+    });
+  }
+
+  async function kyTrackPresence() {
+    if (!KY.presenceChannel || !currentUser) return;
+    try {
+      const running = !!(Timer && Timer.state && Timer.state.status === 'running');
+      const state = running ? Timer.state : null;
+      const payload = {
+        online: true,
+        status: running ? 'running' : 'online',
+        subject: running ? state.subject : null,
+        started_at: running ? state.started_at : null,
+        today_seconds: myLiveTodaySeconds(),
+        day: typeof todayKey === 'function' ? todayKey() : null,
+        updated_at: Date.now()
+      };
+      await KY.presenceChannel.track(payload);
+    } catch (err) {
+      try { logError('couple presence track: ' + (err.message || err)); } catch (_) {}
+    }
+  }
+
+  function kyStopPresence() {
+    return (async () => {
+      try {
+        if (KY.presenceChannel) {
+          try { await KY.presenceChannel.untrack(); } catch (_) {}
+          try { if (sb) await sb.removeChannel(KY.presenceChannel); } catch (_) {}
+        }
+      } finally {
+        KY.presenceChannel = null;
+        KY.partnerPresence = null;
+      }
+    })();
+  }
+
+  async function kyLoadComparison(mode) {
+    if (!sb || !currentUser || !currentProfile?.partner_id || KY.comparisonBusy) return null;
+    KY.comparisonBusy = true;
+    try {
+      const today = new Date();
+      let start = new Date(today);
+      let end = new Date(today);
+      if (mode === 'monthly') {
+        const key = typeof jalaliMonthKey === 'function' ? jalaliMonthKey(today) : '';
+        let d = new Date(today);
+        let guard = 0;
+        while (guard < 32 && typeof jalaliMonthKey === 'function' && jalaliMonthKey(d) === key) {
+          d.setDate(d.getDate() - 1);
+          guard++;
+        }
+        d.setDate(d.getDate() + 1);
+        start = d;
+      } else {
+        start.setDate(start.getDate() - 6);
+      }
+      const toKey = d => typeof isoDay === 'function' ? isoDay(d) : d.toISOString().slice(0,10);
+      const { data, error } = await sb.rpc('get_couple_comparison', {
+        p_start: toKey(start),
+        p_end: toKey(end)
+      });
+      if (error) throw error;
+      KY.lastComparison = { mode, data };
+      return data;
+    } catch (err) {
+      try { logError('couple comparison: ' + (err.message || err)); } catch (_) {}
+      return null;
+    } finally {
+      KY.comparisonBusy = false;
+    }
+  }
+
+  function comparisonCard(data, title) {
+    if (!data || !data.me || !data.partner) return '';
+    const me = Number(data.me.study_seconds) || 0;
+    const partner = Number(data.partner.study_seconds) || 0;
+    const diff = me - partner;
+    const winner = diff === 0 ? 'مساوی' : diff > 0 ? 'تو جلو هستی' : 'همسرت جلو است';
+
+    return '<div class="card section" data-couple-comparison="1">' +
+      '<div class="card-head"><h3>' + esc(title) + '</h3><span class="badge brand">' + esc(winner) + '</span></div>' +
+      '<div class="grid g2" style="gap:10px">' +
+        '<div class="card card-inset" style="padding:13px"><div class="t-xs muted">تو</div>' +
+          '<div class="mono" style="font-size:24px;font-weight:800">' + fmtSeconds(me) + '</div>' +
+          '<div class="t-xs muted">جلسه: ' + faNum(Number(data.me.session_count)||0) + ' · تست: ' + faNum(Number(data.me.test_count)||0) + '</div>' +
+        '</div>' +
+        '<div class="card card-inset" style="padding:13px"><div class="t-xs muted">همسر</div>' +
+          '<div class="mono" style="font-size:24px;font-weight:800">' + fmtSeconds(partner) + '</div>' +
+          '<div class="t-xs muted">جلسه: ' + faNum(Number(data.partner.session_count)||0) + ' · تست: ' + faNum(Number(data.partner.test_count)||0) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function appendComparison(rootSelector, data, title) {
+    const root = document.querySelector(rootSelector);
+    if (!root) return;
+    let host = root.querySelector('[data-couple-comparison-host]');
+    if (!host) {
+      host = document.createElement('div');
+      host.setAttribute('data-couple-comparison-host', '1');
+      root.appendChild(host);
+    }
+    host.innerHTML = comparisonCard(data, title);
+  }
+
+  function patchHome() {
+    try {
+      if (typeof renderHome !== 'function') return;
+      if (!window.__KY_ORIGINAL_RENDER_HOME) {
+        window.__KY_ORIGINAL_RENDER_HOME = renderHome;
+        renderHome = async function () {
+          await window.__KY_ORIGINAL_RENDER_HOME();
+          const host = document.querySelector('#homeRoot [data-partner-card]');
+          if (host) host.innerHTML = newPartnerCardHtml();
+          const home = document.getElementById('homeRoot');
+          if (home) {
+            let live = home.querySelector('[data-couple-live-host]');
+            if (!live) {
+              live = document.createElement('div');
+              live.setAttribute('data-couple-live-host','1');
+              home.appendChild(live);
+            }
+            live.innerHTML = renderCoupleLiveCard();
+          }
+        };
+      }
+      if (window.RENDER) window.RENDER.home = renderHome;
+    } catch (err) {
+      try { logError('patch home: ' + (err.message || err)); } catch (_) {}
+    }
+  }
+
+  function patchViews() {
+    try {
+      if (typeof renderStats === 'function' && !window.__KY_ORIGINAL_RENDER_STATS) {
+        window.__KY_ORIGINAL_RENDER_STATS = renderStats;
+        renderStats = async function () {
+          await window.__KY_ORIGINAL_RENDER_STATS();
+          const data = await kyLoadComparison('weekly');
+          appendComparison('#statsRoot', data, 'رقابت هفتگی زوجی');
+        };
+      }
+      if (typeof renderMonthly === 'function' && !window.__KY_ORIGINAL_RENDER_MONTHLY) {
+        window.__KY_ORIGINAL_RENDER_MONTHLY = renderMonthly;
+        renderMonthly = async function () {
+          await window.__KY_ORIGINAL_RENDER_MONTHLY();
+          const data = await kyLoadComparison('monthly');
+          appendComparison('#monthlyRoot', data, 'رقابت ماهانه زوجی');
+        };
+      }
+      if (window.RENDER) {
+        if (typeof renderStats === 'function') window.RENDER.stats = renderStats;
+        if (typeof renderMonthly === 'function') window.RENDER.monthly = renderMonthly;
+      }
+    } catch (err) {
+      try { logError('patch views: ' + (err.message || err)); } catch (_) {}
+    }
+  }
+
+  function patchBindings() {
+    try {
+      // The original timer save/clear calls trackPresence(), so replacing this
+      // function is enough to publish only on meaningful state changes.
+      if (!window.__KY_ORIGINAL_START_PRESENCE) {
+        try { window.__KY_ORIGINAL_START_PRESENCE = startPresence; } catch (_) {}
+      }
+      if (!window.__KY_ORIGINAL_TRACK_PRESENCE) {
+        try { window.__KY_ORIGINAL_TRACK_PRESENCE = trackPresence; } catch (_) {}
+      }
+      if (!window.__KY_ORIGINAL_STOP_PRESENCE) {
+        try { window.__KY_ORIGINAL_STOP_PRESENCE = stopPresence; } catch (_) {}
+      }
+      if (!window.__KY_ORIGINAL_PARTNER_CARD_HTML) {
+        try { window.__KY_ORIGINAL_PARTNER_CARD_HTML = partnerCardHtml; } catch (_) {}
+      }
+
+      startPresence = kyStartPresence;
+      trackPresence = kyTrackPresence;
+      stopPresence = kyStopPresence;
+      partnerCardHtml = newPartnerCardHtml;
+
+      patchHome();
+      patchViews();
+      KY.installed = true;
+    } catch (err) {
+      try { console.error('KY couple patch failed', err); } catch (_) {}
+    }
+  }
+
+  function refreshNow() {
+    patchBindings();
+    if (currentUser && currentProfile?.partner_id) {
+      try { kyStartPresence(); } catch (_) {}
+    }
+  }
+
+  // Run immediately and again after the app has finished bootstrapping.
+  refreshNow();
+  setTimeout(refreshNow, 500);
+  setTimeout(refreshNow, 1500);
+
+  // Keep the displayed clocks local; Presence itself is NOT tracked every second.
+  setInterval(() => {
+    try {
+      const t = document.getElementById('kyPartnerLiveTimer');
+      if (t && KY.partnerPresence && KY.partnerPresence.status === 'running' && KY.partnerPresence.started_at) {
+        t.textContent = fmtSeconds(Math.floor((Date.now() - Number(KY.partnerPresence.started_at)) / 1000));
+      }
+      const p = document.getElementById('kyPartnerTodayTotal');
+      if (p) p.textContent = fmtSeconds(partnerLiveTodaySeconds());
+      const live = document.querySelector('[data-couple-live-host]');
+      if (live && S?.activeView === 'home') live.innerHTML = renderCoupleLiveCard();
+    } catch (_) {}
+  }, 1000);
+
+  window.addEventListener('online', () => {
+    setTimeout(() => {
+      patchBindings();
+      if (currentUser && currentProfile?.partner_id) kyStartPresence().catch(()=>{});
+    }, 300);
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && currentUser && currentProfile?.partner_id) {
+      kyTrackPresence().catch(()=>{});
+    }
+  });
+
+  window.KY_COUPLE.refresh = refreshNow;
+  window.KY_COUPLE.loadComparison = kyLoadComparison;
+})();
+
+</script>
 </body>
 </html>
